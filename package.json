@@ -1,0 +1,15 @@
+{
+  "name": "dazhi-sports-hub",
+  "version": "1.0.0",
+  "description": "臺北市立大直高中 運動賽事與賽程全方位戰情看板",
+  "scripts": {
+    "start": "serve ."
+  },
+  "keywords": [
+    "dazhi-high-school",
+    "sports-dashboard",
+    "schedule-tracker"
+  ],
+  "author": "Dazhi High School",
+  "license": "MIT"
+}

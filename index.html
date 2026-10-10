@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>臺北市立大直高中 · 運動賽事與賽程全方位戰情看板</title>
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e3a8a;
+      --secondary: #0f172a;
+      --accent-red: #ef4444;
+      --accent-orange: #f59e0b;
+      --accent-green: #10b981;
+      --accent-purple: #8b5cf6;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: white;
+      padding: 24px 32px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .header-info h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-info p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn-white {
+      background: white;
+      color: var(--primary);
+    }
+    .btn-white:hover {
+      background: #f1f5f9;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline-white {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    .btn-outline-white:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .kpi-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .icon-blue { background: #eff6ff; color: #2563eb; }
+    .icon-red { background: #fef2f2; color: #dc2626; }
+    .icon-green { background: #ecfdf5; color: #059669; }
+    .icon-purple { background: #f5f3ff; color: #7c3aed; }
+
+    .kpi-data h3 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--secondary);
+      line-height: 1.1;
+    }
+
+    .kpi-data p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* Alert Banners */
+    .alert-banner {
+      background: #fffbeb;
+      border-left: 4px solid var(--accent-orange);
+      padding: 14px 20px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      flex-wrap: wrap;
+    }
+
+    .alert-urgent {
+      background: #fef2f2;
+      border-left-color: var(--accent-red);
+    }
+
+    .alert-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #991b1b;
+      font-weight: 600;
+    }
+
+    .alert-desc {
+      font-size: 13px;
+      color: #7f1d1d;
+      font-weight: normal;
+    }
+
+    /* Main Navigation Tabs */
+    .tab-bar {
+      display: flex;
+      gap: 8px;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 20px;
+      padding-bottom: 4px;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px 8px 0 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      color: var(--primary);
+      background: #f1f5f9;
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom: 3px solid var(--primary);
+      background: white;
+    }
+
+    /* Content Panes */
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    /* Controls & Filters Bar */
+    .controls-bar {
+      background: white;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .search-input {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      min-width: 240px;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    .view-toggle {
+      display: flex;
+      background: #f1f5f9;
+      padding: 3px;
+      border-radius: 8px;
+    }
+
+    .view-toggle button {
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .view-toggle button.active {
+      background: white;
+      color: var(--secondary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* Tables */
+    .table-container {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow-x: auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 700;
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    tr:hover {
+      background: #f8fafc;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge-urgent { background: #fee2e2; color: #b91c1c; }
+    .badge-active { background: #dbeafe; color: #1d4ed8; }
+    .badge-wait { background: #fef3c7; color: #b45309; }
+    .badge-done { background: #d1fae5; color: #047857; }
+    .badge-purple { background: #ede9fe; color: #6d28d9; }
+
+    /* Calendar Grid */
+    .calendar-container {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .month-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--secondary);
+    }
+
+    .month-nav {
+      display: flex;
+      gap: 8px;
+    }
+
+    .month-nav button {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .month-nav button:hover {
+      background: #f1f5f9;
+    }
+
+    .calendar-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .cal-day {
+      min-height: 110px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .cal-day:hover {
+      border-color: var(--primary-light);
+      background: #fafafa;
+    }
+
+    .cal-day.empty {
+      background: #f8fafc;
+      border-color: transparent;
+      min-height: 80px;
+    }
+
+    .day-num {
+      font-weight: 700;
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 2px;
+    }
+
+    .cal-day.today .day-num {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 22px;
+    }
+
+    .event-pill {
+      font-size: 11px;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: transform 0.1s;
+    }
+
+    .event-pill:hover {
+      transform: scale(1.02);
+      filter: brightness(0.95);
+    }
+
+    .pill-red { background: #fee2e2; color: #991b1b; border-left: 3px solid #dc2626; }
+    .pill-blue { background: #dbeafe; color: #1e40af; border-left: 3px solid #2563eb; }
+    .pill-green { background: #d1fae5; color: #065f46; border-left: 3px solid #10b981; }
+    .pill-purple { background: #ede9fe; color: #5b21b6; border-left: 3px solid #7c3aed; }
+    .pill-amber { background: #fef3c7; color: #92400e; border-left: 3px solid #d97706; }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: 16px;
+      max-width: 600px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--secondary);
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .modal-body p {
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .modal-body strong {
+      color: var(--secondary);
+      display: inline-block;
+      width: 110px;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 12px; }
+      .header { padding: 18px; }
+      .header-info h1 { font-size: 20px; }
+      .search-input { width: 100%; }
+      .cal-day { min-height: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-info">
+      <h1>🏃 臺北市立大直高中 · 運動賽事與賽程全方位戰情看板</h1>
+      <p>實時整合教育盃、學生聯賽與臺北市重點體育賽事報名進度及大直代表隊出賽場次</p>
+    </div>
+    <div class="header-actions">
+      <a href="https://docs.google.com/spreadsheets/d/1OTeWpux8arE7J25uRJbvEph39Ir0f2Vdz2IxFTfULgg/edit" target="_blank" class="btn btn-white">📊 開啟 Google 試算表 ↗</a>
+      <a href="https://drive.google.com/drive/folders/16iBWHC9ilYKB442HuBessa37hWwNe-zm" target="_blank" class="btn btn-outline-white">📁 雲端簡章與賽程庫 ↗</a>
+      <button onclick="window.print()" class="btn btn-outline-white">🖨️ 列印 / 另存 PDF</button>
+    </div>
+  </header>
+
+  <!-- KPI Cards -->
+  <section class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon icon-blue">🏅</div>
+      <div class="kpi-data">
+        <h3>6 項</h3>
+        <p>列管重大賽事</p>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon icon-red">🚨</div>
+      <div class="kpi-data">
+        <h3>1 場</h3>
+        <p>近 7 天緊急截止 (中正盃網球)</p>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon icon-purple">🏀</div>
+      <div class="kpi-data">
+        <h3>12 隊次</h3>
+        <p>大直高中出賽列管</p>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon icon-green">⏰</div>
+      <div class="kpi-data">
+        <h3>10/12 16:00</h3>
+        <p>籃球時間表官方公告</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Urgent Alert Banners -->
+  <div class="alert-banner alert-urgent">
+    <div class="alert-content">
+      <span>🚨</span>
+      <div>
+        <strong>重要報名截止急件：115年臺北市中正盃網球錦標賽</strong>
+        <span class="alert-desc">（截止日：115/10/14 星期三，倒數 4 天）— 須填寫線上報名表並完成每隊 2,000 元匯款且上傳收據。</span>
+      </div>
+    </div>
+    <a href="https://drive.google.com/drive/folders/16iBWHC9ilYKB442HuBessa37hWwNe-zm" target="_blank" class="badge badge-urgent">查閱簡章 ↗</a>
+  </div>
+
+  <div class="alert-banner">
+    <div class="alert-content">
+      <span>📢</span>
+      <div>
+        <strong>賽程公告進度追蹤：115學年度教育盃籃球賽</strong>
+        <span class="alert-desc">大直高中 5 組分組籤位已確定。大會將於 <strong>10/12 (一) 16:00</strong> 公告各場次確切對戰時間表，屆時將自動更新至本看板！</span>
+      </div>
+    </div>
+    <span class="badge badge-wait">等待官方公告時間</span>
+  </div>
+
+  <!-- Main Tabs -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchMainTab('reg')">📋 賽事報名時程掌控 (6項)</button>
+    <button class="tab-btn" onclick="switchMainTab('schedule')">🏆 大直高中出賽賽程 (12隊次)</button>
+  </div>
+
+  <!-- TAB 1: 賽事報名時程掌控 -->
+  <div id="tab-reg" class="tab-pane active">
+    <div class="controls-bar">
+      <div class="filter-group">
+        <button class="filter-btn active" onclick="filterReg('all', this)">全部 (6)</button>
+        <button class="filter-btn" onclick="filterReg('籃球', this)">籃球 (2)</button>
+        <button class="filter-btn" onclick="filterReg('網球', this)">網球 (2)</button>
+        <button class="filter-btn" onclick="filterReg('羽球', this)">羽球 (1)</button>
+        <button class="filter-btn" onclick="filterReg('棒球', this)">棒球 (1)</button>
+      </div>
+      <input type="text" id="reg-search" class="search-input" placeholder="🔍 搜尋賽事、組別或地點..." onkeyup="searchRegTable()">
+    </div>
+
+    <div class="table-container">
+      <table id="reg-table">
+        <thead>
+          <tr>
+            <th>狀態</th>
+            <th>運動項目</th>
+            <th>賽事名稱</th>
+            <th>項目 / 出賽組別</th>
+            <th>比賽日期與地點</th>
+            <th>報名開始日</th>
+            <th>報名截止日</th>
+            <th>報名方式與手續</th>
+            <th>簡章與連結</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-sport="網球">
+            <td><span class="badge badge-urgent">🚨 倒數 4 天</span></td>
+            <td><strong>🎾 網球</strong></td>
+            <td>115年臺北市中正盃網球錦標賽</td>
+            <td>高中組、國中組（男女混合三點雙單雙）</td>
+            <td>115/10/31 ~ 11/01<br><small style="color:#64748b;">臺北市天母運動公園網球場</small></td>
+            <td>即日起</td>
+            <td><strong style="color:#dc2626;">115/10/14 (三)</strong></td>
+            <td>填寫 Google 報名表單＋匯款每隊 2,000 元（元大銀行 806 帳號 21702000057503）上傳收據</td>
+            <td><a href="https://drive.google.com/file/d/1DF0Q-L0XppE7dsGulmnwKhpCs1oW3DxV/view?usp=drivesdk" target="_blank" class="badge badge-active">檢視簡章 ↗</a></td>
+          </tr>
+          <tr data-sport="網球">
+            <td><span class="badge badge-wait">⏳ 10/12 開放</span></td>
+            <td><strong>🎾 網球</strong></td>
+            <td>115學年度教育盃中等學校網球錦標賽</td>
+            <td>國中組、高中組（硬網甲組、軟網）</td>
+            <td>硬網 115/11/09~11/17、軟網 11/18~11/19<br><small style="color:#64748b;">臺北市網球中心（內湖）</small></td>
+            <td>115/10/12 (一)</td>
+            <td><strong>115/10/23 (五) 16:00</strong></td>
+            <td>新興國中網站報名，列印報名表核章正本於 10/30 前送達 190 聯絡箱</td>
+            <td><a href="https://www.hhjh.tp.edu.tw/" target="_blank" class="badge badge-active">報名網站 ↗</a></td>
+          </tr>
+          <tr data-sport="羽球">
+            <td><span class="badge badge-active">📝 報名中</span></td>
+            <td><strong>🏸 羽球</strong></td>
+            <td>115學年度教育盃中等學校羽球錦標賽</td>
+            <td>國中組、高中組、教師組（團體賽／個人賽）</td>
+            <td>115/12/21 ~ 12/25<br><small style="color:#64748b;">臺北體育館7樓羽球場（紅館）</small></td>
+            <td>即日起</td>
+            <td><strong>115/11/03 (二) 17:00</strong></td>
+            <td>線上報名（mylivescore），下載核章報名表掛號郵寄至松山高中體育組</td>
+            <td><a href="https://mylivescore.pse.is/9m4775" target="_blank" class="badge badge-active">報名系統 ↗</a></td>
+          </tr>
+          <tr data-sport="棒球">
+            <td><span class="badge badge-active">📝 報名中</span></td>
+            <td><strong>⚾ 棒球</strong></td>
+            <td>115學年度高中棒球軟式組聯賽</td>
+            <td>高中軟式棒球隊</td>
+            <td>分區賽 115/12/19~116/04/27、全國賽 116/05/23~05/30（臺中）</td>
+            <td>115/09/14</td>
+            <td><strong>115/12/14 (一) 17:00</strong></td>
+            <td>學生棒聯網站線上登錄，12/18 前掛號郵寄正本核章表件與球員同意書</td>
+            <td><a href="http://gameapply.ctsbf.edu.tw" target="_blank" class="badge badge-active">學生棒聯 ↗</a></td>
+          </tr>
+          <tr data-sport="籃球">
+            <td><span class="badge badge-done">✅ 報名截止/排程中</span></td>
+            <td><strong>🏀 籃球</strong></td>
+            <td>115學年度教育盃中等學校籃球錦標賽</td>
+            <td>高男乙、高女乙、國男乙、國女乙、教男組</td>
+            <td>115/10/19 ~ 11/08<br><small style="color:#64748b;">泰北/興雅/陽明/永春/和平暖身館</small></td>
+            <td>即日起</td>
+            <td>115/09/30 截止</td>
+            <td>已於 10/07 完成抽籤，待 10/12 公告賽程時間</td>
+            <td><a href="https://drive.google.com/file/d/1EuysMUBk8HbvzoefTmbsa9sULdtOiRgN/view?usp=drivesdk" target="_blank" class="badge badge-done">分組籤表 ↗</a></td>
+          </tr>
+          <tr data-sport="籃球">
+            <td><span class="badge badge-wait">ℹ️ 公文知會</span></td>
+            <td><strong>🏀 籃球</strong></td>
+            <td>115學年度高級中等學校籃球聯賽 (HBL)</td>
+            <td>高中男子乙組、女子乙組</td>
+            <td>依教育部體育署後續公文為準</td>
+            <td>草案研擬中</td>
+            <td>待教育部核定備查</td>
+            <td>公文先行函知，俟體育署備查後正式發函報名</td>
+            <td><a href="https://drive.google.com/file/d/1ro-kmzTkV6XFafHQumjnH_P9-ixFqIAj/view?usp=drivesdk" target="_blank" class="badge badge-active">公文附件 ↗</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 2: 大直高中出賽賽程 -->
+  <div id="tab-schedule" class="tab-pane">
+    <div class="controls-bar">
+      <div class="filter-group">
+        <button class="filter-btn active" onclick="filterSched('all', this)">全部項目 (12)</button>
+        <button class="filter-btn" onclick="filterSched('籃球', this)">🏀 籃球 (5)</button>
+        <button class="filter-btn" onclick="filterSched('排球', this)">🏐 排球 (2)</button>
+        <button class="filter-btn" onclick="filterSched('網球', this)">🎾 網球 (2)</button>
+        <button class="filter-btn" onclick="filterSched('羽球', this)">🏸 羽球 (1)</button>
+        <button class="filter-btn" onclick="filterSched('棒球', this)">⚾ 棒球 (1)</button>
+      </div>
+
+      <div class="view-toggle">
+        <button id="btn-view-list" class="active" onclick="switchSchedView('list')">📝 表列式檢視</button>
+        <button id="btn-view-cal" onclick="switchSchedView('cal')">📅 行事曆式檢視</button>
+      </div>
+    </div>
+
+    <!-- Sub-view 1: 表列式檢視 -->
+    <div id="sched-view-list" class="table-container">
+      <table id="sched-table">
+        <thead>
+          <tr>
+            <th>種類</th>
+            <th>出賽組別 / 項目</th>
+            <th>賽事名稱</th>
+            <th>比賽日期</th>
+            <th>出賽時間</th>
+            <th>比賽場地 / 體育館</th>
+            <th>對戰隊伍 / 籤位籤號</th>
+            <th>晉級機制 / 備註</th>
+            <th>狀態</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 籃球 5 場 -->
+          <tr data-sport="籃球">
+            <td><strong>🏀 籃球</strong></td>
+            <td><span class="badge badge-purple">高男乙組</span></td>
+            <td>115學年度教育盃籃球賽</td>
+            <td>115/10/19 ~ 11/08</td>
+            <td><span style="color:#b45309; font-weight:600;">待 10/12 16:00 公告</span></td>
+            <td>泰北雙語學校體育館<br><small style="color:#64748b;">臺北市士林區福林路240號</small></td>
+            <td><strong>預賽 F 組</strong>：麗山高中、松山家商、松山工農</td>
+            <td>4 取 2 晉級第二輪單淘汰</td>
+            <td><span class="badge badge-done">官方籤表確認</span></td>
+          </tr>
+          <tr data-sport="籃球">
+            <td><strong>🏀 籃球</strong></td>
+            <td><span class="badge badge-purple">高女乙組</span></td>
+            <td>115學年度教育盃籃球賽</td>
+            <td>115/10/19 ~ 11/08</td>
+            <td><span style="color:#b45309; font-weight:600;">待 10/12 16:00 公告</span></td>
+            <td>興雅國中體育館<br><small style="color:#64748b;">臺北市信義區松德路168巷15號</small></td>
+            <td><strong>預賽 B 組</strong>：育成高中、華江高中、泰北高中</td>
+            <td>4 取 2 晉級 1~4 名決賽</td>
+            <td><span class="badge badge-done">官方籤表確認</span></td>
+          </tr>
+          <tr data-sport="籃球">
+            <td><strong>🏀 籃球</strong></td>
+            <td><span class="badge badge-purple">國男乙組</span></td>
+            <td>115學年度教育盃籃球賽</td>
+            <td>115/10/19 ~ 11/08</td>
+            <td><span style="color:#b45309; font-weight:600;">待 10/12 16:00 公告</span></td>
+            <td>泰北雙語學校體育館<br><small style="color:#64748b;">臺北市士林區福林路240號</small></td>
+            <td><strong>預賽 C 組</strong>：介壽國中、達人中學、古亭國中、南門國中</td>
+            <td>5 取 2 晉級第二輪單淘汰</td>
+            <td><span class="badge badge-done">官方籤表確認</span></td>
+          </tr>
+          <tr data-sport="籃球">
+            <td><strong>🏀 籃球</strong></td>
+            <td><span class="badge badge-purple">國女乙級</span></td>
+            <td>115學年度教育盃籃球賽</td>
+            <td>115/10/19 ~ 11/08</td>
+            <td><span style="color:#b45309; font-weight:600;">待 10/12 16:00 公告</span></td>
+            <td>興雅國中體育館<br><small style="color:#64748b;">臺北市信義區松德路168巷15號</small></td>
+            <td><strong>預賽 B 組</strong>：景美國中、中正國中、再興中學</td>
+            <td>4 取 2 晉級 1~4 名決賽</td>
+            <td><span class="badge badge-done">官方籤表確認</span></td>
+          </tr>
+          <tr data-sport="籃球">
+            <td><strong>🏀 籃球</strong></td>
+            <td><span class="badge badge-purple">教男組</span></td>
+            <td>115學年度教育盃籃球賽</td>
+            <td>115/10/19 ~ 11/08</td>
+            <td><span style="color:#b45309; font-weight:600;">待 10/12 16:00 公告</span></td>
+            <td>永春高中體育館<br><small style="color:#64748b;">臺北市信義區松山路654號</small></td>
+            <td><strong>單淘汰 第 11 籤</strong> vs 陽明高中 (第 10 籤)</td>
+            <td>勝隊晉級次輪對戰 (再興/忠孝勝隊)</td>
+            <td><span class="badge badge-done">官方籤表確認</span></td>
+          </tr>
+
+          <!-- 排球 2 場 -->
+          <tr data-sport="排球">
+            <td><strong>🏐 排球</strong></td>
+            <td><span class="badge badge-purple">教女組</span></td>
+            <td>115學年度教育盃排球賽</td>
+            <td>115年11月 (待公佈)</td>
+            <td>待賽程表排定</td>
+            <td>明湖國中體育館</td>
+            <td><strong>預賽 A 組第 3 籤</strong>：中山女中 (1)、延平中學 (2)</td>
+            <td>小組循環取第 1 名參加決賽</td>
+            <td><span class="badge badge-done">分組抽籤排定</span></td>
+          </tr>
+          <tr data-sport="排球">
+            <td><strong>🏐 排球</strong></td>
+            <td><span class="badge badge-purple">高男乙組</span></td>
+            <td>115學年度教育盃排球賽</td>
+            <td>115年11月 (待公佈)</td>
+            <td>待賽程表排定</td>
+            <td>明湖國中 / 內湖高中</td>
+            <td><strong>預賽 I 組籤 27</strong>：景文高中 (25)、中正高中 (26)</td>
+            <td>12 組循環每組取第 1 名晉級決賽</td>
+            <td><span class="badge badge-done">分組抽籤排定</span></td>
+          </tr>
+
+          <!-- 網球 2 場 -->
+          <tr data-sport="網球">
+            <td><strong>🎾 網球</strong></td>
+            <td><span class="badge badge-purple">中正盃代表隊</span></td>
+            <td>115年臺北市中正盃網球賽</td>
+            <td>115/10/31 ~ 11/01</td>
+            <td>待 10/21 抽籤排定</td>
+            <td>天母運動公園網球場</td>
+            <td>待 10/21 10:30 天母網球場抽籤</td>
+            <td>三點雙單雙制 (男生/女生混合)</td>
+            <td><span class="badge badge-urgent">10/14 截止報名</span></td>
+          </tr>
+          <tr data-sport="網球">
+            <td><strong>🎾 網球</strong></td>
+            <td><span class="badge badge-purple">教育盃代表隊</span></td>
+            <td>115學年度教育盃網球賽</td>
+            <td>115/11/09 ~ 11/19</td>
+            <td>待 10/30 抽籤排定</td>
+            <td>臺北市網球中心</td>
+            <td>待 10/30 09:00 新興國中抽籤</td>
+            <td>硬網採 3 點 2 勝單雙單</td>
+            <td><span class="badge badge-wait">10/12 開放報名</span></td>
+          </tr>
+
+          <!-- 羽球 1 場 -->
+          <tr data-sport="羽球">
+            <td><strong>🏸 羽球</strong></td>
+            <td><span class="badge badge-purple">羽球代表隊</span></td>
+            <td>115學年度教育盃羽球賽</td>
+            <td>115/12/21 ~ 12/25</td>
+            <td>待 11/17 抽籤排定</td>
+            <td>臺北體育館 7 樓</td>
+            <td>待 11/17 10:00 松山高中抽籤</td>
+            <td>乙組團體五點三勝制</td>
+            <td><span class="badge badge-active">11/03 截止報名</span></td>
+          </tr>
+
+          <!-- 棒球 1 場 -->
+          <tr data-sport="棒球">
+            <td><strong>⚾ 棒球</strong></td>
+            <td><span class="badge badge-purple">高中棒球軟式組</span></td>
+            <td>115學年度高中棒球軟式聯賽</td>
+            <td>115/12/19 ~ 116/04/27</td>
+            <td>依分區賽程公告</td>
+            <td>臺北市各棒球場</td>
+            <td>報名截止後由學生棒聯抽籤編配分區賽</td>
+            <td>分區循環制，爭取全國賽門票</td>
+            <td><span class="badge badge-active">12/14 截止報名</span></td>
+          </tr>
+
+          <!-- HBL 1 場 -->
+          <tr data-sport="籃球">
+            <td><strong>🏀 籃球</strong></td>
+            <td><span class="badge badge-purple">高中籃球隊</span></td>
+            <td>115學年度高中籃球聯賽 (HBL)</td>
+            <td>待體育總會公文公告</td>
+            <td>待官方賽程公布</td>
+            <td>待定</td>
+            <td>待公文正式核定後公布籤表</td>
+            <td>教育部體育署指導全國高中聯賽</td>
+            <td><span class="badge badge-wait">公文草案研擬中</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Sub-view 2: 行事曆式檢視 -->
+    <div id="sched-view-cal" class="calendar-container" style="display: none;">
+      <div class="calendar-header">
+        <div class="month-title" id="cal-month-title">2026 年 10 月 (民國 115 年)</div>
+        <div class="month-nav">
+          <button onclick="changeCalMonth(-1)">◀ 上個月</button>
+          <button onclick="setCalMonth(9)">10 月</button>
+          <button onclick="setCalMonth(10)">11 月</button>
+          <button onclick="setCalMonth(11)">12 月</button>
+          <button onclick="changeCalMonth(1)">下個月 ▶</button>
+        </div>
+      </div>
+
+      <div class="calendar-weekdays">
+        <div style="color: #ef4444;">週日</div>
+        <div>週一</div>
+        <div>週二</div>
+        <div>週三</div>
+        <div>週四</div>
+        <div>週五</div>
+        <div style="color: #3b82f6;">週六</div>
+      </div>
+
+      <div class="calendar-grid" id="calendar-grid-cells">
+        <!-- JS 動態生成日期格子 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div id="event-modal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title" id="m-title">賽事詳情</div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="m-body">
+        <!-- 內容動態填充 -->
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>臺北市立大直高級中學 · 運動賽事報名掌控與出賽時程管理系統 | Vercel 雲端全螢幕正式版</p>
+    <p style="margin-top: 4px;">資料來源：Google 雲端硬碟「【賽事簡章與報名檔案】」資料夾與 Google 試算表同步中心</p>
+  </footer>
+
+</div>
+
+<script>
+  // 主分頁切換
+  function switchMainTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+    if (tab === 'reg') {
+      document.querySelectorAll('.tab-btn')[0].classList.add('active');
+      document.getElementById('tab-reg').classList.add('active');
+    } else {
+      document.querySelectorAll('.tab-btn')[1].classList.add('active');
+      document.getElementById('tab-schedule').classList.add('active');
+    }
+  }
+
+  // 賽程子檢視切換 (表列 vs 行事曆)
+  function switchSchedView(view) {
+    const btnList = document.getElementById('btn-view-list');
+    const btnCal = document.getElementById('btn-view-cal');
+    const viewList = document.getElementById('sched-view-list');
+    const viewCal = document.getElementById('sched-view-cal');
+
+    if (view === 'list') {
+      btnList.classList.add('active');
+      btnCal.classList.remove('active');
+      viewList.style.display = 'block';
+      viewCal.style.display = 'none';
+    } else {
+      btnList.classList.remove('active');
+      btnCal.classList.add('active');
+      viewList.style.display = 'none';
+      viewCal.style.display = 'block';
+      renderCalendar();
+    }
+  }
+
+  // 報名表格篩選
+  function filterReg(sport, btn) {
+    document.querySelectorAll('#tab-reg .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const rows = document.querySelectorAll('#reg-table tbody tr');
+    rows.forEach(row => {
+      if (sport === 'all' || row.getAttribute('data-sport') === sport) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  // 賽程表格篩選
+  function filterSched(sport, btn) {
+    document.querySelectorAll('#tab-schedule .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const rows = document.querySelectorAll('#sched-table tbody tr');
+    rows.forEach(row => {
+      if (sport === 'all' || row.getAttribute('data-sport') === sport) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  // 報名搜尋
+  function searchRegTable() {
+    const val = document.getElementById('reg-search').value.toLowerCase();
+    const rows = document.querySelectorAll('#reg-table tbody tr');
+    rows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      row.style.display = text.includes(val) ? '' : 'none';
+    });
+  }
+
+  // 行事曆事件資料庫 (2026 年)
+  const CAL_EVENTS = [
+    // 10月
+    { date: '2026-10-12', title: '📢 16:00 籃球賽程公告', type: 'amber', desc: '教育盃籃球賽每日賽程與出場時間於永春高中官網正式公告。大直高中 5 組分組已排定。' },
+    { date: '2026-10-12', title: '🎾 教育盃網球開放報名', type: 'blue', desc: '115學年度教育盃中學網球賽於新興國中網站開放網路報名至 10/23 16:00 止。' },
+    { date: '2026-10-14', title: '🚨 中正盃網球截止', type: 'red', desc: '115年中正盃網球錦標賽報名截止！須填報 Google 表單並匯款 2,000 元上傳收據。' },
+    { date: '2026-10-19', title: '🏀 教育盃籃球開賽', type: 'purple', desc: '教育盃籃球錦標賽正式開打（10/19~11/08）。大直高男乙於泰北雙語、高女乙興雅國中。' },
+    { date: '2026-10-21', title: '🎾 中正盃網球抽籤', type: 'blue', desc: '上午 10:30 於天母網球場抽籤並排定賽程。' },
+    { date: '2026-10-23', title: '🎾 教育盃網球報名截止', type: 'red', desc: '16:00 截止線上報名，核章正本須於 10/30 前送達新興國中。' },
+    { date: '2026-10-30', title: '🎾 教育盃網球抽籤', type: 'blue', desc: '上午 09:00 於新興國中活動中心抽籤排定賽程。' },
+    { date: '2026-10-31', title: '🎾 中正盃網球開打 (D1)', type: 'green', desc: '115中正盃網球錦標賽首日（天母運動公園網球場）。' },
+
+    // 11月
+    { date: '2026-11-01', title: '🎾 中正盃網球決賽 (D2)', type: 'green', desc: '115中正盃網球錦標賽第二天決賽（天母運動公園網球場）。' },
+    { date: '2026-11-03', title: '🏸 教育盃羽球截止', type: 'red', desc: '17:00 截止線上報名，加蓋校印正本須送達松山高中體育組。' },
+    { date: '2026-11-08', title: '🏀 教育盃籃球閉幕決賽', type: 'purple', desc: '教育盃籃球錦標賽各組決賽（臺北和平籃球館暖身館）。' },
+    { date: '2026-11-09', title: '🎾 教育盃硬網開打', type: 'green', desc: '教育盃硬式網球錦標賽（11/09~11/17，臺北市網球中心）。' },
+    { date: '2026-11-17', title: '🏸 教育盃羽球抽籤', type: 'blue', desc: '上午 10:00 於松山高中一樓大講堂抽籤。' },
+    { date: '2026-11-18', title: '🎾 教育盃軟網開打', type: 'green', desc: '教育盃軟式網球錦標賽（11/18~11/19，臺北市網球中心）。' },
+
+    // 12月
+    { date: '2026-12-14', title: '⚾ 高中軟式棒球截止', type: 'red', desc: '17:00 學生棒聯網路報名截止，12/18 前寄達正本表件。' },
+    { date: '2026-12-19', title: '⚾ 軟棒聯賽分區賽開打', type: 'green', desc: '高中軟式組棒球聯賽縣市分區賽（115/12/19~116/04/27）。' },
+    { date: '2026-12-21', title: '🏸 教育盃羽球開打', type: 'green', desc: '教育盃羽球錦標賽開打（12/21~12/25，臺北體育館 7 樓）。' }
+  ];
+
+  let currentYear = 2026;
+  let currentMonth = 9; // 0-indexed, 9 = October
+
+  function renderCalendar() {
+    const container = document.getElementById('calendar-grid-cells');
+    const monthTitle = document.getElementById('cal-month-title');
+    container.innerHTML = '';
+
+    const monthNames = ['1 月', '2 月', '3 月', '4 月', '5 月', '6 月', '7 月', '8 月', '9 月', '10 月', '11 月', '12 月'];
+    monthTitle.innerText = `${currentYear} 年 ${monthNames[currentMonth]} (民國 115 年)`;
+
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+    // 填補空白開頭
+    for (let i = 0; i < firstDay; i++) {
+      const emptyCell = document.createElement('div');
+      emptyCell.className = 'cal-day empty';
+      container.appendChild(emptyCell);
+    }
+
+    // 填補每日
+    for (let day = 1; day <= daysInMonth; day++) {
+      const cell = document.createElement('div');
+      cell.className = 'cal-day';
+      if (currentYear === 2026 && currentMonth === 9 && day === 10) {
+        cell.classList.add('today');
+      }
+
+      const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      cell.innerHTML = `<span class="day-num">${day}</span>`;
+
+      // 搜尋當日事件
+      const dayEvents = CAL_EVENTS.filter(e => e.date === dateStr);
+      dayEvents.forEach(evt => {
+        const pill = document.createElement('div');
+        pill.className = `event-pill pill-${evt.type}`;
+        pill.innerText = evt.title;
+        pill.onclick = () => openModal(evt.title, evt.desc, dateStr);
+        cell.appendChild(pill);
+      });
+
+      container.appendChild(cell);
+    }
+  }
+
+  function changeCalMonth(delta) {
+    currentMonth += delta;
+    if (currentMonth > 11) { currentMonth = 11; }
+    if (currentMonth < 0) { currentMonth = 0; }
+    renderCalendar();
+  }
+
+  function setCalMonth(m) {
+    currentMonth = m;
+    renderCalendar();
+  }
+
+  function openModal(title, desc, dateStr) {
+    document.getElementById('m-title').innerText = title;
+    document.getElementById('m-body').innerHTML = `
+      <p><strong>日期：</strong>${dateStr}</p>
+      <p><strong>詳細說明：</strong>${desc}</p>
+      <p style="margin-top: 14px; font-size: 12px; color: #64748b;">* 詳細出賽時程以主辦單位官方公告賽程手冊為準。</p>
+    `;
+    document.getElementById('event-modal').style.display = 'flex';
+  }
+
+  function closeModal(e) {
+    document.getElementById('event-modal').style.display = 'none';
+  }
+
+  // 初始化行事曆
+  renderCalendar();
+</script>
+
+</body>
+</html>
