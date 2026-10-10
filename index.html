@@ -17,7 +17,7 @@
       --blue-subtle: #f8fafc;      /* 頁面工作區清爽背景 */
       
       --white-pure: #ffffff;       /* 純白 */
-      --sidebar-bg: #ffffff;       /* 使用者需求2：最左列改為白色 */
+      --sidebar-bg: #ffffff; /* 純白底色 */       /* 使用者需求2：最左列改為白色 */
       --sidebar-border: #e2e8f0;
       
       --border-color: #cbd5e1;     /* 邊框灰藍 */
@@ -65,7 +65,7 @@
        ======================================================== */
     .sidebar {
       width: 260px;
-      background: var(--sidebar-bg);
+      background: #ffffff !important;
       color: var(--text-body);
       display: flex;
       flex-direction: column;
@@ -166,7 +166,7 @@
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: #94a3b8;
+      color: #475569;
       padding: 14px 10px 6px;
     }
     .nav-link {
@@ -367,7 +367,7 @@
       align-items: center;
       gap: 5px;
     }
-    .btn-top-refresh:hover { background: #f8fafc; border-color: #94a3b8; }
+    .btn-top-refresh:hover { background: #f8fafc; border-color: #475569; }
 
     .view-control-pill {
       display: flex;
@@ -546,21 +546,23 @@
     /* ========================================================
        使用需求3：三欄或四欄並排網格 (3 to 4 Column Grid)
        ======================================================== */
+    /* 使用者特別指定：改為三個比賽並排 (固定三欄式網格) */
     .cards-grid-layout {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
       gap: 16px;
     }
-    /* 寬螢幕：四欄並排 */
-    @media (min-width: 1400px) {
+    /* 平板螢幕 (小於900px) 降為兩欄 */
+    @media (max-width: 900px) {
       .cards-grid-layout {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px;
       }
     }
-    /* 中等螢幕/一般筆電：三欄並排 */
-    @media (min-width: 1024px) and (max-width: 1399px) {
+    /* 手機 (小於600px) 單欄 */
+    @media (max-width: 600px) {
       .cards-grid-layout {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: 1fr !important;
       }
     }
     /* 平板螢幕：兩欄並排 */
@@ -597,7 +599,7 @@
     .sport-card.declined-mode {
       opacity: 0.6;
       background: #f8fafc;
-      border-top-color: #94a3b8;
+      border-top-color: #475569;
       border-style: dashed;
     }
     .card-head {
@@ -830,7 +832,7 @@
       padding-bottom: 12px;
     }
     .modal-head h3 { font-size: 1.2rem; font-weight: 900; color: var(--navy-dark); }
-    .close-modal-btn { background: none; border: none; font-size: 1.6rem; cursor: pointer; color: #94a3b8; }
+    .close-modal-btn { background: none; border: none; font-size: 1.6rem; cursor: pointer; color: #475569; }
 
     .voice-interactive-panel {
       background: #f8fafc;
@@ -1009,7 +1011,7 @@
       <div class="sys-status-chip" onclick="openConfigModal()">
         <div>
           <span class="sys-dot" id="sideStatusDot"></span>
-          <span id="sideStatusText" style="color:#cbd5e1; font-weight:700;">連線中...</span>
+          <span id="sideStatusText" style="color:#1e293b; font-weight:700;">連線中...</span>
         </div>
         <span style="color:#94a3b8;">⚙️</span>
       </div>
