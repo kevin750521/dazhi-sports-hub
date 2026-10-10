@@ -1771,7 +1771,49 @@
           });
           html += '</div>';
           container.innerHTML = html;
+        } else if (currentView === 'table') {
+          // 大直出賽賽程專屬表格檢視 (User Requirement 1: 修正表格顯示)
+          if (list.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:60px; color:#94a3b8; font-weight:700;">無符合條件之賽程紀錄</div>';
+            return;
+          }
+          let html = `
+            <div class="table-view-panel">
+              <table>
+                <thead>
+                  <tr>
+                    <th>運動種類</th>
+                    <th>賽事名稱</th>
+                    <th>大直出賽組別</th>
+                    <th>比賽日期</th>
+                    <th>比賽場館 / 地點</th>
+                    <th>對戰隊伍 / 分組籤位</th>
+                    <th>晉級賽制</th>
+                    <th>籤表狀態</th>
+                    <th>來源檔案</th>
+                  </tr>
+                </thead>
+                <tbody>
+          `;
+          list.forEach(s => {
+            html += `
+              <tr>
+                <td><strong style="color:#1e40af;">${s.sport}</strong></td>
+                <td><strong>${s.tournament_name}</strong></td>
+                <td><span style="background:#eff6ff; color:#1e40af; padding:3px 8px; border-radius:4px; font-weight:800; font-size:0.8rem;">${s.division}</span></td>
+                <td>${s.match_date}</td>
+                <td>${s.venue}</td>
+                <td style="max-width:280px; font-weight:700; color:#0f172a; line-height:1.4;">${s.opponents_draw}</td>
+                <td style="font-size:0.8rem; color:#475569;">${s.advancement_rule || '-'}</td>
+                <td><span class="status-tag tag-active">${s.status}</span></td>
+                <td style="font-size:0.75rem; color:#64748b;">${s.source_file || '-'}</td>
+              </tr>
+            `;
+          });
+          html += '</tbody></table></div>';
+          container.innerHTML = html;
         } else {
+          // 月曆檢視
           renderCalendarView();
         }
       }
