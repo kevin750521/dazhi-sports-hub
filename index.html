@@ -1142,6 +1142,9 @@
 
       <div class="top-toolbar">
         <button class="btn-top-refresh" onclick="manualRefreshData()">🔄 重新整理</button>
+        <button class="btn-top-refresh" style="background:#047857; color:#ffffff; border-color:#059669; font-weight:700;" onclick="exportTournamentsToCsv()" title="匯出為 Google Sheet / Excel 格式">
+          <span>📊</span> 匯出 Google 試算表
+        </button>
         <button class="btn-top-voice" onclick="openCreateModal()">
           <span>🎙️</span> 手動/語音建檔
         </button>
@@ -2820,6 +2823,63 @@
       document.getElementById('toastText').textContent = msg;
       toast.style.display = 'flex';
       setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    // ========================================================
+    // 一鍵匯出 Google 試算表 / Excel CSV (含 UTF-8 BOM，不亂碼)
+    // ========================================================
+    function exportTournamentsToCsv() {
+      // 1. 賽事清單 CSV
+      const tHeaders = ['項次', '運動項目', '完整賽事名稱', '參賽組別/出賽代表', '比賽日期', '比賽場地', '報名起始', '報名截止', '報名方式與規定', '時程進度狀態', '報名確認狀態', '官方簡章連結'];
+      const tRows = tournaments.map(t => [
+        t.id,
+        t.sport || '',
+        `"${(t.name || '').replace(/"/g, '""')}"`,
+        `"${(t.divisions || '').replace(/"/g, '""')}"`,
+        `"${(t.competition_dates || '').replace(/"/g, '""')}"`,
+        `"${(t.venue || '').replace(/"/g, '""')}"`,
+        `"${(t.reg_start || '').replace(/"/g, '""')}"`,
+        `"${(t.reg_deadline || '').replace(/"/g, '""')}"`,
+        `"${(t.reg_method || '').replace(/"/g, '""')}"`,
+        `"${(t.status || '').replace(/"/g, '""')}"`,
+        `"${(t.registration_status || '未報名').replace(/"/g, '""')}"`,
+        `"${(t.doc_url || '').replace(/"/g, '""')}"`
+      ]);
+      const tCsvContent = '\uFEFF' + [tHeaders.join(','), ...tRows.map(r => r.join(','))].join('\r\n');
+      downloadBlob(tCsvContent, '運動賽事報名時程與進度掌控看板_賽事清單.csv', 'text/csv;charset=utf-8;');
+
+      // 2. 出賽與抽籤進度 CSV
+      setTimeout(() => {
+        const sHeaders = ['序號', '運動項目', '出賽組別/代表選手', '所屬賽事名稱', '比賽日期', '比賽時間', '比賽地點', '抽籤結果與對戰籤位', '晉級規則', '籤表查驗來源連結', '狀態'];
+        const sRows = schedules.map(s => [
+          s.id,
+          s.sport || '',
+          `"${(s.division || '').replace(/"/g, '""')}"`,
+          `"${(s.tournament_name || '').replace(/"/g, '""')}"`,
+          `"${(s.match_date || '').replace(/"/g, '""')}"`,
+          `"${(s.match_time || '').replace(/"/g, '""')}"`,
+          `"${(s.venue || '').replace(/"/g, '""')}"`,
+          `"${(s.opponents_draw || '').replace(/"/g, '""')}"`,
+          `"${(s.advancement_rule || '').replace(/"/g, '""')}"`,
+          `"${(s.doc_url || '').replace(/"/g, '""')}"`,
+          `"${(s.status || '').replace(/"/g, '""')}"`
+        ]);
+        const sCsvContent = '\uFEFF' + [sHeaders.join(','), ...sRows.map(r => r.join(','))].join('\r\n');
+        downloadBlob(sCsvContent, '運動賽事報名時程與進度掌控看板_賽程與抽籤.csv', 'text/csv;charset=utf-8;');
+        showToast('已匯出 2 份最新 Google Sheet 專用 CSV 檔案！可直接在雲端硬碟匯入取代');
+      }, 500);
+    }
+
+    function downloadBlob(content, filename, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
   </script>
 
