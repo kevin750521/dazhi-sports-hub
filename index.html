@@ -3,227 +3,642 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>臺北市立大直高中 · 運動賽事與賽程全方位戰情看板</title>
+  <title>臺北市立大直高中 · 運動賽事全方位戰情看板</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
-      --primary: #1e3a8a;
-      --primary-light: #3b82f6;
-      --secondary: #0f172a;
-      --bg: #f8fafc;
+      --sidebar-bg: #0d1224;
+      --sidebar-hover: #171e36;
+      --sidebar-active: linear-gradient(135deg, rgba(244,63,94,0.2) 0%, rgba(99,102,241,0.25) 100%);
+      --sidebar-active-border: #f43f5e;
+      --sidebar-text: #94a3b8;
+      --sidebar-text-bright: #ffffff;
+      
+      --primary-gradient: linear-gradient(135deg, #f43f5e 0%, #e11d48 50%, #6366f1 100%);
+      --primary-btn-hover: linear-gradient(135deg, #e11d48 0%, #be123c 50%, #4f46e5 100%);
+      --accent-rose: #f43f5e;
+      --accent-indigo: #6366f1;
+      
+      --bg-main: #f8fafc;
       --card-bg: #ffffff;
-      --text: #1e293b;
+      --border-color: #e2e8f0;
+      --border-dark: #1e293b;
+      
+      --text-main: #0f172a;
       --text-muted: #64748b;
-      --border: #e2e8f0;
-      --urgent: #ef4444;
-      --urgent-bg: #fef2f2;
-      --warning: #f59e0b;
-      --success: #10b981;
-      --success-bg: #ecfdf5;
-      --radius: 12px;
-      --shadow: 0 4px 6px -1px rgba(0,0,0,0.06), 0 2px 4px -2px rgba(0,0,0,0.04);
+      --text-light: #94a3b8;
+      
+      --status-urgent: #ef4444;
+      --status-urgent-bg: #fef2f2;
+      --status-success: #10b981;
+      --status-success-bg: #ecfdf5;
+      --status-warning: #f59e0b;
+      --status-warning-bg: #fffbeb;
+      --status-info: #3b82f6;
+      --status-info-bg: #eff6ff;
+      --status-gray: #64748b;
+      --status-gray-bg: #f1f5f9;
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.03);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      padding-bottom: 60px;
+      background: var(--bg-main);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-    .header {
-      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
-      color: white;
-      padding: 24px 20px 20px;
-      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
+
+    /* ========================================================
+       1. 深色側邊導航欄 (RedPoint 旗艦風格)
+       ======================================================== */
+    .sidebar {
+      width: 260px;
+      background: var(--sidebar-bg);
+      color: var(--sidebar-text);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      border-right: 1px solid rgba(255,255,255,0.06);
       position: sticky;
       top: 0;
+      height: 100vh;
+      overflow-y: auto;
       z-index: 100;
     }
-    .header-content {
-      max-width: 1280px;
-      margin: 0 auto;
+    .sidebar-header {
+      padding: 24px 20px 16px;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 900;
+      font-size: 1.1rem;
+      box-shadow: 0 2px 8px rgba(244,63,94,0.4);
+    }
+    .brand-text h2 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--sidebar-text-bright);
+      letter-spacing: -0.3px;
+    }
+    .brand-text p {
+      font-size: 0.72rem;
+      color: var(--text-light);
+      margin-top: 2px;
+    }
+    .btn-new-tournament {
+      width: 100%;
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      padding: 11px 16px;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(244,63,94,0.3);
+      transition: all 0.2s;
+    }
+    .btn-new-tournament:hover {
+      background: var(--primary-btn-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(244,63,94,0.4);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 10px 12px;
+    }
+    .nav-section-title {
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #64748b;
+      padding: 16px 10px 6px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      color: var(--sidebar-text);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 3px;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+    .nav-item:hover {
+      background: var(--sidebar-hover);
+      color: var(--sidebar-text-bright);
+    }
+    .nav-item.active {
+      background: var(--sidebar-active);
+      color: var(--sidebar-text-bright);
+      border-left: 3px solid var(--sidebar-active-border);
+      font-weight: 700;
+    }
+    .nav-item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-badge {
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.1);
+      color: #cbd5e1;
+      font-weight: 700;
+    }
+    .nav-item.active .nav-badge {
+      background: rgba(244,63,94,0.3);
+      color: #fecdd3;
+    }
+
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .db-status-chip {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+    .db-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--status-success);
+      display: inline-block;
+      margin-right: 6px;
+    }
+    .db-status-dot.offline { background: var(--status-warning); }
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #334155;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: white;
+      font-size: 0.85rem;
+    }
+    .user-info h4 {
+      font-size: 0.82rem;
+      color: var(--sidebar-text-bright);
+      font-weight: 700;
+    }
+    .user-info p {
+      font-size: 0.7rem;
+      color: var(--text-light);
+    }
+
+    /* ========================================================
+       2. 主工作內容區 (Main Content Layout)
+       ======================================================== */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .top-navbar {
+      background: white;
+      border-bottom: 1px solid var(--border-color);
+      padding: 18px 32px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
-    .brand h1 {
+    .top-title-group h1 {
       font-size: 1.5rem;
       font-weight: 800;
       letter-spacing: -0.5px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      color: var(--text-main);
     }
-    .brand p {
-      font-size: 0.875rem;
-      opacity: 0.9;
-      margin-top: 4px;
+    .top-title-group p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 2px;
     }
-    .header-actions {
+    .top-actions {
       display: flex;
       align-items: center;
       gap: 12px;
     }
-    .sync-status {
+    .btn-action-outline {
+      background: white;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn-action-outline:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+    .btn-create-top {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      padding: 9px 18px;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 10px rgba(244,63,94,0.25);
+      transition: all 0.2s;
+    }
+    .btn-create-top:hover {
+      background: var(--primary-btn-hover);
+      transform: translateY(-1px);
+    }
+
+    /* 檢視切換按鈕 (卡片網格 / 表格 / 月曆) */
+    .view-switcher {
+      display: flex;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: #f1f5f9;
+      padding: 2px;
+    }
+    .view-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+    .view-btn.active {
+      background: white;
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .content-body {
+      padding: 24px 32px 60px;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* 篩選與標籤橫列 */
+    .filter-section {
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .filter-tabs-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 14px;
+    }
+    .status-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .status-pill-btn {
+      border: 1px solid var(--border-color);
+      background: white;
+      padding: 6px 14px;
+      border-radius: var(--radius-xl);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .status-pill-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+    .status-pill-btn.active {
+      background: var(--text-main);
+      color: white;
+      border-color: var(--text-main);
+    }
+    .status-pill-btn.pill-reg.active {
+      background: #059669;
+      border-color: #059669;
+      color: white;
+    }
+    .status-pill-btn.pill-unreg.active {
+      background: #d97706;
+      border-color: #d97706;
+      color: white;
+    }
+    .status-pill-btn.pill-declined.active {
+      background: #dc2626;
+      border-color: #dc2626;
+      color: white;
+    }
+    .pill-counter {
+      font-size: 0.72rem;
+      padding: 1px 6px;
+      border-radius: 8px;
+      background: rgba(0,0,0,0.06);
+    }
+    .status-pill-btn.active .pill-counter {
+      background: rgba(255,255,255,0.25);
+      color: white;
+    }
+
+    .filter-controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .search-box-wrapper {
+      position: relative;
+      flex: 1;
+      max-width: 450px;
+    }
+    .search-input {
+      width: 100%;
+      padding: 10px 14px 10px 38px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      font-size: 0.875rem;
+      background: white;
+      outline: none;
+      transition: border 0.15s;
+    }
+    .search-input:focus { border-color: var(--accent-indigo); }
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+    .select-dropdown {
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      font-size: 0.85rem;
+      background: white;
+      color: var(--text-main);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* ========================================================
+       3. 卡片網格視圖 (Card Grid View - RedPoint 3欄精準版)
+       ======================================================== */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+    }
+    .tournament-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    .tournament-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: #cbd5e1;
+    }
+    .tournament-card.declined-card {
+      opacity: 0.65;
+      background: #f8fafc;
+      border-style: dashed;
+    }
+    .card-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.35;
+      flex: 1;
+    }
+    .badge-status {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+    }
+    .badge-urgent { background: var(--status-urgent-bg); color: var(--status-urgent); border: 1px solid #fecaca; }
+    .badge-active { background: var(--status-success-bg); color: #047857; }
+    .badge-closed { background: var(--status-gray-bg); color: var(--status-gray); }
+    .badge-upcoming { background: var(--status-warning-bg); color: #b45309; }
+
+    .card-location {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-date-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(8px);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.8125rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .sync-status:hover { background: rgba(255, 255, 255, 0.25); }
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #10b981;
-    }
-    .status-dot.offline { background: #f59e0b; }
-    .btn-config {
-      background: white;
-      color: var(--primary);
-      border: none;
-      padding: 8px 14px;
-      border-radius: 8px;
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
       font-weight: 700;
-      font-size: 0.8125rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      transition: all 0.2s;
+      color: #334155;
+      margin-bottom: 16px;
     }
-    .btn-config:hover { background: #f1f5f9; transform: translateY(-1px); }
-    .main-nav {
-      max-width: 1280px;
-      margin: 20px auto 0;
-      padding: 0 20px;
-      display: flex;
-      gap: 12px;
-      border-bottom: 2px solid var(--border);
-    }
-    .nav-tab {
-      padding: 12px 20px;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-      margin-bottom: -2px;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .nav-tab:hover { color: var(--primary); }
-    .nav-tab.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-    }
-    .badge-count {
-      background: #e2e8f0;
-      color: #475569;
-      font-size: 0.75rem;
-      padding: 2px 8px;
-      border-radius: 12px;
-    }
-    .nav-tab.active .badge-count {
-      background: #dbeafe;
-      color: var(--primary);
-    }
-    .container {
-      max-width: 1280px;
-      margin: 24px auto 0;
-      padding: 0 20px;
-    }
-    .stats-bar {
+
+    .card-metrics-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .stat-card {
-      background: var(--card-bg);
-      padding: 16px 20px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .stat-val { font-size: 1.75rem; font-weight: 800; color: var(--primary); }
-    .stat-val.urgent { color: var(--urgent); }
-    .stat-label { font-size: 0.8125rem; font-weight: 700; color: var(--text-muted); }
-    .filter-bar {
-      background: var(--card-bg);
-      padding: 16px 20px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      margin-bottom: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .filter-group {
-      display: flex;
-      flex-wrap: wrap;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
-      align-items: center;
+      background: #f8fafc;
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      margin-bottom: 16px;
+      font-size: 0.78rem;
     }
-    .search-input {
-      padding: 8px 14px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      font-size: 0.875rem;
-      outline: none;
-      min-width: 220px;
+    .metric-item { display: flex; flex-direction: column; }
+    .metric-label { color: var(--text-muted); font-size: 0.7rem; font-weight: 600; margin-bottom: 2px; }
+    .metric-value { font-weight: 800; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* 報名確認交互狀態切換按鈕組 (User Requirement 1) */
+    .intent-toggle-wrapper {
+      margin-bottom: 16px;
     }
-    .filter-select {
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      font-size: 0.875rem;
-      background: white;
-      cursor: pointer;
-    }
-    .view-toggle {
+    .intent-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
       display: flex;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
+      justify-content: space-between;
     }
-    .view-btn {
-      padding: 8px 14px;
+    .intent-btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: var(--radius-md);
+    }
+    .intent-btn {
       border: none;
-      background: white;
-      font-size: 0.8125rem;
+      padding: 6px 8px;
+      border-radius: 8px;
+      font-size: 0.75rem;
       font-weight: 700;
       cursor: pointer;
+      background: transparent;
       color: var(--text-muted);
+      transition: all 0.15s;
+      text-align: center;
     }
-    .view-btn.active {
-      background: var(--primary);
+    .intent-btn.active-reg {
+      background: #10b981;
       color: white;
+      box-shadow: 0 2px 4px rgba(16,185,129,0.25);
     }
+    .intent-btn.active-unreg {
+      background: #f59e0b;
+      color: white;
+      box-shadow: 0 2px 4px rgba(245,158,11,0.25);
+    }
+    .intent-btn.active-declined {
+      background: #ef4444;
+      color: white;
+      box-shadow: 0 2px 4px rgba(239,68,68,0.25);
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-color);
+      padding-top: 14px;
+      margin-top: 4px;
+    }
+    .btn-card-manage {
+      background: #fff1f2;
+      color: #e11d48;
+      border: 1px solid #ffe4e6;
+      padding: 7px 14px;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .btn-card-manage:hover {
+      background: #ffe4e6;
+      color: #be123c;
+    }
+    .link-doc {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: #2563eb;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .link-doc:hover { text-decoration: underline; }
+
+    /* ========================================================
+       4. 表格與行事曆視圖 (Table & Calendar View)
+       ======================================================== */
     .table-container {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
       overflow-x: auto;
     }
     table {
@@ -233,39 +648,35 @@
       font-size: 0.875rem;
     }
     th {
-      background: #f1f5f9;
-      color: #334155;
+      background: #f8fafc;
+      color: #475569;
       font-weight: 700;
       padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-color);
       white-space: nowrap;
     }
     td {
       padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-color);
       vertical-align: middle;
     }
     tr:hover td { background: #f8fafc; }
-    .tag {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      white-space: nowrap;
+
+    .calendar-container {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
     }
-    .tag-sport { background: #e0e7ff; color: #3730a3; }
-    .tag-status-urgent { background: #fee2e2; color: #991b1b; }
-    .tag-status-active { background: #ecfdf5; color: #065f46; }
-    .tag-status-closed { background: #f1f5f9; color: #475569; }
-    .tag-status-upcoming { background: #fef3c7; color: #92400e; }
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 10px;
+      margin-top: 16px;
     }
     .cal-header {
-      background: #1e3a8a;
+      background: #0f172a;
       color: white;
       text-align: center;
       padding: 10px;
@@ -274,20 +685,16 @@
       font-size: 0.875rem;
     }
     .cal-day {
-      background: white;
+      background: #f8fafc;
       min-height: 120px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       padding: 8px;
       display: flex;
       flex-direction: column;
       gap: 6px;
     }
-    .cal-day-num {
-      font-weight: 800;
-      font-size: 0.8125rem;
-      color: #64748b;
-    }
+    .cal-day-num { font-weight: 800; font-size: 0.8125rem; color: #64748b; }
     .cal-event-pill {
       background: #eff6ff;
       border-left: 3px solid #3b82f6;
@@ -296,17 +703,20 @@
       font-size: 0.75rem;
       font-weight: 700;
       color: #1e3a8a;
-      cursor: pointer;
       line-height: 1.2;
     }
     .cal-event-pill.basketball { background: #fff7ed; border-left-color: #ea580c; color: #9a3412; }
     .cal-event-pill.volleyball { background: #fdf2f8; border-left-color: #db2777; color: #9d174d; }
     .cal-event-pill.tennis { background: #f0fdf4; border-left-color: #16a34a; color: #166534; }
+
+    /* ========================================================
+       5. 語音與文字手動新增彈窗 (Voice & Manual Input Modal)
+       ======================================================== */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(4px);
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(5px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -315,134 +725,417 @@
     }
     .modal-card {
       background: white;
-      border-radius: 16px;
-      max-width: 600px;
+      border-radius: var(--radius-xl);
+      max-width: 640px;
       width: 100%;
-      padding: 24px;
-      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 28px;
+      box-shadow: var(--shadow-lg);
     }
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 12px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 14px;
     }
-    .modal-header h3 { font-size: 1.25rem; font-weight: 800; color: #1e3a8a; }
-    .close-btn {
-      background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #94a3b8;
+    .modal-header h3 { font-size: 1.25rem; font-weight: 800; color: var(--text-main); }
+    .close-btn { background: none; border: none; font-size: 1.6rem; cursor: pointer; color: #94a3b8; }
+    
+    /* 語音輸入區塊 */
+    .voice-banner {
+      background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
+      border: 1px dashed #c7d2fe;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 0.8125rem; font-weight: 700; margin-bottom: 6px; }
-    .form-group input {
-      width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 0.875rem;
+    .voice-control-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-    .btn-save {
-      background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer;
+    .btn-mic {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: var(--primary-gradient);
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(244,63,94,0.3);
+      transition: all 0.2s;
     }
-    .btn-cancel {
-      background: #e2e8f0; color: #334155; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer;
+    .btn-mic.listening {
+      animation: pulse-mic 1.2s infinite;
+      background: #ef4444;
+    }
+    @keyframes pulse-mic {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
+      70% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(239,68,68,0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+    }
+    .voice-status-text {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: #4338ca;
+    }
+    .voice-transcript-box {
+      font-size: 0.8125rem;
+      background: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      min-height: 38px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .form-group { margin-bottom: 14px; }
+    .form-group.full { grid-column: span 2; }
+    .form-group label { display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 5px; }
+    .form-input {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      font-size: 0.875rem;
+      outline: none;
+    }
+    .form-input:focus { border-color: var(--accent-indigo); }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .btn-save-modal {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-cancel-modal {
+      background: #e2e8f0;
+      color: #334155;
+      border: none;
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Toast 提示 */
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: white;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      font-weight: 700;
+      box-shadow: var(--shadow-lg);
+      display: none;
+      align-items: center;
+      gap: 8px;
+      z-index: 2000;
     }
   </style>
 </head>
 <body>
 
-  <!-- 頂部導航與狀態列 -->
-  <header class="header">
-    <div class="header-content">
-      <div class="brand">
-        <h1>🏅 臺北市立大直高中 · 運動賽事戰情看板</h1>
-        <p>115 學年度中等學校運動賽事報名進度與代表隊出賽賽程中樞</p>
-      </div>
-      <div class="header-actions">
-        <div class="sync-status" id="syncStatusPill" onclick="openConfigModal()">
-          <span class="status-dot" id="statusDot"></span>
-          <span id="statusText">連線檢測中...</span>
+  <!-- ========================================================
+       1. 深色側邊欄 (Sidebar)
+       ======================================================== -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-logo">
+        <div class="logo-icon">D</div>
+        <div class="brand-text">
+          <h2>大直體育 Hub</h2>
+          <p>賽事戰情管理中心</p>
         </div>
-        <button class="btn-config" onclick="manualRefreshData()">🔄 重新整理</button>
-        <button class="btn-config" onclick="openConfigModal()">⚙️ 資料庫設定</button>
+      </div>
+      <button class="btn-new-tournament" onclick="openCreateModal()">
+        <span>+</span> 快速建立賽事 (語音/文字)
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">總覽與核心</div>
+      <a class="nav-item active" id="navTournaments" onclick="switchNavTab('tournaments')">
+        <div class="nav-item-left">
+          <span>🏆</span> 賽事報名管理
+        </div>
+        <span class="nav-badge" id="sideBadgeTournaments">11</span>
+      </a>
+      <a class="nav-item" id="navSchedules" onclick="switchNavTab('schedules')">
+        <div class="nav-item-left">
+          <span>🏀</span> 大直出賽賽程
+        </div>
+        <span class="nav-badge" id="sideBadgeSchedules">12</span>
+      </a>
+
+      <div class="nav-section-title">報名意向過濾 (過濾無效項目)</div>
+      <a class="nav-item" onclick="setRegistrationFilter('全部')">
+        <div class="nav-item-left"><span>📋</span> 全部列管項目</div>
+        <span class="nav-badge" id="sideBadgeAll">11</span>
+      </a>
+      <a class="nav-item" onclick="setRegistrationFilter('未報名')">
+        <div class="nav-item-left"><span>⏳</span> 待確認 / 未報名</div>
+        <span class="nav-badge" style="background:#fef3c7; color:#92400e;" id="sideBadgeUnreg">8</span>
+      </a>
+      <a class="nav-item" onclick="setRegistrationFilter('已報名')">
+        <div class="nav-item-left"><span>✅</span> 已確認出賽</div>
+        <span class="nav-badge" style="background:#d1fae5; color:#065f46;" id="sideBadgeReg">2</span>
+      </a>
+      <a class="nav-item" onclick="setRegistrationFilter('不報名')">
+        <div class="nav-item-left"><span>🚫</span> 不報名 / 略過項目</div>
+        <span class="nav-badge" style="background:#fee2e2; color:#991b1b;" id="sideBadgeDeclined">1</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="db-status-chip" onclick="openConfigModal()">
+        <div>
+          <span class="db-status-dot" id="sideStatusDot"></span>
+          <span id="sideStatusText" style="color:#cbd5e1; font-weight:700;">連線中...</span>
+        </div>
+        <span style="color:#94a3b8;">⚙️</span>
+      </div>
+      <div class="user-profile">
+        <div class="avatar">K</div>
+        <div class="user-info">
+          <h4>體育組管理員</h4>
+          <p>kevin750521@gmail.com</p>
+        </div>
       </div>
     </div>
-  </header>
+  </aside>
 
-  <!-- 主功能分頁籤 -->
-  <nav class="main-nav">
-    <div class="nav-tab active" id="tabTournaments" onclick="switchTab('tournaments')">
-      📋 賽事報名掌控看板 <span class="badge-count" id="tournamentsCount">10</span>
-    </div>
-    <div class="nav-tab" id="tabSchedules" onclick="switchTab('schedules')">
-      🏀 大直代表隊出賽賽程 <span class="badge-count" id="schedulesCount">12</span>
-    </div>
-  </nav>
-
-  <main class="container">
-    <!-- 統計概況指標 -->
-    <div class="stats-bar" id="statsBar"></div>
-
-    <!-- 篩選器與視圖切換 -->
-    <div class="filter-bar">
-      <div class="filter-group">
-        <input type="text" class="search-input" id="searchInput" placeholder="🔍 搜尋賽事、組別或場館..." oninput="renderActiveView()">
-        <select class="filter-select" id="sportFilter" onchange="renderActiveView()">
-          <option value="全部">全部運動項目</option>
-        </select>
-        <select class="filter-select" id="statusFilter" onchange="renderActiveView()">
-          <option value="全部">全部進度狀態</option>
-        </select>
+  <!-- ========================================================
+       2. 主工作內容區 (Main Content)
+       ======================================================== -->
+  <main class="main-wrapper">
+    <!-- 頂部 Navbar -->
+    <header class="top-navbar">
+      <div class="top-title-group">
+        <h1 id="pageMainTitle">All Tournaments 全部列管賽事</h1>
+        <p id="pageMainSubtitle">共 11 項賽事 · 即時同步 Google Drive 與 Supabase 資料庫</p>
       </div>
-      <div class="view-toggle" id="scheduleViewToggle" style="display: none;">
-        <button class="view-btn active" id="btnListView" onclick="switchScheduleView('list')">📑 表列式</button>
-        <button class="view-btn" id="btnCalView" onclick="switchScheduleView('calendar')">🗓️ 行事曆式</button>
+      <div class="top-actions">
+        <button class="btn-action-outline" onclick="manualRefreshData()">🔄 即時重整</button>
+        <button class="btn-create-top" onclick="openCreateModal()">
+          <span>🎙️</span> 快速建立新賽事
+        </button>
+        <div class="view-switcher" id="viewSwitcher">
+          <button class="view-btn active" id="btnGridView" onclick="switchViewMode('grid')">⊞ 網格卡片</button>
+          <button class="view-btn" id="btnTableView" onclick="switchViewMode('table')">☰ 表格</button>
+          <button class="view-btn" id="btnCalendarView" onclick="switchViewMode('calendar')">🗓️ 月曆</button>
+        </div>
       </div>
-    </div>
+    </header>
 
-    <!-- 內容展示區 -->
-    <div id="contentContainer"></div>
+    <div class="content-body">
+      <!-- 篩選列 -->
+      <section class="filter-section">
+        <!-- 報名意向 Pills (User Requirement 1) -->
+        <div class="filter-tabs-row" id="regPillsRow">
+          <div class="status-pills">
+            <button class="status-pill-btn active" id="pillAll" onclick="setRegistrationFilter('全部')">
+              全部項目 <span class="pill-counter" id="pillCountAll">11</span>
+            </button>
+            <button class="status-pill-btn pill-unreg" id="pillUnreg" onclick="setRegistrationFilter('未報名')">
+              ⏳ 待確認 / 未報名 <span class="pill-counter" id="pillCountUnreg">8</span>
+            </button>
+            <button class="status-pill-btn pill-reg" id="pillReg" onclick="setRegistrationFilter('已報名')">
+              ✅ 已確認報名 <span class="pill-counter" id="pillCountReg">2</span>
+            </button>
+            <button class="status-pill-btn pill-declined" id="pillDeclined" onclick="setRegistrationFilter('不報名')">
+              🚫 不報名 / 略過 <span class="pill-counter" id="pillCountDeclined">1</span>
+            </button>
+          </div>
+
+          <label style="font-size:0.8125rem; font-weight:700; color:var(--text-muted); cursor:pointer; display:flex; align-items:center; gap:6px;">
+            <input type="checkbox" id="chkHideDeclined" onchange="renderActiveView()" checked>
+            預設過濾「不報名」項目 (精簡介面)
+          </label>
+        </div>
+
+        <!-- 關鍵字搜尋與項目過濾 -->
+        <div class="filter-controls-row">
+          <div class="search-box-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="搜尋賽事名稱、組別、場館..." oninput="renderActiveView()">
+          </div>
+          <div style="display:flex; gap:10px;">
+            <select class="select-dropdown" id="sportFilter" onchange="renderActiveView()">
+              <option value="全部">全部運動種類</option>
+            </select>
+            <select class="select-dropdown" id="statusFilter" onchange="renderActiveView()">
+              <option value="全部">全部時程狀態</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- 主要動態呈現容器 (卡片網格 / 表格 / 月曆) -->
+      <section id="contentContainer"></section>
+    </div>
   </main>
 
-  <!-- Supabase 連線設定 Modal -->
+  <!-- ========================================================
+       3. 語音與文字手動新增賽事彈窗 (Requirement 2)
+       ======================================================== -->
+  <div class="modal-overlay" id="createModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🎙️ 手動建立新賽事 (支援語音輸入)</h3>
+        <button class="close-btn" onclick="closeCreateModal()">&times;</button>
+      </div>
+
+      <!-- 語音辨識互動區 -->
+      <div class="voice-banner">
+        <div class="voice-control-row">
+          <button class="btn-mic" id="btnMic" onclick="toggleVoiceRecognition()" title="點擊切換語音輸入">
+            🎙️
+          </button>
+          <div>
+            <div class="voice-status-text" id="voiceStatus">點擊麥克風開始說話，自動辨識賽事內容</div>
+            <div style="font-size:0.72rem; color:#64748b;">例如：「115學年度教育盃排球賽，高男乙組，10月28日比賽，已報名」</div>
+          </div>
+        </div>
+        <div class="voice-transcript-box" id="voiceTranscript">尚未錄音或語音辨識內容將顯示於此...</div>
+        <button type="button" class="btn-action-outline" style="align-self:flex-start; font-size:0.75rem;" onclick="smartParseVoice()">
+          ✨ 智慧辨識並填入表單
+        </button>
+      </div>
+
+      <!-- 手動填寫表單 -->
+      <form id="newTournamentForm" onsubmit="handleCreateTournament(event)">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>賽事名稱 *</label>
+            <input type="text" class="form-input" id="formName" required placeholder="如：臺北市115學年度教育盃中等學校排球錦標賽">
+          </div>
+          <div class="form-group">
+            <label>運動項目 *</label>
+            <input type="text" class="form-input" id="formSport" required placeholder="如：排球、籃球、網球">
+          </div>
+          <div class="form-group">
+            <label>參賽組別</label>
+            <input type="text" class="form-input" id="formDivisions" placeholder="如：高男乙組、國男組">
+          </div>
+          <div class="form-group">
+            <label>比賽日期</label>
+            <input type="text" class="form-input" id="formDates" placeholder="如：115/10/26～10/30">
+          </div>
+          <div class="form-group">
+            <label>比賽場館 / 地點</label>
+            <input type="text" class="form-input" id="formVenue" placeholder="如：內湖高工體育館">
+          </div>
+          <div class="form-group">
+            <label>報名截止時間</label>
+            <input type="text" class="form-input" id="formDeadline" placeholder="如：115/10/14 17:00">
+          </div>
+          <div class="form-group">
+            <label>報名確認意向 *</label>
+            <select class="form-input" id="formIntent">
+              <option value="未報名">⏳ 待確認 / 未報名</option>
+              <option value="已報名">✅ 已確認報名出賽</option>
+              <option value="不報名">🚫 不報名 / 略過項目</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label>報名手續 / 備註說明</label>
+            <input type="text" class="form-input" id="formMethod" placeholder="如：線上系統填報＋列印核章送件">
+          </div>
+          <div class="form-group full">
+            <label>簡章或相關連結網址 (選填)</label>
+            <input type="url" class="form-input" id="formDocUrl" placeholder="https://drive.google.com/...">
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel-modal" onclick="closeCreateModal()">取消</button>
+          <button type="submit" class="btn-save-modal">儲存並同步至資料庫</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Supabase 設定彈窗 -->
   <div class="modal-overlay" id="configModal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>⚙️ Supabase 全自動即時連線設定</h3>
+        <h3>⚙️ Supabase 資料庫連線設定</h3>
         <button class="close-btn" onclick="closeConfigModal()">&times;</button>
       </div>
-      <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 16px;">
-        設定您的 Supabase 專案 API 資訊後，看板將全自動即時同步資料庫內的最新簡章與大直代表隊賽程！
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+        目前已為大直高中專屬專案綁定全自動連線憑證。如需更換專案可在此調整：
       </p>
       <div class="form-group">
         <label>Supabase Project URL</label>
-        <input type="text" id="cfgUrl" value="https://hdxrublbpaptthmflnrn.supabase.co">
+        <input type="text" class="form-input" id="cfgUrl">
       </div>
       <div class="form-group">
-        <label>Supabase Anon Public Key</label>
-        <input type="text" id="cfgKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+        <label>Supabase Publishable / Anon Key</label>
+        <input type="text" class="form-input" id="cfgKey">
       </div>
       <div class="modal-actions">
-        <button class="btn-cancel" onclick="closeConfigModal()">取消</button>
-        <button class="btn-save" onclick="saveSupabaseConfig()">儲存並連線</button>
+        <button class="btn-cancel-modal" onclick="closeConfigModal()">取消</button>
+        <button class="btn-save-modal" onclick="saveSupabaseConfig()">儲存並測試連線</button>
       </div>
     </div>
   </div>
 
+  <!-- Toast 提示組件 -->
+  <div class="toast-msg" id="toastMsg">
+    <span id="toastIcon">✅</span>
+    <span id="toastText">操作成功！</span>
+  </div>
+
   <script>
-    // 預設內建資料 (在尚未設定 Supabase 或離線時使用)
-    const DEFAULT_TOURNAMENTS = [
-      { id: 1, name: "臺北市115學年度教育盃中等學校籃球錦標賽", sport: "籃球", divisions: "高男乙、高女乙、國男乙、國女乙、教男組", competition_dates: "115/10/19～11/06", venue: "泰北國際雙語學校、興雅國中、永春高中", reg_start: "115/09/25", reg_deadline: "115/10/06 16:00", reg_method: "網路線上填報＋核章紙本送達", doc_url: "https://drive.google.com/file/d/1_ksrkEbZg9CPzWS2G8efhMbVFxnFjBK9/view", status: "已截止 (10/12 16:00 公告賽程)" },
-      { id: 2, name: "臺北市115中正盃中等學校網球錦標賽", sport: "網球", divisions: "高男組、高女組、國男組、國女組", competition_dates: "115/11/02～11/06", venue: "臺北市立網球中心", reg_start: "115/10/01", reg_deadline: "115/10/14 17:00", reg_method: "Google表單填報＋ATM匯款2,000元並上傳收據", doc_url: "https://drive.google.com/drive/folders/16iBWHC9ilYKB442HuBessa37hWwNe-zm", status: "🚨 報名急件 (倒數 4 天)" },
-      { id: 3, name: "臺北市115學年度教育盃中等學校網球錦標賽", sport: "網球", divisions: "高男、高女、國男、國女 (團體/個人)", competition_dates: "115/11/09～11/13", venue: "臺北市立網球中心", reg_start: "115/10/12", reg_deadline: "115/10/23 16:00", reg_method: "新興國中網站線上報名＋紙本核章正本掛號寄送", doc_url: "https://drive.google.com/file/d/1PcSsn3YOqx8d7AkapGTtXW9YLZ9OK03L/view", status: "即將開始 (10/12 開放)" },
-      { id: 4, name: "臺北市115學年度教育盃中等學校羽球錦標賽", sport: "羽球", divisions: "高中男子/女子組、國中男子/女子組", competition_dates: "115/11/16～11/20", venue: "臺北體育館 7 樓", reg_start: "115/10/05", reg_deadline: "115/10/20 16:00", reg_method: "網路線上填報＋核章紙本掛號郵寄", doc_url: "https://drive.google.com/file/d/1FWvl4sj3Q7Wq4bfy4CJTf_X1Su-U1GHl/view", status: "進行中 (10/20 截止)" },
-      { id: 5, name: "115學年度教育部中小學女子壘球聯賽 (高中組/國中組)", sport: "壘球", divisions: "高女組、國女組", competition_dates: "115/12/01～12/10", venue: "青年公園棒壘球場", reg_start: "115/10/15", reg_deadline: "115/11/05 17:00", reg_method: "中華民國高級中等學校體總官網線上報名", doc_url: "https://drive.google.com/drive/folders/16iBWHC9ilYKB442HuBessa37hWwNe-zm", status: "即將開始 (10/15 開放)" },
-      { id: 6, name: "115學年度全國中等學校棒球聯賽 (軟式組)", sport: "棒球", divisions: "國中軟式組、高中軟式組", competition_dates: "115/11/15～11/25", venue: "重新棒壘球場、中山棒球場", reg_start: "115/10/01", reg_deadline: "115/10/25 18:00", reg_method: "學生棒球運動聯盟線上系統填報＋寄送名冊", doc_url: "https://drive.google.com/file/d/1wZeogENyafl_g6jOj3SJYSkujpey9SgJ/view", status: "進行中 (10/25 截止)" },
-      { id: 7, name: "115學年度高中籃球乙級聯賽臺北市預賽", sport: "籃球", divisions: "高男乙、高女乙", competition_dates: "115/11/23～12/02", venue: "師大附中體育館、陽明高中體育館", reg_start: "115/10/08", reg_deadline: "115/10/28 17:00", reg_method: "體育署中等學校體育資訊網線上系統", doc_url: "https://drive.google.com/file/d/1ro-kmzTkV6XFafHQumjnH_P9-ixFqIAj/view", status: "進行中 (10/28 截止)" },
-      { id: 8, name: "臺北市115學年度教育盃中等學校排球錦標賽", sport: "排球", divisions: "高男乙組、國男乙組、教職員女組", competition_dates: "115/10/26～10/30", venue: "內湖高工、內湖高中、明湖國中體育館", reg_start: "115/09/20", reg_deadline: "115/10/02 16:00", reg_method: "官方線上系統報名＋核章正本", doc_url: "https://drive.google.com/file/d/106vzGXV4aFlu-O9JRcJHtbOU4mGcMSsq/view", status: "已截止 (分組籤表已公告)" },
-      { id: 9, name: "臺北市115學年度教育盃中等學校11人制足球錦標賽", sport: "足球", divisions: "高男組、國男組", competition_dates: "115/11/24～11/28", venue: "臺北田徑場、迎風足球場", reg_start: "115/10/12", reg_deadline: "115/10/30 16:00", reg_method: "網路線上填報＋核章紙本送達", doc_url: "https://drive.google.com/file/d/19pnbrItBu6NXdFCwwwl6FS4pNHB_sSex/view", status: "即將開始 (10/12 開放)" },
-      { id: 10, name: "臺北市115學年度教育盃中等學校擊劍錦標賽", sport: "擊劍", divisions: "國男/女銳劍鈍劍軍刀；高男/女銳劍鈍劍軍刀", competition_dates: "115/12/08～12/11", venue: "臺北體育館 1 樓", reg_start: "115/11/02", reg_deadline: "115/11/13 16:00", reg_method: "中正國中網站線上報名＋紙本核章正本送達", doc_url: "https://drive.google.com/file/d/11WOPUkuJDX2p2we14j-tZgbHOJFJxFul/view", status: "籌備中 (11/02 開放)" }
+    // ========================================================
+    // 資料核心與 Supabase 連線憑證
+    // ========================================================
+    const DEFAULT_SUPABASE_URL = "https://hdxrublbpaptthmflnrn.supabase.co";
+    const DEFAULT_SUPABASE_KEY = "sb_publishable_n3ONLlgwYQ0TAOcxkKoNhg_ZwL6M9wP";
+
+    // 內建完整種子資料庫 (11 項賽事 + 12 組賽程)
+    const SEED_TOURNAMENTS = [
+      { id: 1, name: "臺北市115學年度教育盃中等學校籃球錦標賽", sport: "籃球", divisions: "高男乙、高女乙、國男乙、國女乙、教男組", competition_dates: "115/10/19～11/06", venue: "泰北國際雙語學校、興雅國中、永春高中體育館", reg_start: "115/09/25", reg_deadline: "115/10/06 16:00", reg_method: "網路線上填報＋核章紙本送達", doc_url: "https://drive.google.com/file/d/1_ksrkEbZg9CPzWS2G8efhMbVFxnFjBK9/view", status: "已截止 (10/12 16:00 公告賽程)", registration_status: "已報名" },
+      { id: 2, name: "臺北市115中正盃中等學校網球錦標賽", sport: "網球", divisions: "高男組、高女組、國男組、國女組", competition_dates: "115/11/02～11/06", venue: "臺北市立網球中心", reg_start: "115/10/01", reg_deadline: "115/10/14 17:00", reg_method: "Google表單填報＋ATM匯款2,000元並上傳收據", doc_url: "https://drive.google.com/drive/folders/16iBWHC9ilYKB442HuBessa37hWwNe-zm", status: "🚨 報名急件 (倒數 4 天)", registration_status: "未報名" },
+      { id: 3, name: "中華民國115年度全國中正盃空手道錦標賽", sport: "空手道", divisions: "高中男子/女子組、國中男子/女子組 (個人形/個人對打/團體形)", competition_dates: "115/11/06～11/08", venue: "新北市板橋體育館", reg_start: "115/09/20", reg_deadline: "115/10/12 23:00", reg_method: "網路線上填報(kfcjc.neoqqf.com.tw)＋列印核章＋匯款證明上傳", doc_url: "https://drive.google.com/file/d/1kdiiSofB4wLkOZFcBp8LJX8Bzg0Lop5t/view", status: "🚨 報名急件 (倒數 2 天)", registration_status: "未報名" },
+      { id: 4, name: "臺北市115學年度教育盃中等學校網球錦標賽", sport: "網球", divisions: "高男、高女、國男、國女 (團體/個人)", competition_dates: "115/11/09～11/13", venue: "臺北市立網球中心", reg_start: "115/10/12", reg_deadline: "115/10/23 16:00", reg_method: "新興國中網站線上報名＋紙本核章正本掛號寄送", doc_url: "https://drive.google.com/file/d/1PcSsn3YOqx8d7AkapGTtXW9YLZ9OK03L/view", status: "即將開始 (10/12 開放)", registration_status: "未報名" },
+      { id: 5, name: "臺北市115學年度教育盃中等學校羽球錦標賽", sport: "羽球", divisions: "高中男子/女子組、國中男子/女子組", competition_dates: "115/11/16～11/20", venue: "臺北體育館 7 樓", reg_start: "115/10/05", reg_deadline: "115/10/20 16:00", reg_method: "網路線上填報＋核章紙本掛號郵寄", doc_url: "https://drive.google.com/file/d/1FWvl4sj3Q7Wq4bfy4CJTf_X1Su-U1GHl/view", status: "進行中 (10/20 截止)", registration_status: "未報名" },
+      { id: 6, name: "115學年度教育部中小學女子壘球聯賽 (高中組/國中組)", sport: "壘球", divisions: "高女組、國女組", competition_dates: "115/12/01～12/10", venue: "青年公園棒壘球場", reg_start: "115/10/15", reg_deadline: "115/11/05 17:00", reg_method: "中華民國高級中等學校體總官網線上報名", doc_url: "https://drive.google.com/drive/folders/16iBWHC9ilYKB442HuBessa37hWwNe-zm", status: "即將開始 (10/15 開放)", registration_status: "不報名" },
+      { id: 7, name: "115學年度全國中等學校棒球聯賽 (軟式組)", sport: "棒球", divisions: "國中軟式組、高中軟式組", competition_dates: "115/11/15～11/25", venue: "重新棒壘球場、中山棒球場", reg_start: "115/10/01", reg_deadline: "115/10/25 18:00", reg_method: "學生棒球運動聯盟線上系統填報＋寄送名冊", doc_url: "https://drive.google.com/file/d/1wZeogENyafl_g6jOj3SJYSkujpey9SgJ/view", status: "進行中 (10/25 截止)", registration_status: "未報名" },
+      { id: 8, name: "115學年度高中籃球乙級聯賽臺北市預賽", sport: "籃球", divisions: "高男乙、高女乙", competition_dates: "115/11/23～12/02", venue: "師大附中體育館、陽明高中體育館", reg_start: "115/10/08", reg_deadline: "115/10/28 17:00", reg_method: "體育署中等學校體育資訊網線上系統", doc_url: "https://drive.google.com/file/d/1ro-kmzTkV6XFafHQumjnH_P9-ixFqIAj/view", status: "進行中 (10/28 截止)", registration_status: "未報名" },
+      { id: 9, name: "臺北市115學年度教育盃中等學校排球錦標賽", sport: "排球", divisions: "高男乙組、國男乙組、教職員女組", competition_dates: "115/10/26～10/30", venue: "內湖高工、內湖高中、明湖國中體育館", reg_start: "115/09/20", reg_deadline: "115/10/02 16:00", reg_method: "官方線上系統報名＋核章正本", doc_url: "https://drive.google.com/file/d/106vzGXV4aFlu-O9JRcJHtbOU4mGcMSsq/view", status: "已截止 (分組籤表已公告)", registration_status: "已報名" },
+      { id: 10, name: "臺北市115學年度教育盃中等學校11人制足球錦標賽", sport: "足球", divisions: "高男組、國男組", competition_dates: "115/11/24～11/28", venue: "臺北田徑場、迎風足球場", reg_start: "115/10/12", reg_deadline: "115/10/30 16:00", reg_method: "網路線上填報＋核章紙本送達", doc_url: "https://drive.google.com/file/d/19pnbrItBu6NXdFCwwwl6FS4pNHB_sSex/view", status: "即將開始 (10/12 開放)", registration_status: "未報名" },
+      { id: 11, name: "臺北市115學年度教育盃中等學校擊劍錦標賽", sport: "擊劍", divisions: "國男/女銳劍鈍劍軍刀；高男/女銳劍鈍劍軍刀", competition_dates: "115/12/08～12/11", venue: "臺北體育館 1 樓", reg_start: "115/11/02", reg_deadline: "115/11/13 16:00", reg_method: "中正國中網站線上報名＋紙本核章正本送達", doc_url: "https://drive.google.com/file/d/11WOPUkuJDX2p2we14j-tZgbHOJFJxFul/view", status: "籌備中 (11/02 開放)", registration_status: "未報名" }
     ];
 
-    const DEFAULT_SCHEDULES = [
+    const SEED_SCHEDULES = [
       { id: 1, sport: "🏀 籃球", division: "高男乙組", tournament_name: "115學年度教育盃籃球賽", match_date: "115/10/19～11/06", match_time: "待10/12公佈", venue: "泰北國際雙語學校體育館", opponents_draw: "預賽 F 組：大直高中、麗山高中、松山家商、松山工農", advancement_rule: "4 取 2 晉級第二輪", source_file: "教育盃籃賽分組表.pdf", status: "已抽籤排定" },
       { id: 2, sport: "🏀 籃球", division: "高女乙組", tournament_name: "115學年度教育盃籃球賽", match_date: "115/10/19～11/06", match_time: "待10/12公佈", venue: "興雅國中活動中心體育館", opponents_draw: "預賽 B 組：大直高中、育成高中、華江高中、泰北高中", advancement_rule: "4 取 2 晉級決賽", source_file: "教育盃籃賽分組表.pdf", status: "已抽籤排定" },
       { id: 3, sport: "🏀 籃球", division: "國男乙組", tournament_name: "115學年度教育盃籃球賽", match_date: "115/10/19～11/06", match_time: "待10/12公佈", venue: "泰北國際雙語學校體育館", opponents_draw: "預賽 C 組：大直高中、介壽國中、達人中學、古亭國中", advancement_rule: "4 取 2 晉級第二輪", source_file: "教育盃籃賽分組表.pdf", status: "已抽籤排定" },
@@ -454,371 +1147,599 @@
       { id: 9, sport: "🎾 網球", division: "國男團體組", tournament_name: "115學年度教育盃網球賽", match_date: "115/11/09～11/11", match_time: "待抽籤公告", venue: "臺北市立網球中心", opponents_draw: "抽籤排定（大直高中國中部）", advancement_rule: "單淘汰賽制", source_file: "BJ115.pdf", status: "備件報名中" },
       { id: 10, sport: "🏸 羽球", division: "高中男子組", tournament_name: "115學年度教育盃羽球賽", match_date: "115/11/16～11/18", match_time: "待大會公告", venue: "臺北體育館 7 樓", opponents_draw: "待領隊會議抽籤", advancement_rule: "雙敗淘汰/循環", source_file: "115教育盃羽球.pdf", status: "報名作業中" },
       { id: 11, sport: "⚾ 棒球", division: "國中軟式組", tournament_name: "115學年度全國棒球聯賽", match_date: "115/11/15～11/20", match_time: "待大會公告", venue: "重新棒壘球場", opponents_draw: "分區預賽循環排籤", advancement_rule: "分組取優勝晉級全國", source_file: "115軟式聯賽.pdf", status: "名冊審核中" },
-      { id: 12, sport: "🏀 籃球", division: "高男乙組", tournament_name: "115高中籃球乙級市預賽", match_date: "115/11/23～11/28", match_time: "待大會時程", venue: "師大附中體育館", opponents_draw: "市預賽分組抽籤", advancement_rule: "分組前兩名進四強", source_file: "115籃球聯賽.pdf", status: "報名籌備中" }
+      { id: 12, sport: "🏀 籃球", division: "高男乙組", tournament_name: "115高中籃球乙級市預賽", match_date: "115/11/23～12/02", match_time: "待大會時程", venue: "師大附中體育館", opponents_draw: "市預賽分組抽籤", advancement_rule: "分組前兩名進四強", source_file: "115籃球聯賽.pdf", status: "報名籌備中" }
     ];
 
-    let currentTournaments = [...DEFAULT_TOURNAMENTS];
-    let currentSchedules = [...DEFAULT_SCHEDULES];
-    let currentTab = 'tournaments';
-    let currentScheduleView = 'list';
+    let tournaments = JSON.parse(localStorage.getItem('dazhi_tournaments')) || [...SEED_TOURNAMENTS];
+    let schedules = [...SEED_SCHEDULES];
+    let currentActiveNav = 'tournaments'; // 'tournaments' | 'schedules'
+    let currentViewMode = 'grid'; // 'grid' | 'table' | 'calendar'
+    let currentRegFilter = '全部'; // '全部' | '已報名' | '未報名' | '不報名'
     let supabaseClient = null;
 
-    // 初始化載入
+    // 語音識別實例
+    let recognition = null;
+    let isListening = false;
+
     window.addEventListener('DOMContentLoaded', () => {
-      initSupabaseConnection();
-      renderStats();
-      populateFilters();
+      initSupabase();
+      initSpeechRecognition();
+      populateDropdownFilters();
+      updatePillCounts();
       renderActiveView();
     });
 
-    // Supabase 專案預設連線憑證 (已為大直高中專屬專案綁定)
-    const DEFAULT_SUPABASE_URL = "https://hdxrublbpaptthmflnrn.supabase.co";
-    const DEFAULT_SUPABASE_KEY = "sb_publishable_n3ONLlgwYQ0TAOcxkKoNhg_ZwL6M9wP";
-
-    function initSupabaseConnection() {
+    // ========================================================
+    // Supabase 連線與資料讀寫
+    // ========================================================
+    function initSupabase() {
       const url = localStorage.getItem('dazhi_supabase_url') || DEFAULT_SUPABASE_URL;
       const key = localStorage.getItem('dazhi_supabase_key') || DEFAULT_SUPABASE_KEY;
-      const dot = document.getElementById('statusDot');
-      const txt = document.getElementById('statusText');
+      const dot = document.getElementById('sideStatusDot');
+      const txt = document.getElementById('sideStatusText');
 
       if (url && key && window.supabase) {
         try {
           supabaseClient = window.supabase.createClient(url, key);
-          dot.className = 'status-dot';
-          txt.textContent = '🟢 Supabase 即時同步中';
+          dot.className = 'db-status-dot';
+          txt.textContent = '🟢 Supabase 即時連線';
           fetchDataFromSupabase();
           return;
         } catch (e) {
-          console.error('Supabase init error:', e);
+          console.error('Supabase 初始化失敗:', e);
         }
       }
-      dot.className = 'status-dot offline';
-      txt.textContent = '🟡 內建離線資料模式 (點擊設定)';
+      dot.className = 'db-status-dot offline';
+      txt.textContent = '🟡 內建離線備援模式';
     }
 
-        async function fetchDataFromSupabase() {
-      const url = localStorage.getItem('dazhi_supabase_url') || DEFAULT_SUPABASE_URL;
-      const key = localStorage.getItem('dazhi_supabase_key') || DEFAULT_SUPABASE_KEY;
-      const dot = document.getElementById('statusDot');
-      const txt = document.getElementById('statusText');
-
-      // 優先使用 Supabase SDK
-      if (supabaseClient) {
-        try {
-          const { data: tData, error: tErr } = await supabaseClient.from('tournaments').select('*').order('id', { ascending: true });
-          if (!tErr && tData && tData.length > 0) {
-            currentTournaments = tData;
-            document.getElementById('tournamentsCount').textContent = tData.length;
-          }
-
-          const { data: sData, error: sErr } = await supabaseClient.from('schedules').select('*').order('id', { ascending: true });
-          if (!sErr && sData && sData.length > 0) {
-            currentSchedules = sData;
-            document.getElementById('schedulesCount').textContent = sData.length;
-          }
-
-          dot.className = 'status-dot';
-          txt.textContent = '🟢 Supabase 即時同步中 (' + currentTournaments.length + ' 賽事 / ' + currentSchedules.length + ' 賽程)';
-          renderStats();
-          populateFilters();
-          renderActiveView();
-          return;
-        } catch (e) {
-          console.warn('Supabase SDK 讀取異常，切換至 REST API 直接連線:', e);
-        }
-      }
-
-      // REST API 直接連線備援
+    async function fetchDataFromSupabase() {
+      if (!supabaseClient) return;
       try {
-        const headers = { 'apikey': key, 'Authorization': 'Bearer ' + key };
-        const [resT, resS] = await Promise.all([
-          fetch(url + '/rest/v1/tournaments?select=*&order=id.asc', { headers }),
-          fetch(url + '/rest/v1/schedules?select=*&order=id.asc', { headers })
-        ]);
-        if (resT.ok && resS.ok) {
-          const tData = await resT.json();
-          const sData = await resS.json();
-          if (tData && tData.length > 0) {
-            currentTournaments = tData;
-            document.getElementById('tournamentsCount').textContent = tData.length;
-          }
-          if (sData && sData.length > 0) {
-            currentSchedules = sData;
-            document.getElementById('schedulesCount').textContent = sData.length;
-          }
-          dot.className = 'status-dot';
-          txt.textContent = '🟢 Supabase 即時同步中 (' + currentTournaments.length + ' 賽事 / ' + currentSchedules.length + ' 賽程)';
-          renderStats();
-          populateFilters();
-          renderActiveView();
-          return;
+        const { data: tData, error: tErr } = await supabaseClient.from('tournaments').select('*').order('id', { ascending: true });
+        if (!tErr && tData && tData.length > 0) {
+          tournaments = tData;
+          localStorage.setItem('dazhi_tournaments', JSON.stringify(tournaments));
         }
-      } catch (err) {
-        console.warn('REST API 讀取異常，保留內建完整預載資料:', err);
-      }
 
-      // 若尚未建表或離線，使用內建資料並提示
-      dot.className = 'status-dot offline';
-      txt.textContent = '🟡 內建完整資料庫模式 (已連線準備)';
-      renderStats();
-      populateFilters();
-      renderActiveView();
+        const { data: sData, error: sErr } = await supabaseClient.from('schedules').select('*').order('id', { ascending: true });
+        if (!sErr && sData && sData.length > 0) {
+          schedules = sData;
+        }
+
+        updatePillCounts();
+        populateDropdownFilters();
+        renderActiveView();
+      } catch (err) {
+        console.warn('從 Supabase 取得資料異常，沿用本地資料:', err);
+      }
     }
 
     function manualRefreshData() {
       if (supabaseClient) {
         fetchDataFromSupabase();
-        alert('已從 Supabase 資料庫重新整理最新資料！');
+        showToast('已從 Supabase 即時同步最新賽事與賽程！');
       } else {
-        alert('目前處於內建資料模式。若要全自動即時同步，請點擊「⚙️ 資料庫設定」貼上您的 Supabase API 資訊！');
+        showToast('目前為內建資料模式。已刷新畫面！');
+        renderActiveView();
       }
     }
 
-    function switchTab(tab) {
-      currentTab = tab;
-      document.getElementById('tabTournaments').className = 'nav-tab' + (tab === 'tournaments' ? ' active' : '');
-      document.getElementById('tabSchedules').className = 'nav-tab' + (tab === 'schedules' ? ' active' : '');
-      document.getElementById('scheduleViewToggle').style.display = tab === 'schedules' ? 'flex' : 'none';
-      populateFilters();
-      renderActiveView();
-    }
+    // ========================================================
+    // 報名狀態切換 (Requirement 1: 已報名 / 未報名 / 不報名)
+    // ========================================================
+    async function updateRegistrationIntent(tournamentId, newStatus) {
+      const t = tournaments.find(item => item.id === tournamentId);
+      if (!t) return;
+      t.registration_status = newStatus;
 
-    function switchScheduleView(view) {
-      currentScheduleView = view;
-      document.getElementById('btnListView').className = 'view-btn' + (view === 'list' ? ' active' : '');
-      document.getElementById('btnCalView').className = 'view-btn' + (view === 'calendar' ? ' active' : '');
-      renderActiveView();
-    }
+      // 1. 本地儲存持久化
+      localStorage.setItem('dazhi_tournaments', JSON.stringify(tournaments));
 
-    function renderStats() {
-      const statsBar = document.getElementById('statsBar');
-      if (currentTab === 'tournaments') {
-        const total = currentTournaments.length;
-        const urgent = currentTournaments.filter(t => t.status && t.status.includes('🚨')).length;
-        const active = currentTournaments.filter(t => t.status && (t.status.includes('進行中') || t.status.includes('即將'))).length;
-        statsBar.innerHTML = `
-          <div class="stat-card">
-            <div><div class="stat-val">${total}</div><div class="stat-label">列管重大賽事</div></div>
-            <div style="font-size:2rem;">📋</div>
-          </div>
-          <div class="stat-card">
-            <div><div class="stat-val urgent">${urgent}</div><div class="stat-label">🚨 近期截止急件</div></div>
-            <div style="font-size:2rem;">⚠️</div>
-          </div>
-          <div class="stat-card">
-            <div><div class="stat-val">${active}</div><div class="stat-label">開放或籌備中</div></div>
-            <div style="font-size:2rem;">⏳</div>
-          </div>
-        `;
-      } else {
-        const total = currentSchedules.length;
-        const bbCount = currentSchedules.filter(s => s.sport.includes('籃球')).length;
-        const vbCount = currentSchedules.filter(s => s.sport.includes('排球')).length;
-        statsBar.innerHTML = `
-          <div class="stat-card">
-            <div><div class="stat-val">${total}</div><div class="stat-label">大直高中出賽代表隊</div></div>
-            <div style="font-size:2rem;">🏅</div>
-          </div>
-          <div class="stat-card">
-            <div><div class="stat-val">${bbCount}</div><div class="stat-label">🏀 籃球項目出賽隊次</div></div>
-            <div style="font-size:2rem;">🏀</div>
-          </div>
-          <div class="stat-card">
-            <div><div class="stat-val">${vbCount}</div><div class="stat-label">🏐 排球項目出賽隊次</div></div>
-            <div style="font-size:2rem;">🏐</div>
-          </div>
-        `;
+      // 2. 若 Supabase 連線可用，非同步推播更新至後端
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('tournaments').update({ registration_status: newStatus }).eq('id', tournamentId);
+        } catch (e) {
+          console.warn('推播報名意向至 Supabase 失敗:', e);
+        }
       }
+
+      showToast(`已將「${t.name.substring(0, 10)}...」標記為【${newStatus}】！`);
+      updatePillCounts();
+      renderActiveView();
     }
 
-    function populateFilters() {
+    function setRegistrationFilter(filter) {
+      currentRegFilter = filter;
+      document.getElementById('pillAll').className = 'status-pill-btn' + (filter === '全部' ? ' active' : '');
+      document.getElementById('pillUnreg').className = 'status-pill-btn pill-unreg' + (filter === '未報名' ? ' active' : '');
+      document.getElementById('pillReg').className = 'status-pill-btn pill-reg' + (filter === '已報名' ? ' active' : '');
+      document.getElementById('pillDeclined').className = 'status-pill-btn pill-declined' + (filter === '不報名' ? ' active' : '');
+      renderActiveView();
+    }
+
+    function updatePillCounts() {
+      const total = tournaments.length;
+      const unreg = tournaments.filter(t => (t.registration_status || '未報名') === '未報名').length;
+      const reg = tournaments.filter(t => t.registration_status === '已報名').length;
+      const dec = tournaments.filter(t => t.registration_status === '不報名').length;
+
+      document.getElementById('pillCountAll').textContent = total;
+      document.getElementById('pillCountUnreg').textContent = unreg;
+      document.getElementById('pillCountReg').textContent = reg;
+      document.getElementById('pillCountDeclined').textContent = dec;
+
+      document.getElementById('sideBadgeTournaments').textContent = total;
+      document.getElementById('sideBadgeAll').textContent = total;
+      document.getElementById('sideBadgeUnreg').textContent = unreg;
+      document.getElementById('sideBadgeReg').textContent = reg;
+      document.getElementById('sideBadgeDeclined').textContent = dec;
+    }
+
+    // ========================================================
+    // 導航與視圖切換
+    // ========================================================
+    function switchNavTab(tab) {
+      currentActiveNav = tab;
+      document.getElementById('navTournaments').className = 'nav-item' + (tab === 'tournaments' ? ' active' : '');
+      document.getElementById('navSchedules').className = 'nav-item' + (tab === 'schedules' ? ' active' : '');
+
+      if (tab === 'tournaments') {
+        document.getElementById('pageMainTitle').textContent = 'All Tournaments 全部列管賽事';
+        document.getElementById('pageMainSubtitle').textContent = `共 ${tournaments.length} 項賽事 · 即時同步 Google Drive 與 Supabase 資料庫`;
+        document.getElementById('regPillsRow').style.display = 'flex';
+      } else {
+        document.getElementById('pageMainTitle').textContent = 'Dazhi Squad Schedules 大直出賽賽程';
+        document.getElementById('pageMainSubtitle').textContent = `共 ${schedules.length} 場次代表隊出賽 · 籤位對手與場館資訊`;
+        document.getElementById('regPillsRow').style.display = 'none';
+      }
+      populateDropdownFilters();
+      renderActiveView();
+    }
+
+    function switchViewMode(mode) {
+      currentViewMode = mode;
+      document.getElementById('btnGridView').className = 'view-btn' + (mode === 'grid' ? ' active' : '');
+      document.getElementById('btnTableView').className = 'view-btn' + (mode === 'table' ? ' active' : '');
+      document.getElementById('btnCalendarView').className = 'view-btn' + (mode === 'calendar' ? ' active' : '');
+      renderActiveView();
+    }
+
+    function populateDropdownFilters() {
       const sportSelect = document.getElementById('sportFilter');
-      const currentVal = sportSelect.value;
-      const data = currentTab === 'tournaments' ? currentTournaments : currentSchedules;
+      const cur = sportSelect.value;
+      const data = currentActiveNav === 'tournaments' ? tournaments : schedules;
       const sports = Array.from(new Set(data.map(d => d.sport.replace(/[^\u4e00-\u9fa5]/g, '')))).filter(Boolean);
 
-      sportSelect.innerHTML = '<option value="全部">全部運動項目</option>';
+      sportSelect.innerHTML = '<option value="全部">全部運動種類</option>';
       sports.forEach(s => {
         sportSelect.innerHTML += `<option value="${s}">${s}</option>`;
       });
-      if (sports.includes(currentVal)) sportSelect.value = currentVal;
+      if (sports.includes(cur)) sportSelect.value = cur;
     }
 
+    // ========================================================
+    // 核心渲染視圖 (Render Active View)
+    // ========================================================
     function renderActiveView() {
       const container = document.getElementById('contentContainer');
       const search = document.getElementById('searchInput').value.trim().toLowerCase();
       const sport = document.getElementById('sportFilter').value;
+      const hideDeclined = document.getElementById('chkHideDeclined').checked;
 
-      if (currentTab === 'tournaments') {
-        let filtered = currentTournaments.filter(item => {
-          const matchSearch = !search || item.name.toLowerCase().includes(search) || (item.divisions && item.divisions.toLowerCase().includes(search)) || (item.venue && item.venue.toLowerCase().includes(search));
-          const matchSport = sport === '全部' || item.sport.includes(sport);
-          return matchSearch && matchSport;
+      if (currentActiveNav === 'tournaments') {
+        // 篩選賽事
+        let list = tournaments.filter(t => {
+          const matchSearch = !search || t.name.toLowerCase().includes(search) || (t.divisions && t.divisions.toLowerCase().includes(search)) || (t.venue && t.venue.toLowerCase().includes(search));
+          const matchSport = sport === '全部' || t.sport.includes(sport);
+          
+          const regStatus = t.registration_status || '未報名';
+          const matchRegPill = currentRegFilter === '全部' || regStatus === currentRegFilter;
+          
+          // 如果勾選隱藏不報名且當前不是特定看「不報名」頁籤
+          if (hideDeclined && currentRegFilter === '全部' && regStatus === '不報名') return false;
+
+          return matchSearch && matchSport && matchRegPill;
         });
 
-        let html = `
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>賽事名稱</th>
-                  <th>項目</th>
-                  <th>組別／項目</th>
-                  <th>比賽時程</th>
-                  <th>比賽場地</th>
-                  <th>報名截止</th>
-                  <th>報名方式</th>
-                  <th>狀態</th>
-                  <th>簡章連結</th>
-                </tr>
-              </thead>
-              <tbody>
-        `;
-        filtered.forEach(t => {
-          let statusClass = 'tag-status-active';
-          if (t.status.includes('🚨')) statusClass = 'tag-status-urgent';
-          else if (t.status.includes('截止')) statusClass = 'tag-status-closed';
-          else if (t.status.includes('即將') || t.status.includes('籌備')) statusClass = 'tag-status-upcoming';
+        if (currentViewMode === 'grid') {
+          // 卡片網格模式 (RedPoint 3欄精準版)
+          if (list.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:60px; color:#94a3b8;">無符合篩選條件的賽事項目</div>';
+            return;
+          }
+          let html = '<div class="cards-grid">';
+          list.forEach(t => {
+            const regStatus = t.registration_status || '未報名';
+            let badgeClass = 'badge-active';
+            if (t.status.includes('🚨')) badgeClass = 'badge-urgent';
+            else if (t.status.includes('截止')) badgeClass = 'badge-closed';
+            else if (t.status.includes('即將') || t.status.includes('籌備')) badgeClass = 'badge-upcoming';
 
-          html += `
-            <tr>
-              <td><strong>${t.name}</strong></td>
-              <td><span class="tag tag-sport">${t.sport}</span></td>
-              <td style="max-width:200px;">${t.divisions || '-'}</td>
-              <td>${t.competition_dates || '-'}</td>
-              <td>${t.venue || '-'}</td>
-              <td><strong>${t.reg_deadline || '-'}</strong></td>
-              <td style="font-size:0.8125rem;">${t.reg_method || '-'}</td>
-              <td><span class="tag ${statusClass}">${t.status}</span></td>
-              <td><a href="${t.doc_url}" target="_blank" style="color:#2563eb; text-decoration:none; font-weight:700;">📄 開啟簡章 ↗</a></td>
-            </tr>
-          `;
-        });
-        html += '</tbody></table></div>';
-        container.innerHTML = html;
+            const isDeclined = regStatus === '不報名';
 
-      } else {
-        // Schedules Tab
-        let filtered = currentSchedules.filter(item => {
-          const matchSearch = !search || item.tournament_name.toLowerCase().includes(search) || item.division.toLowerCase().includes(search) || (item.opponents_draw && item.opponents_draw.toLowerCase().includes(search)) || (item.venue && item.venue.toLowerCase().includes(search));
-          const matchSport = sport === '全部' || item.sport.includes(sport);
-          return matchSearch && matchSport;
-        });
+            html += `
+              <div class="tournament-card ${isDeclined ? 'declined-card' : ''}">
+                <div>
+                  <div class="card-top-row">
+                    <h3 class="card-title">${t.name}</h3>
+                    <span class="badge-status ${badgeClass}">${t.status}</span>
+                  </div>
+                  <div class="card-location">
+                    <span>📍</span> ${t.sport} · ${t.venue || '場館確認中'}
+                  </div>
+                  <div class="card-date-badge">
+                    <span>📅</span> 比賽：${t.competition_dates || '待定'}
+                  </div>
 
-        if (currentScheduleView === 'list') {
+                  <div class="card-metrics-grid">
+                    <div class="metric-item">
+                      <span class="metric-label">參賽組別</span>
+                      <span class="metric-value" title="${t.divisions}">${t.divisions || '各組別'}</span>
+                    </div>
+                    <div class="metric-item">
+                      <span class="metric-label">報名截止</span>
+                      <span class="metric-value" style="color:#e11d48;">${t.reg_deadline || '待公告'}</span>
+                    </div>
+                  </div>
+
+                  <!-- 報名意向確認列 (User Requirement 1) -->
+                  <div class="intent-toggle-wrapper">
+                    <div class="intent-label">
+                      <span>報名決策狀態</span>
+                      <strong style="color:${regStatus==='已報名'?'#10b981':(regStatus==='不報名'?'#ef4444':'#f59e0b')}">${regStatus}</strong>
+                    </div>
+                    <div class="intent-btn-group">
+                      <button class="intent-btn ${regStatus==='已報名'?'active-reg':''}" onclick="updateRegistrationIntent(${t.id}, '已報名')">✅ 已報名</button>
+                      <button class="intent-btn ${regStatus==='未報名'?'active-unreg':''}" onclick="updateRegistrationIntent(${t.id}, '未報名')">⏳ 未報名</button>
+                      <button class="intent-btn ${regStatus==='不報名'?'active-declined':''}" onclick="updateRegistrationIntent(${t.id}, '不報名')">🚫 不報名</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-footer">
+                  <a href="${t.doc_url || '#'}" target="_blank" class="link-doc">📄 開啟簡章 ↗</a>
+                  <button class="btn-card-manage" onclick="showTournamentDetails(${t.id})">檢視完整資訊</button>
+                </div>
+              </div>
+            `;
+          });
+          html += '</div>';
+          container.innerHTML = html;
+        } else if (currentViewMode === 'table') {
+          // 表格模式
           let html = `
             <div class="table-container">
               <table>
                 <thead>
                   <tr>
-                    <th>運動</th>
                     <th>賽事名稱</th>
-                    <th>大直出賽組別</th>
-                    <th>比賽日期</th>
-                    <th>場館／地點</th>
-                    <th>對手名單／分組籤位</th>
-                    <th>晉級賽制</th>
-                    <th>抽籤進度</th>
+                    <th>種類</th>
+                    <th>組別</th>
+                    <th>比賽時程</th>
+                    <th>地點</th>
+                    <th>報名截止</th>
+                    <th>報名狀態確認</th>
+                    <th>簡章</th>
                   </tr>
                 </thead>
                 <tbody>
           `;
-          filtered.forEach(s => {
+          list.forEach(t => {
+            const regStatus = t.registration_status || '未報名';
             html += `
               <tr>
-                <td><strong>${s.sport}</strong></td>
-                <td>${s.tournament_name}</td>
-                <td><span class="tag" style="background:#e2e8f0; color:#1e293b; font-weight:800;">${s.division}</span></td>
-                <td>${s.match_date}</td>
-                <td>${s.venue}</td>
-                <td><strong style="color:#1e40af;">${s.opponents_draw}</strong></td>
-                <td>${s.advancement_rule || '-'}</td>
-                <td><span class="tag tag-status-active">${s.status}</span></td>
+                <td><strong>${t.name}</strong></td>
+                <td><span style="font-weight:700;">${t.sport}</span></td>
+                <td style="max-width:200px; font-size:0.8rem;">${t.divisions || '-'}</td>
+                <td>${t.competition_dates}</td>
+                <td>${t.venue}</td>
+                <td><strong style="color:#e11d48;">${t.reg_deadline}</strong></td>
+                <td>
+                  <select class="select-dropdown" style="padding:4px 8px; font-size:0.8rem;" onchange="updateRegistrationIntent(${t.id}, this.value)">
+                    <option value="未報名" ${regStatus==='未報名'?'selected':''}>⏳ 未報名</option>
+                    <option value="已報名" ${regStatus==='已報名'?'selected':''}>✅ 已報名</option>
+                    <option value="不報名" ${regStatus==='不報名'?'selected':''}>🚫 不報名</option>
+                  </select>
+                </td>
+                <td><a href="${t.doc_url}" target="_blank" class="link-doc">📄 簡章</a></td>
               </tr>
             `;
           });
           html += '</tbody></table></div>';
           container.innerHTML = html;
         } else {
-          // Calendar View
-          container.innerHTML = `
-            <div style="background:white; padding:20px; border-radius:12px; border:1px solid var(--border);">
-              <div style="text-align:center; font-weight:800; font-size:1.2rem; margin-bottom:16px; color:#1e3a8a;">
-                📅 2026 年 10 月 ～ 11 月 大直代表隊出賽時程月曆
+          // 月曆模式
+          renderCalendarView();
+        }
+      } else {
+        // 大直出賽賽程 Tab
+        let list = schedules.filter(s => {
+          const matchSearch = !search || s.tournament_name.toLowerCase().includes(search) || s.division.toLowerCase().includes(search) || s.venue.toLowerCase().includes(search);
+          const matchSport = sport === '全部' || s.sport.includes(sport);
+          return matchSearch && matchSport;
+        });
+
+        if (currentViewMode === 'grid') {
+          let html = '<div class="cards-grid">';
+          list.forEach(s => {
+            html += `
+              <div class="tournament-card">
+                <div>
+                  <div class="card-top-row">
+                    <h3 class="card-title">${s.tournament_name}</h3>
+                    <span class="badge-status badge-active">${s.status}</span>
+                  </div>
+                  <div class="card-location"><span>🏀</span> ${s.sport} · <strong>${s.division}</strong></div>
+                  <div class="card-date-badge"><span>📅</span> 日期：${s.match_date}</div>
+
+                  <div class="card-metrics-grid">
+                    <div class="metric-item" style="grid-column: span 2;">
+                      <span class="metric-label">對手名單 / 分組籤位</span>
+                      <span class="metric-value" style="color:#1d4ed8; white-space:normal;">${s.opponents_draw}</span>
+                    </div>
+                    <div class="metric-item">
+                      <span class="metric-label">比賽場館</span>
+                      <span class="metric-value">${s.venue}</span>
+                    </div>
+                    <div class="metric-item">
+                      <span class="metric-label">晉級規則</span>
+                      <span class="metric-value">${s.advancement_rule || '-'}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <span style="font-size:0.75rem; color:#64748b;">來源：${s.source_file}</span>
+                  <button class="btn-card-manage">籤表確認</button>
+                </div>
               </div>
-              <div class="calendar-grid">
-                <div class="cal-header">週日</div>
-                <div class="cal-header">週一</div>
-                <div class="cal-header">週二</div>
-                <div class="cal-header">週三</div>
-                <div class="cal-header">週四</div>
-                <div class="cal-header">週五</div>
-                <div class="cal-header">週六</div>
-
-                <div class="cal-day"><span class="cal-day-num">10/18</span></div>
-                <div class="cal-day">
-                  <span class="cal-day-num">10/19</span>
-                  <div class="cal-event-pill basketball">🏀 籃球教育盃 開打 (5組)</div>
-                </div>
-                <div class="cal-day"><span class="cal-day-num">10/20</span></div>
-                <div class="cal-day"><span class="cal-day-num">10/21</span></div>
-                <div class="cal-day"><span class="cal-day-num">10/22</span></div>
-                <div class="cal-day"><span class="cal-day-num">10/23</span></div>
-                <div class="cal-day"><span class="cal-day-num">10/24</span></div>
-
-                <div class="cal-day"><span class="cal-day-num">10/25</span></div>
-                <div class="cal-day">
-                  <span class="cal-day-num">10/26</span>
-                  <div class="cal-event-pill volleyball">🏐 排球教育盃 教女組</div>
-                </div>
-                <div class="cal-day"><span class="cal-day-num">10/27</span></div>
-                <div class="cal-day">
-                  <span class="cal-day-num">10/28</span>
-                  <div class="cal-event-pill volleyball">🏐 排球教育盃 高男乙</div>
-                </div>
-                <div class="cal-day"><span class="cal-day-num">10/29</span></div>
-                <div class="cal-day"><span class="cal-day-num">10/30</span></div>
-                <div class="cal-day"><span class="cal-day-num">10/31</span></div>
-
-                <div class="cal-day"><span class="cal-day-num">11/01</span></div>
-                <div class="cal-day">
-                  <span class="cal-day-num">11/02</span>
-                  <div class="cal-event-pill tennis">🎾 網球中正盃 高男組</div>
-                </div>
-                <div class="cal-day"><span class="cal-day-num">11/03</span></div>
-                <div class="cal-day"><span class="cal-day-num">11/04</span></div>
-                <div class="cal-day"><span class="cal-day-num">11/05</span></div>
-                <div class="cal-day"><span class="cal-day-num">11/06</span></div>
-                <div class="cal-day"><span class="cal-day-num">11/07</span></div>
-              </div>
-            </div>
-          `;
+            `;
+          });
+          html += '</div>';
+          container.innerHTML = html;
+        } else {
+          renderCalendarView();
         }
       }
     }
 
-    function openConfigModal() {
-      document.getElementById('cfgUrl').value = localStorage.getItem('dazhi_supabase_url') || 'https://hdxrublbpaptthmflnrn.supabase.co';
-      document.getElementById('cfgKey').value = localStorage.getItem('dazhi_supabase_key') || '';
-      document.getElementById('configModal').style.display = 'flex';
+    function renderCalendarView() {
+      const container = document.getElementById('contentContainer');
+      container.innerHTML = `
+        <div class="calendar-container">
+          <div style="text-align:center; font-weight:800; font-size:1.15rem; margin-bottom:12px; color:#0f172a;">
+            📅 115 學年度 10 月 ～ 11 月 大直代表隊出賽賽程行事曆
+          </div>
+          <div class="calendar-grid">
+            <div class="cal-header">週日</div>
+            <div class="cal-header">週一</div>
+            <div class="cal-header">週二</div>
+            <div class="cal-header">週三</div>
+            <div class="cal-header">週四</div>
+            <div class="cal-header">週五</div>
+            <div class="cal-header">週六</div>
+
+            <div class="cal-day"><span class="cal-day-num">10/18</span></div>
+            <div class="cal-day">
+              <span class="cal-day-num">10/19</span>
+              <div class="cal-event-pill basketball">🏀 籃球教育盃 開打 (5組出賽)</div>
+            </div>
+            <div class="cal-day"><span class="cal-day-num">10/20</span></div>
+            <div class="cal-day"><span class="cal-day-num">10/21</span></div>
+            <div class="cal-day"><span class="cal-day-num">10/22</span></div>
+            <div class="cal-day"><span class="cal-day-num">10/23</span></div>
+            <div class="cal-day"><span class="cal-day-num">10/24</span></div>
+
+            <div class="cal-day"><span class="cal-day-num">10/25</span></div>
+            <div class="cal-day">
+              <span class="cal-day-num">10/26</span>
+              <div class="cal-event-pill volleyball">🏐 排球教育盃 (教女組 A組第3籤)</div>
+            </div>
+            <div class="cal-day"><span class="cal-day-num">10/27</span></div>
+            <div class="cal-day">
+              <span class="cal-day-num">10/28</span>
+              <div class="cal-event-pill volleyball">🏐 排球教育盃 (高男乙 I組27籤)</div>
+            </div>
+            <div class="cal-day"><span class="cal-day-num">10/29</span></div>
+            <div class="cal-day"><span class="cal-day-num">10/30</span></div>
+            <div class="cal-day"><span class="cal-day-num">10/31</span></div>
+
+            <div class="cal-day"><span class="cal-day-num">11/01</span></div>
+            <div class="cal-day">
+              <span class="cal-day-num">11/02</span>
+              <div class="cal-event-pill tennis">🎾 網球中正盃 (高男組 網球中心)</div>
+            </div>
+            <div class="cal-day"><span class="cal-day-num">11/03</span></div>
+            <div class="cal-day"><span class="cal-day-num">11/04</span></div>
+            <div class="cal-day"><span class="cal-day-num">11/05</span></div>
+            <div class="cal-day">
+              <span class="cal-day-num">11/06</span>
+              <div class="cal-event-pill" style="border-left-color:#8b5cf6; background:#f5f3ff; color:#6d28d9;">🥋 空手道中正盃 (板橋體育館)</div>
+            </div>
+            <div class="cal-day"><span class="cal-day-num">11/07</span></div>
+          </div>
+        </div>
+      `;
     }
 
-    function closeConfigModal() {
-      document.getElementById('configModal').style.display = 'none';
-    }
-
-    function saveSupabaseConfig() {
-      const url = document.getElementById('cfgUrl').value.trim();
-      const key = document.getElementById('cfgKey').value.trim();
-      if (!url || !key) {
-        alert('請填寫完整的 Supabase Project URL 與 Anon Key');
+    // ========================================================
+    // 語音識別模組 (HTML5 Web Speech API) (Requirement 2)
+    // ========================================================
+    function initSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        document.getElementById('voiceStatus').textContent = '⚠️ 您的瀏覽器不支援語音輸入，請手動填寫';
+        document.getElementById('btnMic').disabled = true;
         return;
       }
-      localStorage.setItem('dazhi_supabase_url', url);
-      localStorage.setItem('dazhi_supabase_key', key);
+      recognition = new SpeechRecognition();
+      recognition.lang = 'zh-TW';
+      recognition.continuous = false;
+      recognition.interimResults = true;
+
+      recognition.onstart = () => {
+        isListening = true;
+        document.getElementById('btnMic').className = 'btn-mic listening';
+        document.getElementById('voiceStatus').textContent = '🎙️ 正在聆聽中... 請說話';
+      };
+
+      recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        document.getElementById('voiceTranscript').textContent = transcript;
+      };
+
+      recognition.onerror = (event) => {
+        console.error('語音辨識錯誤:', event.error);
+        stopListening();
+        document.getElementById('voiceStatus').textContent = '錄音中斷或未偵測到聲音，請再試一次';
+      };
+
+      recognition.onend = () => {
+        stopListening();
+        document.getElementById('voiceStatus').textContent = '錄音結束！可點擊下方「智慧代入表單」';
+      };
+    }
+
+    function toggleVoiceRecognition() {
+      if (!recognition) return;
+      if (isListening) {
+        recognition.stop();
+        stopListening();
+      } else {
+        try {
+          recognition.start();
+        } catch (e) {
+          console.warn('Recognition start exception:', e);
+        }
+      }
+    }
+
+    function stopListening() {
+      isListening = false;
+      document.getElementById('btnMic').className = 'btn-mic';
+    }
+
+    function smartParseVoice() {
+      const text = document.getElementById('voiceTranscript').textContent.trim();
+      if (!text || text.includes('尚未錄音')) {
+        alert('請先點擊麥克風說出賽事內容！');
+        return;
+      }
+
+      // 智慧萃取
+      document.getElementById('formName').value = text;
+      
+      const sports = ['籃球', '排球', '網球', '羽球', '空手道', '棒球', '壘球', '足球', '擊劍', '游泳', '田徑', '桌球'];
+      for (const s of sports) {
+        if (text.includes(s)) {
+          document.getElementById('formSport').value = s;
+          break;
+        }
+      }
+
+      if (text.includes('高男') || text.includes('高中')) document.getElementById('formDivisions').value = '高中男子組';
+      else if (text.includes('高女')) document.getElementById('formDivisions').value = '高中女子組';
+      else if (text.includes('國中') || text.includes('國男')) document.getElementById('formDivisions').value = '國中組';
+
+      if (text.includes('已報名') || text.includes('已經報名') || text.includes('報名完成')) {
+        document.getElementById('formIntent').value = '已報名';
+      } else if (text.includes('不報名') || text.includes('不參加') || text.includes('略過')) {
+        document.getElementById('formIntent').value = '不報名';
+      } else {
+        document.getElementById('formIntent').value = '未報名';
+      }
+
+      showToast('✨ 語音內容已智慧解析並代入表單欄位！');
+    }
+
+    // ========================================================
+    // 手動新增賽事儲存
+    // ========================================================
+    async function handleCreateTournament(e) {
+      e.preventDefault();
+      const newT = {
+        id: Date.now(),
+        name: document.getElementById('formName').value.trim(),
+        sport: document.getElementById('formSport').value.trim(),
+        divisions: document.getElementById('formDivisions').value.trim() || '代表隊組別',
+        competition_dates: document.getElementById('formDates').value.trim() || '時程待定',
+        venue: document.getElementById('formVenue').value.trim() || '場地確認中',
+        reg_start: '今日',
+        reg_deadline: document.getElementById('formDeadline').value.trim() || '待公告',
+        reg_method: document.getElementById('formMethod').value.trim() || '手動建檔賽事',
+        doc_url: document.getElementById('formDocUrl').value.trim() || 'https://drive.google.com/drive/folders/16iBWHC9ilYKB442HuBessa37hWwNe-zm',
+        status: '籌備進行中',
+        registration_status: document.getElementById('formIntent').value
+      };
+
+      // 1. 本地立即加入
+      tournaments.unshift(newT);
+      localStorage.setItem('dazhi_tournaments', JSON.stringify(tournaments));
+
+      // 2. 同步至 Supabase
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('tournaments').insert([{
+            name: newT.name,
+            sport: newT.sport,
+            divisions: newT.divisions,
+            competition_dates: newT.competition_dates,
+            venue: newT.venue,
+            reg_start: newT.reg_start,
+            reg_deadline: newT.reg_deadline,
+            reg_method: newT.reg_method,
+            doc_url: newT.doc_url,
+            status: newT.status,
+            registration_status: newT.registration_status
+          }]);
+        } catch (err) {
+          console.warn('寫入 Supabase 失敗:', err);
+        }
+      }
+
+      closeCreateModal();
+      showToast(`🎉 成功新增賽事：「${newT.name.substring(0, 10)}...」！`);
+      updatePillCounts();
+      populateDropdownFilters();
+      renderActiveView();
+      document.getElementById('newTournamentForm').reset();
+    }
+
+    // Modal 控制
+    function openCreateModal() { document.getElementById('createModal').style.display = 'flex'; }
+    function closeCreateModal() { document.getElementById('createModal').style.display = 'none'; stopListening(); }
+    function openConfigModal() {
+      document.getElementById('cfgUrl').value = localStorage.getItem('dazhi_supabase_url') || DEFAULT_SUPABASE_URL;
+      document.getElementById('cfgKey').value = localStorage.getItem('dazhi_supabase_key') || DEFAULT_SUPABASE_KEY;
+      document.getElementById('configModal').style.display = 'flex';
+    }
+    function closeConfigModal() { document.getElementById('configModal').style.display = 'none'; }
+    function saveSupabaseConfig() {
+      const u = document.getElementById('cfgUrl').value.trim();
+      const k = document.getElementById('cfgKey').value.trim();
+      if (!u || !k) { alert('請填寫完整資訊'); return; }
+      localStorage.setItem('dazhi_supabase_url', u);
+      localStorage.setItem('dazhi_supabase_key', k);
       closeConfigModal();
-      initSupabaseConnection();
-      alert('已成功儲存 Supabase 設定並啟動即時同步連線！');
+      initSupabase();
+      showToast('已更新 Supabase 設定並重新連線！');
+    }
+
+    function showTournamentDetails(id) {
+      const t = tournaments.find(item => item.id === id);
+      if (!t) return;
+      alert(`【${t.name}】\n項目：${t.sport}\n組別：${t.divisions}\n比賽日期：${t.competition_dates}\n場地：${t.venue}\n報名截止：${t.reg_deadline}\n手續：${t.reg_method}\n報名狀態：${t.registration_status || '未報名'}`);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastMsg');
+      document.getElementById('toastText').textContent = msg;
+      toast.style.display = 'flex';
+      setTimeout(() => { toast.style.display = 'none'; }, 3000);
     }
   </script>
 </body>
