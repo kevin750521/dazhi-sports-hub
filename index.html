@@ -1601,54 +1601,77 @@
       renderActiveView();
     }
 
-    // 同步空手道與擊劍之代表隊選手確認出賽狀態
+    // 同步空手道與擊劍之代表隊選手確認出賽狀態 (孔○誠同學與劉○炘同學)
     function syncFencingAndKarateStatus() {
-      const karate = tournaments.find(t => t.id === 3 || (t.sport && t.sport.includes('空手道')));
+      // 1. 空手道賽事更新
+      const karate = tournaments.find(t => (t.sport && t.sport.includes('空手道')) || (t.name && t.name.includes('空手道')));
       if (karate) {
         karate.registration_status = "已報名";
-        karate.status = "✅ 已完成報名 (待領隊會議排籤)";
-        karate.divisions = "國中男子組個人對打/形 (孔O誠同學代表出賽)";
+        karate.status = "✅ 報名確認 (孔○誠同學出賽/待排籤)";
+        karate.divisions = "國中男子組個人對打/形 (孔○誠同學代表出賽)";
         karate.reg_deadline = "115/10/12 23:00 (即將截止)";
       }
-      const fencing = tournaments.find(t => t.id === 11 || (t.sport && t.sport.includes('擊劍')));
+      // 2. 擊劍賽事更新
+      const fencing = tournaments.find(t => (t.sport && t.sport.includes('擊劍')) || (t.name && t.name.includes('擊劍')));
       if (fencing) {
         fencing.registration_status = "已報名";
-        fencing.status = "🎯 報名完成 (誠正國中抽籤排籤中)";
-        fencing.divisions = "國中男子鈍劍個人組 (劉O炘同學代表出賽)";
+        fencing.status = "🎯 報名完成 (劉○炘同學出賽/誠正國中排籤中)";
+        fencing.divisions = "國中男子鈍劍個人組 (劉○炘同學代表出賽)";
         fencing.competition_dates = "115/10/22～10/25";
         fencing.venue = "南港區玉成國小活動中心3樓 (承辦校：誠正國中)";
       }
-      if (!schedules.some(s => s.id === 13)) {
-        schedules.push({
+
+      // 3. 出賽排程更新 (確保 schedules 內含有此兩位同學之賽程)
+      if (!schedules.some(s => s.sport && s.sport.includes('空手道'))) {
+        schedules.unshift({
           id: 13,
           sport: "🥋 空手道",
-          division: "國男男子組個人對打/形 (孔O誠)",
+          division: "國男組個人對打/形 (孔○誠同學)",
           tournament_name: "115年度全國中正盃空手道錦標賽",
           match_date: "115/11/06～11/08",
-          match_time: "大會時程待抽籤排定",
+          match_time: "大會賽程待抽籤公告",
           venue: "新北市板橋體育館",
-          opponents_draw: "大直高中國中部代表籤位 (領隊會議抽籤編排中)",
+          opponents_draw: "大直高中國中部代表籤位 (孔○誠同學出賽，待領隊會議抽籤編排)",
           advancement_rule: "全國單淘汰賽制",
-          source_file: "全國中正盃規程.pdf",
+          source_file: "大直體育組校園榮譽榜.pdf",
           status: "選手已確認報名 (抽籤中)"
         });
       }
-      if (!schedules.some(s => s.id === 14)) {
-        schedules.push({
+      if (!schedules.some(s => s.sport && s.sport.includes('擊劍'))) {
+        schedules.unshift({
           id: 14,
           sport: "🤺 擊劍",
-          division: "國中男子組鈍劍 (劉O炘)",
+          division: "國中男子鈍劍個人賽 (劉○炘同學)",
           tournament_name: "臺北市115學年度教育盃中等學校擊劍錦標賽",
           match_date: "115/10/22～10/25",
-          match_time: "循環賽檢錄時程依承辦校公告",
+          match_time: "各組檢錄時程依承辦校公告",
           venue: "南港區玉成國小活動中心3樓",
-          opponents_draw: "國男個人鈍劍小組循環賽 (承辦校誠正國中排籤中)",
+          opponents_draw: "國男個人鈍劍小組循環賽 (劉○炘同學出賽，承辦校誠正國中排籤中)",
           advancement_rule: "分組循環預賽 ＋ 單淘汰複決賽",
-          source_file: "北市教育盃擊劍規程.pdf",
+          source_file: "誠正國中教育盃擊劍規程.pdf",
           status: "報名已截止 (籤表排定中)"
         });
       }
       localStorage.setItem('dazhi_tournaments', JSON.stringify(tournaments));
+
+      // 若有 Supabase 連線，自動非同步更新回雲端資料庫
+      if (supabaseClient) {
+        try {
+          supabaseClient.from('tournaments').update({
+            registration_status: '已報名',
+            status: '✅ 報名確認 (孔○誠同學出賽/待排籤)',
+            divisions: '國中男子組個人對打/形 (孔○誠同學代表出賽)'
+          }).like('sport', '%空手道%').then(() => {});
+
+          supabaseClient.from('tournaments').update({
+            registration_status: '已報名',
+            status: '🎯 報名完成 (劉○炘同學出賽/誠正國中排籤中)',
+            divisions: '國中男子鈍劍個人組 (劉○炘同學代表出賽)',
+            competition_dates: '115/10/22～10/25',
+            venue: '南港區玉成國小活動中心3樓 (承辦校：誠正國中)'
+          }).like('sport', '%擊劍%').then(() => {});
+        } catch (e) {}
+      }
     }
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -1691,12 +1714,13 @@
         const { data: tData, error: tErr } = await supabaseClient.from('tournaments').select('*').order('id', { ascending: true });
         if (!tErr && tData && tData.length > 0) {
           tournaments = tData;
-          localStorage.setItem('dazhi_tournaments', JSON.stringify(tournaments));
+          syncFencingAndKarateStatus(); // 關鍵：覆蓋後立即合流孔同學與劉同學的最新狀態
         }
 
         const { data: sData, error: sErr } = await supabaseClient.from('schedules').select('*').order('id', { ascending: true });
         if (!sErr && sData && sData.length > 0) {
           schedules = sData;
+          syncFencingAndKarateStatus(); // 關鍵：確保包含空手道與擊劍出賽排程
         }
 
         updateMetrics();
@@ -1839,6 +1863,33 @@
             const visual = getSportVisual(t.sport);
             const coreTitle = extractCoreTournamentName(t.name, t.sport);
 
+            let athleteBadgeHtml = '';
+            if (t.sport.includes('空手道') || t.name.includes('空手道')) {
+              athleteBadgeHtml = `
+                <div style="background:#faf5ff; border:1px solid #d8b4fe; border-left:4px solid #7c3aed; border-radius:8px; padding:8px 12px; margin-bottom:12px;">
+                  <div style="font-size:0.84rem; font-weight:900; color:#581c87; display:flex; align-items:center; gap:6px;">
+                    <span>🥋</span> 大直出賽選手：<strong>孔○誠 同學</strong> (國中部)
+                  </div>
+                  <div style="font-size:0.72rem; color:#7e22ce; margin-top:3px; line-height:1.4;">
+                    參賽組別：國男甲組個人對打 / 形<br>
+                    <strong>抽籤狀態</strong>：已確認報名出賽！大會審核中，籤表待領隊會議抽籤公告。
+                  </div>
+                </div>
+              `;
+            } else if (t.sport.includes('擊劍') || t.name.includes('擊劍')) {
+              athleteBadgeHtml = `
+                <div style="background:#f0fdf4; border:1px solid #86efac; border-left:4px solid #16a34a; border-radius:8px; padding:8px 12px; margin-bottom:12px;">
+                  <div style="font-size:0.84rem; font-weight:900; color:#14532d; display:flex; align-items:center; gap:6px;">
+                    <span>🤺</span> 大直出賽選手：<strong>劉○炘 同學</strong> (國中部)
+                  </div>
+                  <div style="font-size:0.72rem; color:#15803d; margin-top:3px; line-height:1.4;">
+                    參賽組別：國中男子鈍劍個人賽<br>
+                    <strong>抽籤狀態</strong>：報名已於9/21截止，承辦校（誠正國中）排籤作業中。
+                  </div>
+                </div>
+              `;
+            }
+
             html += `
               <div class="sport-card ${isDeclined ? 'declined-mode' : ''}" style="border-top-color: ${visual.color};">
                 <div>
@@ -1859,6 +1910,8 @@
                     <h3 class="card-core-name">${coreTitle}</h3>
                     <span class="card-full-name-sub" title="官方正式全名：${t.name}">📋 全名：${t.name}</span>
                   </div>
+
+                  ${athleteBadgeHtml}
 
                   <div class="card-venue-row">
                     <span>📍</span> <strong>比賽場地</strong>：${t.venue || '場地確認中'}
@@ -1942,7 +1995,10 @@
                   <div style="font-weight:900; color:var(--navy-dark); font-size:0.92rem;">${coreTitle}</div>
                   <div style="font-size:0.72rem; color:#64748b; max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${t.name}">📋 ${t.name}</div>
                 </td>
-                <td style="max-width:180px; font-size:0.8rem; font-weight:600;">${t.divisions || '-'}</td>
+                <td style="max-width:210px; font-size:0.8rem; font-weight:600;">
+                  ${t.divisions && (t.divisions.includes('孔') || t.divisions.includes('劉')) ? `<span style="background:#fef3c7; color:#92400e; border:1px solid #fde68a; padding:1px 6px; border-radius:4px; font-weight:800; font-size:0.72rem; display:inline-block; margin-bottom:3px;">🌟 代表選手出賽</span><br>` : ''}
+                  ${t.divisions || '-'}
+                </td>
                 <td>${t.competition_dates}</td>
                 <td>${t.venue}</td>
                 <td><strong style="color:#b91c1c;">${t.reg_deadline}</strong></td>
@@ -1979,6 +2035,21 @@
           list.forEach(s => {
             const visual = getSportVisual(s.sport);
             const coreTitle = extractCoreTournamentName(s.tournament_name, s.sport);
+            let athleteSchedBadge = '';
+            if (s.sport.includes('空手道')) {
+              athleteSchedBadge = `
+                <div style="background:#faf5ff; border:1px solid #d8b4fe; border-left:4px solid #7c3aed; border-radius:8px; padding:6px 10px; margin-bottom:10px;">
+                  <span style="font-size:0.8rem; font-weight:800; color:#581c87;">🌟 代表選手：孔○誠 同學 (國中代表隊)</span>
+                </div>
+              `;
+            } else if (s.sport.includes('擊劍')) {
+              athleteSchedBadge = `
+                <div style="background:#f0fdf4; border:1px solid #86efac; border-left:4px solid #16a34a; border-radius:8px; padding:6px 10px; margin-bottom:10px;">
+                  <span style="font-size:0.8rem; font-weight:800; color:#14532d;">🌟 代表選手：劉○炘 同學 (鈍劍個人賽)</span>
+                </div>
+              `;
+            }
+
             html += `
               <div class="sport-card" style="border-top-color: ${visual.color};">
                 <div>
@@ -1997,6 +2068,8 @@
                     <h3 class="card-core-name">${coreTitle}</h3>
                     <span class="card-full-name-sub" title="${s.tournament_name}">📋 ${s.tournament_name}</span>
                   </div>
+
+                  ${athleteSchedBadge}
 
                   <div class="card-venue-row"><span>🎯</span> 參賽代表組別：<strong style="color:${visual.accent};">${s.division}</strong></div>
                   <div class="card-date-chip"><span>📅</span> 出賽時程：${s.match_date}</div>
