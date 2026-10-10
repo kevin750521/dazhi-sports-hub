@@ -3,72 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>臺北市立大直高中 · 運動賽事全方位戰情看板</title>
+  <title>臺北市立大直高級中學 · 運動賽事與賽程戰情中心</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
-      --sidebar-bg: #0d1224;
-      --sidebar-hover: #171e36;
-      --sidebar-active: linear-gradient(135deg, rgba(244,63,94,0.2) 0%, rgba(99,102,241,0.25) 100%);
-      --sidebar-active-border: #f43f5e;
-      --sidebar-text: #94a3b8;
-      --sidebar-text-bright: #ffffff;
+      /* 穩重專業藍白基調 (Dignified Academic Blue & White Palette) */
+      --navy-dark: #0a192f;        /* 頂級深藍，穩重權威 */
+      --navy-primary: #102a43;     /* 典雅海軍藍 */
+      --navy-sidebar: #0b1a30;     /* 側邊欄深藍底 */
+      --blue-accent: #1e40af;      /* 大直校徽標準皇家藍 */
+      --blue-royal: #2563eb;       /* 主互動藍 */
+      --blue-light: #3b82f6;       /* 亮藍亮點 */
+      --blue-ice: #eff6ff;         /* 冰藍淺色底 */
+      --blue-subtle: #f0f4f9;      /* 主工作區柔和淺灰藍 */
       
-      --primary-gradient: linear-gradient(135deg, #f43f5e 0%, #e11d48 50%, #6366f1 100%);
-      --primary-btn-hover: linear-gradient(135deg, #e11d48 0%, #be123c 50%, #4f46e5 100%);
-      --accent-rose: #f43f5e;
-      --accent-indigo: #6366f1;
+      --white-pure: #ffffff;       /* 純白 */
+      --border-color: #cbd5e1;     /* 沉穩邊框灰藍 */
+      --border-light: #e2e8f0;     /* 極細分隔線 */
       
-      --bg-main: #f8fafc;
-      --card-bg: #ffffff;
-      --border-color: #e2e8f0;
-      --border-dark: #1e293b;
+      --text-heading: #0f172a;     /* 標題炭黑深藍 */
+      --text-body: #334155;        /* 內文清晰深灰 */
+      --text-muted: #64748b;       /* 次要提示灰 */
+      --text-white: #ffffff;
       
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --text-light: #94a3b8;
-      
-      --status-urgent: #ef4444;
+      /* 狀態色彩 (克制而權威) */
+      --status-urgent: #b91c1c;    /* 深紅急件 */
       --status-urgent-bg: #fef2f2;
-      --status-success: #10b981;
-      --status-success-bg: #ecfdf5;
-      --status-warning: #f59e0b;
-      --status-warning-bg: #fffbeb;
-      --status-info: #3b82f6;
-      --status-info-bg: #eff6ff;
-      --status-gray: #64748b;
-      --status-gray-bg: #f1f5f9;
+      --status-urgent-border: #fecaca;
       
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
-      --radius-xl: 20px;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.03);
-      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+      --status-success: #047857;   /* 常春藤綠 */
+      --status-success-bg: #ecfdf5;
+      --status-success-border: #a7f3d0;
+      
+      --status-warning: #b45309;   /* 琥珀金 */
+      --status-warning-bg: #fffbeb;
+      --status-warning-border: #fde68a;
+      
+      --status-info: #1d4ed8;      /* 蔚藍 */
+      --status-info-bg: #eff6ff;
+      --status-info-border: #bfdbfe;
+      
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 18px;
+      --shadow-card: 0 2px 8px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03);
+      --shadow-hover: 0 8px 20px rgba(15, 23, 42, 0.08), 0 3px 6px rgba(15, 23, 42, 0.04);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
-      background: var(--bg-main);
-      color: var(--text-main);
+      background: var(--blue-subtle);
+      color: var(--text-body);
       display: flex;
       min-height: 100vh;
       overflow-x: hidden;
+      letter-spacing: -0.1px;
     }
 
     /* ========================================================
-       1. 深色側邊導航欄 (RedPoint 旗艦風格)
+       1. 穩重深藍側邊欄 (Sidebar - Navy & White Professional)
        ======================================================== */
     .sidebar {
-      width: 260px;
-      background: var(--sidebar-bg);
-      color: var(--sidebar-text);
+      width: 270px;
+      background: var(--navy-sidebar);
+      color: #94a3b8;
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
-      border-right: 1px solid rgba(255,255,255,0.06);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
       position: sticky;
       top: 0;
       height: 100vh;
@@ -76,80 +80,99 @@
       z-index: 100;
     }
     .sidebar-header {
-      padding: 24px 20px 16px;
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
-    .brand-logo {
+    .school-brand-box {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 20px;
     }
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: var(--primary-gradient);
+    /* 大直校徽圓盾容器 */
+    .school-crest-wrapper {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: white;
+      padding: 3px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-weight: 900;
-      font-size: 1.1rem;
-      box-shadow: 0 2px 8px rgba(244,63,94,0.4);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      flex-shrink: 0;
     }
-    .brand-text h2 {
-      font-size: 1.05rem;
+    .school-crest-svg {
+      width: 36px;
+      height: 36px;
+    }
+    .brand-titles h2 {
+      font-size: 0.95rem;
       font-weight: 800;
-      color: var(--sidebar-text-bright);
-      letter-spacing: -0.3px;
+      color: var(--text-white);
+      line-height: 1.25;
+      letter-spacing: 0.5px;
     }
-    .brand-text p {
-      font-size: 0.72rem;
-      color: var(--text-light);
+    .brand-titles .brand-en {
+      font-size: 0.65rem;
+      color: #94a3b8;
+      line-height: 1.2;
       margin-top: 2px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    .btn-new-tournament {
+    .brand-titles .dept-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      background: rgba(37, 99, 235, 0.25);
+      color: #93c5fd;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-top: 4px;
+    }
+
+    .btn-quick-create {
       width: 100%;
-      background: var(--primary-gradient);
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
       color: white;
-      border: none;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       padding: 11px 16px;
       border-radius: var(--radius-md);
       font-weight: 700;
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(244,63,94,0.3);
+      box-shadow: 0 4px 12px rgba(30, 64, 175, 0.35);
       transition: all 0.2s;
     }
-    .btn-new-tournament:hover {
-      background: var(--primary-btn-hover);
+    .btn-quick-create:hover {
+      background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
       transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(244,63,94,0.4);
+      box-shadow: 0 6px 16px rgba(30, 64, 175, 0.45);
     }
 
     .sidebar-nav {
       flex: 1;
-      padding: 10px 12px;
+      padding: 14px 12px;
     }
-    .nav-section-title {
+    .nav-label {
       font-size: 0.68rem;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.2px;
       color: #64748b;
-      padding: 16px 10px 6px;
+      padding: 14px 10px 6px;
     }
-    .nav-item {
+    .nav-link {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 12px;
+      padding: 10px 14px;
       border-radius: var(--radius-md);
-      color: var(--sidebar-text);
+      color: #94a3b8;
       font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
@@ -157,88 +180,89 @@
       transition: all 0.15s;
       text-decoration: none;
     }
-    .nav-item:hover {
-      background: var(--sidebar-hover);
-      color: var(--sidebar-text-bright);
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
     }
-    .nav-item.active {
-      background: var(--sidebar-active);
-      color: var(--sidebar-text-bright);
-      border-left: 3px solid var(--sidebar-active-border);
+    .nav-link.active {
+      background: rgba(37, 99, 235, 0.18);
+      color: white;
+      border-left: 3px solid #3b82f6;
       font-weight: 700;
     }
-    .nav-item-left {
+    .nav-link-left {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    .nav-badge {
+    .nav-count-badge {
       font-size: 0.72rem;
       padding: 2px 7px;
       border-radius: 10px;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       color: #cbd5e1;
       font-weight: 700;
     }
-    .nav-item.active .nav-badge {
-      background: rgba(244,63,94,0.3);
-      color: #fecdd3;
+    .nav-link.active .nav-count-badge {
+      background: #1e40af;
+      color: #dbeafe;
     }
 
     .sidebar-footer {
       padding: 16px;
-      border-top: 1px solid rgba(255,255,255,0.06);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
     }
-    .db-status-chip {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
+    .sys-status-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: var(--radius-sm);
-      padding: 8px 10px;
+      padding: 8px 12px;
       font-size: 0.75rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       cursor: pointer;
     }
-    .db-status-dot {
-      width: 7px;
-      height: 7px;
+    .sys-dot {
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background: var(--status-success);
+      background: #10b981;
       display: inline-block;
       margin-right: 6px;
     }
-    .db-status-dot.offline { background: var(--status-warning); }
-    .user-profile {
+    .sys-dot.offline { background: #f59e0b; }
+    .manager-card {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    .avatar {
-      width: 34px;
-      height: 34px;
+    .manager-avatar {
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      background: #334155;
+      background: #1e3a8a;
+      border: 2px solid #3b82f6;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 800;
       color: white;
-      font-size: 0.85rem;
+      font-weight: 800;
+      font-size: 0.9rem;
     }
-    .user-info h4 {
+    .manager-meta h4 {
       font-size: 0.82rem;
-      color: var(--sidebar-text-bright);
+      color: white;
       font-weight: 700;
     }
-    .user-info p {
+    .manager-meta p {
       font-size: 0.7rem;
-      color: var(--text-light);
+      color: #94a3b8;
     }
 
     /* ========================================================
-       2. 主工作內容區 (Main Content Layout)
+       2. 主工作區頂部 (Header with Official Wordmark Logo)
        ======================================================== */
     .main-wrapper {
       flex: 1;
@@ -247,40 +271,92 @@
       height: 100vh;
       overflow-y: auto;
     }
-    .top-navbar {
+    .top-header-bar {
       background: white;
       border-bottom: 1px solid var(--border-color);
-      padding: 18px 32px;
+      padding: 16px 36px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       position: sticky;
       top: 0;
       z-index: 50;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
     }
-    .top-title-group h1 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: var(--text-main);
+    .official-wordmark-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
-    .top-title-group p {
-      font-size: 0.82rem;
+    /* 整合使用者上傳的校徽與標準字排版 */
+    .official-crest-header {
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 1px solid var(--border-light);
+      background: #fafcff;
+      padding: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+    }
+    .official-text-block {
+      display: flex;
+      flex-direction: column;
+    }
+    .official-title-zh {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--text-heading);
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+    }
+    .official-title-en {
+      font-size: 0.78rem;
+      font-weight: 600;
       color: var(--text-muted);
+      letter-spacing: 0.3px;
       margin-top: 2px;
     }
-    .top-actions {
+    .official-sub-hub {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--blue-accent);
+      margin-left: 6px;
+    }
+
+    .top-toolbar {
       display: flex;
       align-items: center;
       gap: 12px;
     }
-    .btn-action-outline {
+    .btn-top-voice {
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+      color: white;
+      border: none;
+      padding: 9px 18px;
+      border-radius: var(--radius-md);
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 8px rgba(30, 64, 175, 0.25);
+      transition: all 0.15s;
+    }
+    .btn-top-voice:hover {
+      background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+      transform: translateY(-1px);
+    }
+    .btn-top-refresh {
       background: white;
       border: 1px solid var(--border-color);
-      color: var(--text-main);
+      color: var(--text-heading);
       padding: 8px 14px;
       border-radius: var(--radius-md);
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
@@ -288,32 +364,10 @@
       gap: 6px;
       transition: all 0.15s;
     }
-    .btn-action-outline:hover {
-      background: #f1f5f9;
-      border-color: #cbd5e1;
-    }
-    .btn-create-top {
-      background: var(--primary-gradient);
-      color: white;
-      border: none;
-      padding: 9px 18px;
-      border-radius: var(--radius-md);
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 4px 10px rgba(244,63,94,0.25);
-      transition: all 0.2s;
-    }
-    .btn-create-top:hover {
-      background: var(--primary-btn-hover);
-      transform: translateY(-1px);
-    }
+    .btn-top-refresh:hover { background: #f8fafc; border-color: #94a3b8; }
 
-    /* 檢視切換按鈕 (卡片網格 / 表格 / 月曆) */
-    .view-switcher {
+    /* 檢視切換控制 */
+    .view-control-pill {
       display: flex;
       border: 1px solid var(--border-color);
       border-radius: var(--radius-sm);
@@ -321,7 +375,7 @@
       background: #f1f5f9;
       padding: 2px;
     }
-    .view-btn {
+    .view-control-btn {
       border: none;
       background: transparent;
       padding: 6px 12px;
@@ -335,224 +389,266 @@
       gap: 5px;
       transition: all 0.15s;
     }
-    .view-btn.active {
+    .view-control-btn.active {
       background: white;
-      color: var(--text-main);
-      box-shadow: var(--shadow-sm);
+      color: var(--navy-primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
-    .content-body {
-      padding: 24px 32px 60px;
-      max-width: 1400px;
+    /* ========================================================
+       3. 核心內容區 (Content Container)
+       ======================================================== */
+    .main-body-container {
+      padding: 24px 36px 60px;
+      max-width: 1440px;
       width: 100%;
       margin: 0 auto;
     }
 
-    /* 篩選與標籤橫列 */
-    .filter-section {
+    /* 頂部賽事數據快速指標 */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 3px solid var(--blue-accent);
+    }
+    .kpi-card.urgent { border-top-color: var(--status-urgent); }
+    .kpi-card.success { border-top-color: var(--status-success); }
+    .kpi-num { font-size: 1.85rem; font-weight: 900; color: var(--navy-dark); line-height: 1; }
+    .kpi-card.urgent .kpi-num { color: var(--status-urgent); }
+    .kpi-card.success .kpi-num { color: var(--status-success); }
+    .kpi-label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-top: 4px; }
+    .kpi-icon { font-size: 2rem; opacity: 0.8; }
+
+    /* 報名意向 Pills 與過濾器 (Requirement 1) */
+    .filter-card-bar {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      box-shadow: var(--shadow-card);
       margin-bottom: 24px;
       display: flex;
       flex-direction: column;
       gap: 16px;
     }
-    .filter-tabs-row {
+    .filter-intent-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 14px;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-light);
       padding-bottom: 14px;
     }
-    .status-pills {
+    .intent-pills {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
-    .status-pill-btn {
+    .intent-pill {
       border: 1px solid var(--border-color);
-      background: white;
-      padding: 6px 14px;
-      border-radius: var(--radius-xl);
-      font-size: 0.8125rem;
+      background: #f8fafc;
+      padding: 7px 16px;
+      border-radius: 24px;
+      font-size: 0.82rem;
       font-weight: 700;
-      color: var(--text-muted);
+      color: var(--text-body);
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
       transition: all 0.15s;
     }
-    .status-pill-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
-    .status-pill-btn.active {
-      background: var(--text-main);
+    .intent-pill:hover { background: #f1f5f9; border-color: #94a3b8; }
+    .intent-pill.active {
+      background: var(--navy-primary);
       color: white;
-      border-color: var(--text-main);
+      border-color: var(--navy-primary);
+      box-shadow: 0 2px 6px rgba(16, 42, 67, 0.2);
     }
-    .status-pill-btn.pill-reg.active {
-      background: #059669;
-      border-color: #059669;
-      color: white;
-    }
-    .status-pill-btn.pill-unreg.active {
-      background: #d97706;
-      border-color: #d97706;
+    .intent-pill.pill-registered.active {
+      background: #047857;
+      border-color: #047857;
       color: white;
     }
-    .status-pill-btn.pill-declined.active {
-      background: #dc2626;
-      border-color: #dc2626;
+    .intent-pill.pill-unregistered.active {
+      background: #b45309;
+      border-color: #b45309;
       color: white;
     }
-    .pill-counter {
+    .intent-pill.pill-declined.active {
+      background: #b91c1c;
+      border-color: #b91c1c;
+      color: white;
+    }
+    .pill-num {
       font-size: 0.72rem;
-      padding: 1px 6px;
-      border-radius: 8px;
+      padding: 1px 7px;
+      border-radius: 10px;
       background: rgba(0,0,0,0.06);
     }
-    .status-pill-btn.active .pill-counter {
+    .intent-pill.active .pill-num {
       background: rgba(255,255,255,0.25);
       color: white;
     }
 
-    .filter-controls-row {
+    .filter-options-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 14px;
     }
-    .search-box-wrapper {
+    .search-input-group {
       position: relative;
       flex: 1;
-      max-width: 450px;
+      max-width: 480px;
     }
-    .search-input {
+    .search-field {
       width: 100%;
       padding: 10px 14px 10px 38px;
       border-radius: var(--radius-md);
       border: 1px solid var(--border-color);
       font-size: 0.875rem;
-      background: white;
+      background: #fafcff;
       outline: none;
       transition: border 0.15s;
     }
-    .search-input:focus { border-color: var(--accent-indigo); }
-    .search-icon {
+    .search-field:focus { border-color: var(--blue-royal); background: white; }
+    .search-svg-icon {
       position: absolute;
       left: 12px;
       top: 50%;
       transform: translateY(-50%);
-      color: #94a3b8;
-      font-size: 0.9rem;
+      color: #64748b;
     }
-    .select-dropdown {
+    .filter-dropdown {
       padding: 10px 14px;
       border-radius: var(--radius-md);
       border: 1px solid var(--border-color);
       font-size: 0.85rem;
-      background: white;
-      color: var(--text-main);
+      background: #fafcff;
+      color: var(--text-heading);
       cursor: pointer;
       font-weight: 600;
     }
 
     /* ========================================================
-       3. 卡片網格視圖 (Card Grid View - RedPoint 3欄精準版)
+       4. 穩重藍白卡片網格 (Blue & White Card Grid)
        ======================================================== */
-    .cards-grid {
+    .cards-grid-layout {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+      gap: 22px;
     }
-    .tournament-card {
-      background: var(--card-bg);
+    .sport-card {
+      background: var(--white-pure);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
       padding: 20px;
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-card);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      border-top: 4px solid var(--blue-accent);
       position: relative;
       transition: all 0.2s ease;
     }
-    .tournament-card:hover {
+    .sport-card:hover {
       transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
-      border-color: #cbd5e1;
+      box-shadow: var(--shadow-hover);
+      border-color: #94a3b8;
     }
-    .tournament-card.declined-card {
+    .sport-card.declined-mode {
       opacity: 0.65;
       background: #f8fafc;
+      border-top-color: #94a3b8;
       border-style: dashed;
     }
-    .card-top-row {
+    .card-head {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 12px;
       margin-bottom: 8px;
     }
-    .card-title {
+    .card-title-text {
       font-size: 1.05rem;
       font-weight: 800;
-      color: var(--text-main);
+      color: var(--navy-dark);
       line-height: 1.35;
       flex: 1;
     }
-    .badge-status {
+    .status-tag {
       font-size: 0.72rem;
       font-weight: 700;
       padding: 3px 8px;
       border-radius: var(--radius-sm);
       white-space: nowrap;
     }
-    .badge-urgent { background: var(--status-urgent-bg); color: var(--status-urgent); border: 1px solid #fecaca; }
-    .badge-active { background: var(--status-success-bg); color: #047857; }
-    .badge-closed { background: var(--status-gray-bg); color: var(--status-gray); }
-    .badge-upcoming { background: var(--status-warning-bg); color: #b45309; }
+    .tag-urgent { background: var(--status-urgent-bg); color: var(--status-urgent); border: 1px solid var(--status-urgent-border); }
+    .tag-active { background: var(--status-success-bg); color: var(--status-success); border: 1px solid var(--status-success-border); }
+    .tag-closed { background: #f1f5f9; color: var(--text-muted); border: 1px solid #e2e8f0; }
+    .tag-upcoming { background: var(--status-warning-bg); color: var(--status-warning); border: 1px solid var(--status-warning-border); }
 
-    .card-location {
+    .card-venue-row {
       font-size: 0.8125rem;
       color: var(--text-muted);
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
-    .card-date-badge {
+    .card-date-chip {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: #f1f5f9;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
       padding: 4px 10px;
       border-radius: var(--radius-sm);
       font-size: 0.78rem;
       font-weight: 700;
-      color: #334155;
-      margin-bottom: 16px;
+      color: #1e40af;
+      margin-bottom: 14px;
     }
 
-    .card-metrics-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    .card-details-box {
       background: #f8fafc;
+      border: 1px solid #e2e8f0;
       border-radius: var(--radius-md);
       padding: 10px 12px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       font-size: 0.78rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
     }
-    .metric-item { display: flex; flex-direction: column; }
-    .metric-label { color: var(--text-muted); font-size: 0.7rem; font-weight: 600; margin-bottom: 2px; }
-    .metric-value { font-weight: 800; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .detail-item { display: flex; flex-direction: column; }
+    .detail-item.full { grid-column: span 2; }
+    .detail-lbl { color: var(--text-muted); font-size: 0.7rem; font-weight: 600; margin-bottom: 2px; }
+    .detail-val { font-weight: 800; color: var(--text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* 報名確認交互狀態切換按鈕組 (User Requirement 1) */
-    .intent-toggle-wrapper {
+    /* 報名確認三態按鈕組 */
+    .intent-selector-container {
       margin-bottom: 16px;
+      padding: 8px 10px;
+      background: #f1f5f9;
+      border-radius: var(--radius-md);
     }
-    .intent-label {
+    .intent-header-text {
       font-size: 0.72rem;
       font-weight: 700;
       color: var(--text-muted);
@@ -560,278 +656,195 @@
       display: flex;
       justify-content: space-between;
     }
-    .intent-btn-group {
+    .intent-toggles {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 6px;
-      background: #f1f5f9;
-      padding: 4px;
-      border-radius: var(--radius-md);
     }
-    .intent-btn {
-      border: none;
+    .intent-toggle-btn {
+      border: 1px solid transparent;
       padding: 6px 8px;
-      border-radius: 8px;
+      border-radius: 6px;
       font-size: 0.75rem;
       font-weight: 700;
       cursor: pointer;
-      background: transparent;
+      background: white;
       color: var(--text-muted);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
       transition: all 0.15s;
       text-align: center;
     }
-    .intent-btn.active-reg {
-      background: #10b981;
+    .intent-toggle-btn:hover { background: #fafcff; color: var(--text-heading); }
+    .intent-toggle-btn.btn-is-reg {
+      background: #047857;
       color: white;
-      box-shadow: 0 2px 4px rgba(16,185,129,0.25);
+      border-color: #047857;
     }
-    .intent-btn.active-unreg {
-      background: #f59e0b;
+    .intent-toggle-btn.btn-is-unreg {
+      background: #b45309;
       color: white;
-      box-shadow: 0 2px 4px rgba(245,158,11,0.25);
+      border-color: #b45309;
     }
-    .intent-btn.active-declined {
-      background: #ef4444;
+    .intent-toggle-btn.btn-is-declined {
+      background: #b91c1c;
       color: white;
-      box-shadow: 0 2px 4px rgba(239,68,68,0.25);
+      border-color: #b91c1c;
     }
 
-    .card-footer {
+    .card-action-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-top: 1px solid var(--border-color);
-      padding-top: 14px;
+      border-top: 1px solid var(--border-light);
+      padding-top: 12px;
       margin-top: 4px;
     }
-    .btn-card-manage {
-      background: #fff1f2;
-      color: #e11d48;
-      border: 1px solid #ffe4e6;
+    .btn-detail-outline {
+      background: white;
+      color: var(--navy-primary);
+      border: 1px solid var(--border-color);
       padding: 7px 14px;
       border-radius: var(--radius-md);
       font-weight: 700;
       font-size: 0.8125rem;
       cursor: pointer;
-      text-decoration: none;
       transition: all 0.15s;
     }
-    .btn-card-manage:hover {
-      background: #ffe4e6;
-      color: #be123c;
+    .btn-detail-outline:hover {
+      background: #eff6ff;
+      border-color: #93c5fd;
+      color: var(--blue-accent);
     }
-    .link-doc {
+    .doc-link-btn {
       font-size: 0.8125rem;
       font-weight: 700;
-      color: #2563eb;
+      color: #1e40af;
       text-decoration: none;
       display: flex;
       align-items: center;
       gap: 4px;
     }
-    .link-doc:hover { text-decoration: underline; }
+    .doc-link-btn:hover { text-decoration: underline; color: #2563eb; }
 
     /* ========================================================
-       4. 表格與行事曆視圖 (Table & Calendar View)
+       5. 語音與文字手動新增彈窗 (Voice & Manual Modal)
        ======================================================== */
-    .table-container {
-      background: white;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-sm);
-      overflow-x: auto;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 0.875rem;
-    }
-    th {
-      background: #f8fafc;
-      color: #475569;
-      font-weight: 700;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border-color);
-      white-space: nowrap;
-    }
-    td {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border-color);
-      vertical-align: middle;
-    }
-    tr:hover td { background: #f8fafc; }
-
-    .calendar-container {
-      background: white;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-color);
-      padding: 24px;
-      box-shadow: var(--shadow-sm);
-    }
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
-      margin-top: 16px;
-    }
-    .cal-header {
-      background: #0f172a;
-      color: white;
-      text-align: center;
-      padding: 10px;
-      font-weight: 700;
-      border-radius: 6px;
-      font-size: 0.875rem;
-    }
-    .cal-day {
-      background: #f8fafc;
-      min-height: 120px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .cal-day-num { font-weight: 800; font-size: 0.8125rem; color: #64748b; }
-    .cal-event-pill {
-      background: #eff6ff;
-      border-left: 3px solid #3b82f6;
-      padding: 4px 6px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #1e3a8a;
-      line-height: 1.2;
-    }
-    .cal-event-pill.basketball { background: #fff7ed; border-left-color: #ea580c; color: #9a3412; }
-    .cal-event-pill.volleyball { background: #fdf2f8; border-left-color: #db2777; color: #9d174d; }
-    .cal-event-pill.tennis { background: #f0fdf4; border-left-color: #16a34a; color: #166534; }
-
-    /* ========================================================
-       5. 語音與文字手動新增彈窗 (Voice & Manual Input Modal)
-       ======================================================== */
-    .modal-overlay {
+    .modal-backdrop {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(5px);
+      background: rgba(10, 25, 47, 0.7);
+      backdrop-filter: blur(4px);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 1000;
       padding: 20px;
     }
-    .modal-card {
+    .modal-dialog {
       background: white;
       border-radius: var(--radius-xl);
-      max-width: 640px;
+      max-width: 660px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
-      padding: 28px;
-      box-shadow: var(--shadow-lg);
+      padding: 30px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+      border: 1px solid var(--border-color);
     }
-    .modal-header {
+    .modal-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-light);
       padding-bottom: 14px;
     }
-    .modal-header h3 { font-size: 1.25rem; font-weight: 800; color: var(--text-main); }
-    .close-btn { background: none; border: none; font-size: 1.6rem; cursor: pointer; color: #94a3b8; }
-    
-    /* 語音輸入區塊 */
-    .voice-banner {
-      background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
-      border: 1px dashed #c7d2fe;
+    .modal-head h3 { font-size: 1.25rem; font-weight: 900; color: var(--navy-dark); }
+    .close-modal-btn { background: none; border: none; font-size: 1.6rem; cursor: pointer; color: #94a3b8; }
+
+    .voice-interactive-panel {
+      background: #f8fafc;
+      border: 1px dashed #93c5fd;
       border-radius: var(--radius-md);
       padding: 16px;
       margin-bottom: 20px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-    }
-    .voice-control-row {
-      display: flex;
-      align-items: center;
       gap: 12px;
     }
-    .btn-mic {
-      width: 44px;
-      height: 44px;
+    .mic-flex-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .mic-button {
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       border: none;
-      background: var(--primary-gradient);
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
       color: white;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 10px rgba(244,63,94,0.3);
+      box-shadow: 0 4px 12px rgba(30, 64, 175, 0.35);
       transition: all 0.2s;
     }
-    .btn-mic.listening {
-      animation: pulse-mic 1.2s infinite;
-      background: #ef4444;
+    .mic-button.recording {
+      animation: pulse-mic-ring 1.2s infinite;
+      background: #b91c1c;
     }
-    @keyframes pulse-mic {
-      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
-      70% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(239,68,68,0); }
-      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+    @keyframes pulse-mic-ring {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(185, 28, 28, 0.7); }
+      70% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(185, 28, 28, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(185, 28, 28, 0); }
     }
-    .voice-status-text {
-      font-size: 0.8125rem;
-      font-weight: 700;
-      color: #4338ca;
-    }
-    .voice-transcript-box {
+    .transcript-box {
       font-size: 0.8125rem;
       background: white;
-      padding: 8px 12px;
+      padding: 10px 14px;
       border-radius: 6px;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #cbd5e1;
       color: #334155;
-      min-height: 38px;
+      min-height: 40px;
     }
 
-    .form-grid {
+    .form-inputs-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
-    .form-group { margin-bottom: 14px; }
-    .form-group.full { grid-column: span 2; }
-    .form-group label { display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 5px; }
-    .form-input {
+    .field-wrapper { margin-bottom: 14px; }
+    .field-wrapper.full { grid-column: span 2; }
+    .field-wrapper label { display: block; font-size: 0.8125rem; font-weight: 700; color: var(--navy-dark); margin-bottom: 5px; }
+    .field-ctrl {
       width: 100%;
       padding: 9px 12px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border-color);
       font-size: 0.875rem;
       outline: none;
+      background: #fafcff;
     }
-    .form-input:focus { border-color: var(--accent-indigo); }
-    .modal-actions {
+    .field-ctrl:focus { border-color: var(--blue-royal); background: white; }
+    .modal-bottom-actions {
       display: flex;
       justify-content: flex-end;
       gap: 10px;
       margin-top: 20px;
     }
-    .btn-save-modal {
-      background: var(--primary-gradient);
+    .btn-submit-form {
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 10px 22px;
       border-radius: var(--radius-md);
       font-weight: 700;
       cursor: pointer;
     }
-    .btn-cancel-modal {
+    .btn-dismiss-form {
       background: #e2e8f0;
       color: #334155;
       border: none;
@@ -841,89 +854,144 @@
       cursor: pointer;
     }
 
-    /* Toast 提示 */
-    .toast-msg {
+    /* 表格與行事曆視圖 */
+    .table-view-panel {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-card);
+      overflow-x: auto;
+    }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem; }
+    th { background: #f8fafc; color: var(--navy-dark); font-weight: 800; padding: 14px 16px; border-bottom: 2px solid var(--border-color); white-space: nowrap; }
+    td { padding: 14px 16px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
+    tr:hover td { background: #f8fafc; }
+
+    .calendar-view-panel {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+    }
+    .calendar-matrix {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .cal-day-col {
+      background: #f8fafc;
+      min-height: 120px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .cal-num-badge { font-weight: 800; font-size: 0.8125rem; color: #64748b; }
+    .cal-match-pill {
+      background: #eff6ff;
+      border-left: 3px solid #1e40af;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #1e40af;
+      line-height: 1.2;
+    }
+
+    /* Toast 通知 */
+    .toast-popup {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: #0f172a;
+      background: var(--navy-dark);
       color: white;
-      padding: 12px 20px;
+      padding: 12px 22px;
       border-radius: var(--radius-md);
       font-size: 0.875rem;
       font-weight: 700;
-      box-shadow: var(--shadow-lg);
+      box-shadow: var(--shadow-hover);
       display: none;
       align-items: center;
       gap: 8px;
       z-index: 2000;
+      border-left: 4px solid #3b82f6;
     }
   </style>
 </head>
 <body>
 
   <!-- ========================================================
-       1. 深色側邊欄 (Sidebar)
+       1. 穩重深藍側邊欄 (Sidebar)
        ======================================================== -->
   <aside class="sidebar">
     <div class="sidebar-header">
-      <div class="brand-logo">
-        <div class="logo-icon">D</div>
-        <div class="brand-text">
-          <h2>大直體育 Hub</h2>
-          <p>賽事戰情管理中心</p>
+      <div class="school-brand-box">
+        <div class="school-crest-wrapper">
+          <!-- 大直高中官方藍色校徽向量 SVG (方正校徽) -->
+          <svg class="school-crest-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="46" stroke="#0033cc" stroke-width="4" fill="none" opacity="0.15"/>
+            <!-- 飛翔之翼與幾何圓弧 (大直高中標誌) -->
+            <path d="M22 42C22 56 34 68 48 68C62 68 73 57 73 45C73 43 65 38 52 40C38 42 32 46 28 47C25 47 24 45 26 43C31 37 40 33 50 33C64 33 76 41 80 50C83 45 88 38 95 32C85 24 72 20 58 20C38 20 22 30 22 42Z" fill="#0033cc"/>
+            <path d="M28 48C28 58 37 66 48 66C56 66 63 61 66 54C58 56 46 54 39 49C33 45 29 46 28 48Z" fill="#002299"/>
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <h2>大直高中體育組</h2>
+          <div class="brand-en">Taipei Municipal Dazhi High School</div>
+          <span class="dept-tag">賽事戰情管理中心</span>
         </div>
       </div>
-      <button class="btn-new-tournament" onclick="openCreateModal()">
-        <span>+</span> 快速建立賽事 (語音/文字)
+
+      <button class="btn-quick-create" onclick="openCreateModal()">
+        <span>🎙️ / ＋</span> 快速建立賽事 (語音/文字)
       </button>
     </div>
 
     <nav class="sidebar-nav">
-      <div class="nav-section-title">總覽與核心</div>
-      <a class="nav-item active" id="navTournaments" onclick="switchNavTab('tournaments')">
-        <div class="nav-item-left">
-          <span>🏆</span> 賽事報名管理
-        </div>
-        <span class="nav-badge" id="sideBadgeTournaments">11</span>
+      <div class="nav-label">總覽與主要功能</div>
+      <a class="nav-link active" id="navTournaments" onclick="switchNavTab('tournaments')">
+        <div class="nav-link-left"><span>🏆</span> 賽事報名掌控</div>
+        <span class="nav-count-badge" id="sideBadgeTournaments">11</span>
       </a>
-      <a class="nav-item" id="navSchedules" onclick="switchNavTab('schedules')">
-        <div class="nav-item-left">
-          <span>🏀</span> 大直出賽賽程
-        </div>
-        <span class="nav-badge" id="sideBadgeSchedules">12</span>
+      <a class="nav-link" id="navSchedules" onclick="switchNavTab('schedules')">
+        <div class="nav-link-left"><span>🏀</span> 大直出賽賽程</div>
+        <span class="nav-count-badge" id="sideBadgeSchedules">12</span>
       </a>
 
-      <div class="nav-section-title">報名意向過濾 (過濾無效項目)</div>
-      <a class="nav-item" onclick="setRegistrationFilter('全部')">
-        <div class="nav-item-left"><span>📋</span> 全部列管項目</div>
-        <span class="nav-badge" id="sideBadgeAll">11</span>
+      <div class="nav-label">報名意向過濾 (精簡資訊)</div>
+      <a class="nav-link" onclick="setRegistrationFilter('全部')">
+        <div class="nav-link-left"><span>📋</span> 全部列管項目</div>
+        <span class="nav-count-badge" id="sideBadgeAll">11</span>
       </a>
-      <a class="nav-item" onclick="setRegistrationFilter('未報名')">
-        <div class="nav-item-left"><span>⏳</span> 待確認 / 未報名</div>
-        <span class="nav-badge" style="background:#fef3c7; color:#92400e;" id="sideBadgeUnreg">8</span>
+      <a class="nav-link" onclick="setRegistrationFilter('未報名')">
+        <div class="nav-link-left"><span>⏳</span> 待確認 / 未報名</div>
+        <span class="nav-count-badge" style="background:#b45309; color:#fffbeb;" id="sideBadgeUnreg">8</span>
       </a>
-      <a class="nav-item" onclick="setRegistrationFilter('已報名')">
-        <div class="nav-item-left"><span>✅</span> 已確認出賽</div>
-        <span class="nav-badge" style="background:#d1fae5; color:#065f46;" id="sideBadgeReg">2</span>
+      <a class="nav-link" onclick="setRegistrationFilter('已報名')">
+        <div class="nav-link-left"><span>✅</span> 已確認出賽</div>
+        <span class="nav-count-badge" style="background:#047857; color:#ecfdf5;" id="sideBadgeReg">2</span>
       </a>
-      <a class="nav-item" onclick="setRegistrationFilter('不報名')">
-        <div class="nav-item-left"><span>🚫</span> 不報名 / 略過項目</div>
-        <span class="nav-badge" style="background:#fee2e2; color:#991b1b;" id="sideBadgeDeclined">1</span>
+      <a class="nav-link" onclick="setRegistrationFilter('不報名')">
+        <div class="nav-link-left"><span>🚫</span> 不報名 / 略過項目</div>
+        <span class="nav-count-badge" style="background:#b91c1c; color:#fef2f2;" id="sideBadgeDeclined">1</span>
       </a>
     </nav>
 
     <div class="sidebar-footer">
-      <div class="db-status-chip" onclick="openConfigModal()">
+      <div class="sys-status-chip" onclick="openConfigModal()">
         <div>
-          <span class="db-status-dot" id="sideStatusDot"></span>
+          <span class="sys-dot" id="sideStatusDot"></span>
           <span id="sideStatusText" style="color:#cbd5e1; font-weight:700;">連線中...</span>
         </div>
         <span style="color:#94a3b8;">⚙️</span>
       </div>
-      <div class="user-profile">
-        <div class="avatar">K</div>
-        <div class="user-info">
+      <div class="manager-card">
+        <div class="manager-avatar">大</div>
+        <div class="manager-meta">
           <h4>體育組管理員</h4>
           <p>kevin750521@gmail.com</p>
         </div>
@@ -935,180 +1003,214 @@
        2. 主工作內容區 (Main Content)
        ======================================================== -->
   <main class="main-wrapper">
-    <!-- 頂部 Navbar -->
-    <header class="top-navbar">
-      <div class="top-title-group">
-        <h1 id="pageMainTitle">All Tournaments 全部列管賽事</h1>
-        <p id="pageMainSubtitle">共 11 項賽事 · 即時同步 Google Drive 與 Supabase 資料庫</p>
+    <!-- 頂部 Header：整合大直高中官方校名與標準字排版 -->
+    <header class="top-header-bar">
+      <div class="official-wordmark-container">
+        <div class="official-crest-header">
+          <!-- 頂部校徽圖標 -->
+          <svg viewBox="0 0 100 100" width="36" height="36" fill="none">
+            <path d="M22 42C22 56 34 68 48 68C62 68 73 57 73 45C73 43 65 38 52 40C38 42 32 46 28 47C25 47 24 45 26 43C31 37 40 33 50 33C64 33 76 41 80 50C83 45 88 38 95 32C85 24 72 20 58 20C38 20 22 30 22 42Z" fill="#0033cc"/>
+          </svg>
+        </div>
+        <div class="official-text-block">
+          <div class="official-title-zh">
+            臺北市立大直高級中學
+            <span class="official-sub-hub">· 運動賽事戰情看板</span>
+          </div>
+          <div class="official-title-en">Taipei Municipal Dazhi High School · Sports Operations Hub</div>
+        </div>
       </div>
-      <div class="top-actions">
-        <button class="btn-action-outline" onclick="manualRefreshData()">🔄 即時重整</button>
-        <button class="btn-create-top" onclick="openCreateModal()">
-          <span>🎙️</span> 快速建立新賽事
+
+      <div class="top-toolbar">
+        <button class="btn-top-refresh" onclick="manualRefreshData()">🔄 重新整理</button>
+        <button class="btn-top-voice" onclick="openCreateModal()">
+          <span>🎙️</span> 手動/語音建檔
         </button>
-        <div class="view-switcher" id="viewSwitcher">
-          <button class="view-btn active" id="btnGridView" onclick="switchViewMode('grid')">⊞ 網格卡片</button>
-          <button class="view-btn" id="btnTableView" onclick="switchViewMode('table')">☰ 表格</button>
-          <button class="view-btn" id="btnCalendarView" onclick="switchViewMode('calendar')">🗓️ 月曆</button>
+        <div class="view-control-pill">
+          <button class="view-control-btn active" id="btnGridView" onclick="switchViewMode('grid')">⊞ 卡片網格</button>
+          <button class="view-control-btn" id="btnTableView" onclick="switchViewMode('table')">☰ 表格</button>
+          <button class="view-control-btn" id="btnCalendarView" onclick="switchViewMode('calendar')">🗓️ 月曆</button>
         </div>
       </div>
     </header>
 
-    <div class="content-body">
-      <!-- 篩選列 -->
-      <section class="filter-section">
-        <!-- 報名意向 Pills (User Requirement 1) -->
-        <div class="filter-tabs-row" id="regPillsRow">
-          <div class="status-pills">
-            <button class="status-pill-btn active" id="pillAll" onclick="setRegistrationFilter('全部')">
-              全部項目 <span class="pill-counter" id="pillCountAll">11</span>
+    <div class="main-body-container">
+      <!-- 頂部指標統計 (KPIs) -->
+      <div class="kpi-row" id="kpiSummaryRow">
+        <div class="kpi-card">
+          <div><div class="kpi-num" id="kpiTotal">11</div><div class="kpi-label">列管重大賽事</div></div>
+          <div class="kpi-icon">📋</div>
+        </div>
+        <div class="kpi-card urgent">
+          <div><div class="kpi-num" id="kpiUrgent">2</div><div class="kpi-label">🚨 近期截止急件</div></div>
+          <div class="kpi-icon">⚠️</div>
+        </div>
+        <div class="kpi-card success">
+          <div><div class="kpi-num" id="kpiRegistered">2</div><div class="kpi-label">✅ 已確認出賽</div></div>
+          <div class="kpi-icon">🎯</div>
+        </div>
+        <div class="kpi-card">
+          <div><div class="kpi-num" id="kpiPending">8</div><div class="kpi-label">⏳ 待確認項目</div></div>
+          <div class="kpi-icon">⏳</div>
+        </div>
+      </div>
+
+      <!-- 報名篩選區 (Requirement 1) -->
+      <div class="filter-card-bar">
+        <div class="filter-intent-row" id="regFilterRow">
+          <div class="intent-pills">
+            <button class="intent-pill active" id="pillAll" onclick="setRegistrationFilter('全部')">
+              全部賽事 <span class="pill-num" id="pillCountAll">11</span>
             </button>
-            <button class="status-pill-btn pill-unreg" id="pillUnreg" onclick="setRegistrationFilter('未報名')">
-              ⏳ 待確認 / 未報名 <span class="pill-counter" id="pillCountUnreg">8</span>
+            <button class="intent-pill pill-unregistered" id="pillUnreg" onclick="setRegistrationFilter('未報名')">
+              ⏳ 待確認 / 未報名 <span class="pill-num" id="pillCountUnreg">8</span>
             </button>
-            <button class="status-pill-btn pill-reg" id="pillReg" onclick="setRegistrationFilter('已報名')">
-              ✅ 已確認報名 <span class="pill-counter" id="pillCountReg">2</span>
+            <button class="intent-pill pill-registered" id="pillReg" onclick="setRegistrationFilter('已報名')">
+              ✅ 已確認出賽 <span class="pill-num" id="pillCountReg">2</span>
             </button>
-            <button class="status-pill-btn pill-declined" id="pillDeclined" onclick="setRegistrationFilter('不報名')">
-              🚫 不報名 / 略過 <span class="pill-counter" id="pillCountDeclined">1</span>
+            <button class="intent-pill pill-declined" id="pillDeclined" onclick="setRegistrationFilter('不報名')">
+              🚫 不報名 / 略過項目 <span class="pill-num" id="pillCountDeclined">1</span>
             </button>
           </div>
 
-          <label style="font-size:0.8125rem; font-weight:700; color:var(--text-muted); cursor:pointer; display:flex; align-items:center; gap:6px;">
+          <label style="font-size:0.82rem; font-weight:700; color:var(--text-muted); cursor:pointer; display:flex; align-items:center; gap:6px;">
             <input type="checkbox" id="chkHideDeclined" onchange="renderActiveView()" checked>
             預設過濾「不報名」項目 (精簡介面)
           </label>
         </div>
 
-        <!-- 關鍵字搜尋與項目過濾 -->
-        <div class="filter-controls-row">
-          <div class="search-box-wrapper">
-            <span class="search-icon">🔍</span>
-            <input type="text" class="search-input" id="searchInput" placeholder="搜尋賽事名稱、組別、場館..." oninput="renderActiveView()">
+        <div class="filter-options-row">
+          <div class="search-input-group">
+            <span class="search-svg-icon">🔍</span>
+            <input type="text" class="search-field" id="searchInput" placeholder="搜尋賽事名稱、組別、場館地點..." oninput="renderActiveView()">
           </div>
           <div style="display:flex; gap:10px;">
-            <select class="select-dropdown" id="sportFilter" onchange="renderActiveView()">
+            <select class="filter-dropdown" id="sportFilter" onchange="renderActiveView()">
               <option value="全部">全部運動種類</option>
             </select>
-            <select class="select-dropdown" id="statusFilter" onchange="renderActiveView()">
+            <select class="filter-dropdown" id="statusFilter" onchange="renderActiveView()">
               <option value="全部">全部時程狀態</option>
             </select>
           </div>
         </div>
-      </section>
+      </div>
 
-      <!-- 主要動態呈現容器 (卡片網格 / 表格 / 月曆) -->
-      <section id="contentContainer"></section>
+      <!-- 主要內容掛載區 -->
+      <div id="contentContainer"></div>
     </div>
   </main>
 
   <!-- ========================================================
-       3. 語音與文字手動新增賽事彈窗 (Requirement 2)
+       5. 語音與文字手動新增賽事彈窗 (Requirement 2)
        ======================================================== -->
-  <div class="modal-overlay" id="createModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>🎙️ 手動建立新賽事 (支援語音輸入)</h3>
-        <button class="close-btn" onclick="closeCreateModal()">&times;</button>
+  <div class="modal-backdrop" id="createModal">
+    <div class="modal-dialog">
+      <div class="modal-head">
+        <h3>🎙️ 快速建立賽事 (支援語音輸入與手動建檔)</h3>
+        <button class="close-modal-btn" onclick="closeCreateModal()">&times;</button>
       </div>
 
       <!-- 語音辨識互動區 -->
-      <div class="voice-banner">
-        <div class="voice-control-row">
-          <button class="btn-mic" id="btnMic" onclick="toggleVoiceRecognition()" title="點擊切換語音輸入">
+      <div class="voice-interactive-panel">
+        <div class="mic-flex-row">
+          <button class="mic-button" id="btnMic" onclick="toggleVoiceRecognition()" title="點擊麥克風語音輸入">
             🎙️
           </button>
           <div>
-            <div class="voice-status-text" id="voiceStatus">點擊麥克風開始說話，自動辨識賽事內容</div>
-            <div style="font-size:0.72rem; color:#64748b;">例如：「115學年度教育盃排球賽，高男乙組，10月28日比賽，已報名」</div>
+            <div style="font-size:0.85rem; font-weight:800; color:var(--navy-dark);" id="voiceStatus">
+              點擊麥克風開始說話，自動辨識賽事內容
+            </div>
+            <div style="font-size:0.72rem; color:#64748b;">
+              範例：「115學年度教育盃排球賽，高男乙組，10月28日比賽，已報名」
+            </div>
           </div>
         </div>
-        <div class="voice-transcript-box" id="voiceTranscript">尚未錄音或語音辨識內容將顯示於此...</div>
-        <button type="button" class="btn-action-outline" style="align-self:flex-start; font-size:0.75rem;" onclick="smartParseVoice()">
-          ✨ 智慧辨識並填入表單
+        <div class="transcript-box" id="voiceTranscript">尚未錄音，說話內容將即時顯示於此...</div>
+        <button type="button" class="btn-detail-outline" style="align-self:flex-start; font-size:0.75rem;" onclick="smartParseVoice()">
+          ✨ 智慧解析並填入下方表單
         </button>
       </div>
 
       <!-- 手動填寫表單 -->
       <form id="newTournamentForm" onsubmit="handleCreateTournament(event)">
-        <div class="form-grid">
-          <div class="form-group full">
+        <div class="form-inputs-grid">
+          <div class="field-wrapper full">
             <label>賽事名稱 *</label>
-            <input type="text" class="form-input" id="formName" required placeholder="如：臺北市115學年度教育盃中等學校排球錦標賽">
+            <input type="text" class="field-ctrl" id="formName" required placeholder="如：臺北市115學年度教育盃中等學校排球錦標賽">
           </div>
-          <div class="form-group">
+          <div class="field-wrapper">
             <label>運動項目 *</label>
-            <input type="text" class="form-input" id="formSport" required placeholder="如：排球、籃球、網球">
+            <input type="text" class="field-ctrl" id="formSport" required placeholder="如：排球、籃球、網球、空手道">
           </div>
-          <div class="form-group">
+          <div class="field-wrapper">
             <label>參賽組別</label>
-            <input type="text" class="form-input" id="formDivisions" placeholder="如：高男乙組、國男組">
+            <input type="text" class="field-ctrl" id="formDivisions" placeholder="如：高男乙組、國女組">
           </div>
-          <div class="form-group">
+          <div class="field-wrapper">
             <label>比賽日期</label>
-            <input type="text" class="form-input" id="formDates" placeholder="如：115/10/26～10/30">
+            <input type="text" class="field-ctrl" id="formDates" placeholder="如：115/10/26～10/30">
           </div>
-          <div class="form-group">
+          <div class="field-wrapper">
             <label>比賽場館 / 地點</label>
-            <input type="text" class="form-input" id="formVenue" placeholder="如：內湖高工體育館">
+            <input type="text" class="field-ctrl" id="formVenue" placeholder="如：內湖高工體育館">
           </div>
-          <div class="form-group">
+          <div class="field-wrapper">
             <label>報名截止時間</label>
-            <input type="text" class="form-input" id="formDeadline" placeholder="如：115/10/14 17:00">
+            <input type="text" class="field-ctrl" id="formDeadline" placeholder="如：115/10/14 17:00">
           </div>
-          <div class="form-group">
+          <div class="field-wrapper">
             <label>報名確認意向 *</label>
-            <select class="form-input" id="formIntent">
+            <select class="field-ctrl" id="formIntent">
               <option value="未報名">⏳ 待確認 / 未報名</option>
-              <option value="已報名">✅ 已確認報名出賽</option>
+              <option value="已報名">✅ 已確認出賽</option>
               <option value="不報名">🚫 不報名 / 略過項目</option>
             </select>
           </div>
-          <div class="form-group full">
+          <div class="field-wrapper full">
             <label>報名手續 / 備註說明</label>
-            <input type="text" class="form-input" id="formMethod" placeholder="如：線上系統填報＋列印核章送件">
+            <input type="text" class="field-ctrl" id="formMethod" placeholder="如：網路線上系統填報＋列印核章送件">
           </div>
-          <div class="form-group full">
+          <div class="field-wrapper full">
             <label>簡章或相關連結網址 (選填)</label>
-            <input type="url" class="form-input" id="formDocUrl" placeholder="https://drive.google.com/...">
+            <input type="url" class="field-ctrl" id="formDocUrl" placeholder="https://drive.google.com/...">
           </div>
         </div>
 
-        <div class="modal-actions">
-          <button type="button" class="btn-cancel-modal" onclick="closeCreateModal()">取消</button>
-          <button type="submit" class="btn-save-modal">儲存並同步至資料庫</button>
+        <div class="modal-bottom-actions">
+          <button type="button" class="btn-dismiss-form" onclick="closeCreateModal()">取消</button>
+          <button type="submit" class="btn-submit-form">儲存並同步至資料庫</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- Supabase 設定彈窗 -->
-  <div class="modal-overlay" id="configModal">
-    <div class="modal-card">
-      <div class="modal-header">
+  <div class="modal-backdrop" id="configModal">
+    <div class="modal-dialog">
+      <div class="modal-head">
         <h3>⚙️ Supabase 資料庫連線設定</h3>
-        <button class="close-btn" onclick="closeConfigModal()">&times;</button>
+        <button class="close-modal-btn" onclick="closeConfigModal()">&times;</button>
       </div>
       <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
-        目前已為大直高中專屬專案綁定全自動連線憑證。如需更換專案可在此調整：
+        目前已為大直高中專屬專案綁定連線憑證。如需更換專案可在此調整：
       </p>
-      <div class="form-group">
+      <div class="field-wrapper">
         <label>Supabase Project URL</label>
-        <input type="text" class="form-input" id="cfgUrl">
+        <input type="text" class="field-ctrl" id="cfgUrl">
       </div>
-      <div class="form-group">
-        <label>Supabase Publishable / Anon Key</label>
-        <input type="text" class="form-input" id="cfgKey">
+      <div class="field-wrapper">
+        <label>Supabase Publishable Key</label>
+        <input type="text" class="field-ctrl" id="cfgKey">
       </div>
-      <div class="modal-actions">
-        <button class="btn-cancel-modal" onclick="closeConfigModal()">取消</button>
-        <button class="btn-save-modal" onclick="saveSupabaseConfig()">儲存並測試連線</button>
+      <div class="modal-bottom-actions">
+        <button class="btn-dismiss-form" onclick="closeConfigModal()">取消</button>
+        <button class="btn-submit-form" onclick="saveSupabaseConfig()">儲存設定</button>
       </div>
     </div>
   </div>
 
-  <!-- Toast 提示組件 -->
-  <div class="toast-msg" id="toastMsg">
+  <!-- Toast 通知組件 -->
+  <div class="toast-popup" id="toastMsg">
     <span id="toastIcon">✅</span>
     <span id="toastText">操作成功！</span>
   </div>
@@ -1120,7 +1222,7 @@
     const DEFAULT_SUPABASE_URL = "https://hdxrublbpaptthmflnrn.supabase.co";
     const DEFAULT_SUPABASE_KEY = "sb_publishable_n3ONLlgwYQ0TAOcxkKoNhg_ZwL6M9wP";
 
-    // 內建完整種子資料庫 (11 項賽事 + 12 組賽程)
+    // 內建完整 11 項賽事與 12 組出賽排程
     const SEED_TOURNAMENTS = [
       { id: 1, name: "臺北市115學年度教育盃中等學校籃球錦標賽", sport: "籃球", divisions: "高男乙、高女乙、國男乙、國女乙、教男組", competition_dates: "115/10/19～11/06", venue: "泰北國際雙語學校、興雅國中、永春高中體育館", reg_start: "115/09/25", reg_deadline: "115/10/06 16:00", reg_method: "網路線上填報＋核章紙本送達", doc_url: "https://drive.google.com/file/d/1_ksrkEbZg9CPzWS2G8efhMbVFxnFjBK9/view", status: "已截止 (10/12 16:00 公告賽程)", registration_status: "已報名" },
       { id: 2, name: "臺北市115中正盃中等學校網球錦標賽", sport: "網球", divisions: "高男組、高女組、國男組、國女組", competition_dates: "115/11/02～11/06", venue: "臺北市立網球中心", reg_start: "115/10/01", reg_deadline: "115/10/14 17:00", reg_method: "Google表單填報＋ATM匯款2,000元並上傳收據", doc_url: "https://drive.google.com/drive/folders/16iBWHC9ilYKB442HuBessa37hWwNe-zm", status: "🚨 報名急件 (倒數 4 天)", registration_status: "未報名" },
@@ -1152,25 +1254,24 @@
 
     let tournaments = JSON.parse(localStorage.getItem('dazhi_tournaments')) || [...SEED_TOURNAMENTS];
     let schedules = [...SEED_SCHEDULES];
-    let currentActiveNav = 'tournaments'; // 'tournaments' | 'schedules'
-    let currentViewMode = 'grid'; // 'grid' | 'table' | 'calendar'
-    let currentRegFilter = '全部'; // '全部' | '已報名' | '未報名' | '不報名'
+    let currentNav = 'tournaments';
+    let currentView = 'grid';
+    let currentRegFilter = '全部';
     let supabaseClient = null;
 
-    // 語音識別實例
     let recognition = null;
     let isListening = false;
 
     window.addEventListener('DOMContentLoaded', () => {
       initSupabase();
       initSpeechRecognition();
-      populateDropdownFilters();
-      updatePillCounts();
+      populateFilters();
+      updateMetrics();
       renderActiveView();
     });
 
     // ========================================================
-    // Supabase 連線與資料讀寫
+    // Supabase 初始化與讀寫
     // ========================================================
     function initSupabase() {
       const url = localStorage.getItem('dazhi_supabase_url') || DEFAULT_SUPABASE_URL;
@@ -1181,19 +1282,19 @@
       if (url && key && window.supabase) {
         try {
           supabaseClient = window.supabase.createClient(url, key);
-          dot.className = 'db-status-dot';
+          dot.className = 'sys-dot';
           txt.textContent = '🟢 Supabase 即時連線';
-          fetchDataFromSupabase();
+          fetchData();
           return;
         } catch (e) {
-          console.error('Supabase 初始化失敗:', e);
+          console.error(e);
         }
       }
-      dot.className = 'db-status-dot offline';
+      dot.className = 'sys-dot offline';
       txt.textContent = '🟡 內建離線備援模式';
     }
 
-    async function fetchDataFromSupabase() {
+    async function fetchData() {
       if (!supabaseClient) return;
       try {
         const { data: tData, error: tErr } = await supabaseClient.from('tournaments').select('*').order('id', { ascending: true });
@@ -1207,17 +1308,17 @@
           schedules = sData;
         }
 
-        updatePillCounts();
-        populateDropdownFilters();
+        updateMetrics();
+        populateFilters();
         renderActiveView();
       } catch (err) {
-        console.warn('從 Supabase 取得資料異常，沿用本地資料:', err);
+        console.warn('Supabase 連線失敗，沿用本地快取:', err);
       }
     }
 
     function manualRefreshData() {
       if (supabaseClient) {
-        fetchDataFromSupabase();
+        fetchData();
         showToast('已從 Supabase 即時同步最新賽事與賽程！');
       } else {
         showToast('目前為內建資料模式。已刷新畫面！');
@@ -1226,44 +1327,47 @@
     }
 
     // ========================================================
-    // 報名狀態切換 (Requirement 1: 已報名 / 未報名 / 不報名)
+    // 報名狀態切換 (Requirement 1)
     // ========================================================
-    async function updateRegistrationIntent(tournamentId, newStatus) {
-      const t = tournaments.find(item => item.id === tournamentId);
+    async function updateRegistrationIntent(id, newStatus) {
+      const t = tournaments.find(item => item.id === id);
       if (!t) return;
       t.registration_status = newStatus;
-
-      // 1. 本地儲存持久化
       localStorage.setItem('dazhi_tournaments', JSON.stringify(tournaments));
 
-      // 2. 若 Supabase 連線可用，非同步推播更新至後端
       if (supabaseClient) {
         try {
-          await supabaseClient.from('tournaments').update({ registration_status: newStatus }).eq('id', tournamentId);
+          await supabaseClient.from('tournaments').update({ registration_status: newStatus }).eq('id', id);
         } catch (e) {
-          console.warn('推播報名意向至 Supabase 失敗:', e);
+          console.warn('推播報名意向失敗:', e);
         }
       }
 
       showToast(`已將「${t.name.substring(0, 10)}...」標記為【${newStatus}】！`);
-      updatePillCounts();
+      updateMetrics();
       renderActiveView();
     }
 
     function setRegistrationFilter(filter) {
       currentRegFilter = filter;
-      document.getElementById('pillAll').className = 'status-pill-btn' + (filter === '全部' ? ' active' : '');
-      document.getElementById('pillUnreg').className = 'status-pill-btn pill-unreg' + (filter === '未報名' ? ' active' : '');
-      document.getElementById('pillReg').className = 'status-pill-btn pill-reg' + (filter === '已報名' ? ' active' : '');
-      document.getElementById('pillDeclined').className = 'status-pill-btn pill-declined' + (filter === '不報名' ? ' active' : '');
+      document.getElementById('pillAll').className = 'intent-pill' + (filter === '全部' ? ' active' : '');
+      document.getElementById('pillUnreg').className = 'intent-pill pill-unregistered' + (filter === '未報名' ? ' active' : '');
+      document.getElementById('pillReg').className = 'intent-pill pill-registered' + (filter === '已報名' ? ' active' : '');
+      document.getElementById('pillDeclined').className = 'intent-pill pill-declined' + (filter === '不報名' ? ' active' : '');
       renderActiveView();
     }
 
-    function updatePillCounts() {
+    function updateMetrics() {
       const total = tournaments.length;
       const unreg = tournaments.filter(t => (t.registration_status || '未報名') === '未報名').length;
       const reg = tournaments.filter(t => t.registration_status === '已報名').length;
       const dec = tournaments.filter(t => t.registration_status === '不報名').length;
+      const urgent = tournaments.filter(t => t.status && t.status.includes('🚨')).length;
+
+      document.getElementById('kpiTotal').textContent = total;
+      document.getElementById('kpiUrgent').textContent = urgent;
+      document.getElementById('kpiRegistered').textContent = reg;
+      document.getElementById('kpiPending').textContent = unreg;
 
       document.getElementById('pillCountAll').textContent = total;
       document.getElementById('pillCountUnreg').textContent = unreg;
@@ -1277,39 +1381,28 @@
       document.getElementById('sideBadgeDeclined').textContent = dec;
     }
 
-    // ========================================================
-    // 導航與視圖切換
-    // ========================================================
     function switchNavTab(tab) {
-      currentActiveNav = tab;
-      document.getElementById('navTournaments').className = 'nav-item' + (tab === 'tournaments' ? ' active' : '');
-      document.getElementById('navSchedules').className = 'nav-item' + (tab === 'schedules' ? ' active' : '');
-
-      if (tab === 'tournaments') {
-        document.getElementById('pageMainTitle').textContent = 'All Tournaments 全部列管賽事';
-        document.getElementById('pageMainSubtitle').textContent = `共 ${tournaments.length} 項賽事 · 即時同步 Google Drive 與 Supabase 資料庫`;
-        document.getElementById('regPillsRow').style.display = 'flex';
-      } else {
-        document.getElementById('pageMainTitle').textContent = 'Dazhi Squad Schedules 大直出賽賽程';
-        document.getElementById('pageMainSubtitle').textContent = `共 ${schedules.length} 場次代表隊出賽 · 籤位對手與場館資訊`;
-        document.getElementById('regPillsRow').style.display = 'none';
-      }
-      populateDropdownFilters();
+      currentNav = tab;
+      document.getElementById('navTournaments').className = 'nav-link' + (tab === 'tournaments' ? ' active' : '');
+      document.getElementById('navSchedules').className = 'nav-link' + (tab === 'schedules' ? ' active' : '');
+      document.getElementById('regFilterRow').style.display = tab === 'tournaments' ? 'flex' : 'none';
+      document.getElementById('kpiSummaryRow').style.display = tab === 'tournaments' ? 'grid' : 'none';
+      populateFilters();
       renderActiveView();
     }
 
     function switchViewMode(mode) {
-      currentViewMode = mode;
-      document.getElementById('btnGridView').className = 'view-btn' + (mode === 'grid' ? ' active' : '');
-      document.getElementById('btnTableView').className = 'view-btn' + (mode === 'table' ? ' active' : '');
-      document.getElementById('btnCalendarView').className = 'view-btn' + (mode === 'calendar' ? ' active' : '');
+      currentView = mode;
+      document.getElementById('btnGridView').className = 'view-control-btn' + (mode === 'grid' ? ' active' : '');
+      document.getElementById('btnTableView').className = 'view-control-btn' + (mode === 'table' ? ' active' : '');
+      document.getElementById('btnCalendarView').className = 'view-control-btn' + (mode === 'calendar' ? ' active' : '');
       renderActiveView();
     }
 
-    function populateDropdownFilters() {
+    function populateFilters() {
       const sportSelect = document.getElementById('sportFilter');
       const cur = sportSelect.value;
-      const data = currentActiveNav === 'tournaments' ? tournaments : schedules;
+      const data = currentNav === 'tournaments' ? tournaments : schedules;
       const sports = Array.from(new Set(data.map(d => d.sport.replace(/[^\u4e00-\u9fa5]/g, '')))).filter(Boolean);
 
       sportSelect.innerHTML = '<option value="全部">全部運動種類</option>';
@@ -1320,7 +1413,7 @@
     }
 
     // ========================================================
-    // 核心渲染視圖 (Render Active View)
+    // 渲染主畫面
     // ========================================================
     function renderActiveView() {
       const container = document.getElementById('contentContainer');
@@ -1328,100 +1421,97 @@
       const sport = document.getElementById('sportFilter').value;
       const hideDeclined = document.getElementById('chkHideDeclined').checked;
 
-      if (currentActiveNav === 'tournaments') {
-        // 篩選賽事
+      if (currentNav === 'tournaments') {
         let list = tournaments.filter(t => {
           const matchSearch = !search || t.name.toLowerCase().includes(search) || (t.divisions && t.divisions.toLowerCase().includes(search)) || (t.venue && t.venue.toLowerCase().includes(search));
           const matchSport = sport === '全部' || t.sport.includes(sport);
-          
           const regStatus = t.registration_status || '未報名';
           const matchRegPill = currentRegFilter === '全部' || regStatus === currentRegFilter;
-          
-          // 如果勾選隱藏不報名且當前不是特定看「不報名」頁籤
           if (hideDeclined && currentRegFilter === '全部' && regStatus === '不報名') return false;
-
           return matchSearch && matchSport && matchRegPill;
         });
 
-        if (currentViewMode === 'grid') {
-          // 卡片網格模式 (RedPoint 3欄精準版)
+        if (currentView === 'grid') {
           if (list.length === 0) {
-            container.innerHTML = '<div style="text-align:center; padding:60px; color:#94a3b8;">無符合篩選條件的賽事項目</div>';
+            container.innerHTML = '<div style="text-align:center; padding:60px; color:#94a3b8; font-weight:700;">無符合條件之賽事項目</div>';
             return;
           }
-          let html = '<div class="cards-grid">';
+          let html = '<div class="cards-grid-layout">';
           list.forEach(t => {
             const regStatus = t.registration_status || '未報名';
-            let badgeClass = 'badge-active';
-            if (t.status.includes('🚨')) badgeClass = 'badge-urgent';
-            else if (t.status.includes('截止')) badgeClass = 'badge-closed';
-            else if (t.status.includes('即將') || t.status.includes('籌備')) badgeClass = 'badge-upcoming';
+            let tagClass = 'tag-active';
+            if (t.status.includes('🚨')) tagClass = 'tag-urgent';
+            else if (t.status.includes('截止')) tagClass = 'tag-closed';
+            else if (t.status.includes('即將') || t.status.includes('籌備')) tagClass = 'tag-upcoming';
 
             const isDeclined = regStatus === '不報名';
 
             html += `
-              <div class="tournament-card ${isDeclined ? 'declined-card' : ''}">
+              <div class="sport-card ${isDeclined ? 'declined-mode' : ''}">
                 <div>
-                  <div class="card-top-row">
-                    <h3 class="card-title">${t.name}</h3>
-                    <span class="badge-status ${badgeClass}">${t.status}</span>
+                  <div class="card-head">
+                    <h3 class="card-title-text">${t.name}</h3>
+                    <span class="status-tag ${tagClass}">${t.status}</span>
                   </div>
-                  <div class="card-location">
-                    <span>📍</span> ${t.sport} · ${t.venue || '場館確認中'}
+                  <div class="card-venue-row">
+                    <span>📍</span> <strong>${t.sport}</strong> · ${t.venue || '場地確認中'}
                   </div>
-                  <div class="card-date-badge">
-                    <span>📅</span> 比賽：${t.competition_dates || '待定'}
-                  </div>
-
-                  <div class="card-metrics-grid">
-                    <div class="metric-item">
-                      <span class="metric-label">參賽組別</span>
-                      <span class="metric-value" title="${t.divisions}">${t.divisions || '各組別'}</span>
-                    </div>
-                    <div class="metric-item">
-                      <span class="metric-label">報名截止</span>
-                      <span class="metric-value" style="color:#e11d48;">${t.reg_deadline || '待公告'}</span>
-                    </div>
+                  <div class="card-date-chip">
+                    <span>📅</span> 比賽日期：${t.competition_dates || '待定'}
                   </div>
 
-                  <!-- 報名意向確認列 (User Requirement 1) -->
-                  <div class="intent-toggle-wrapper">
-                    <div class="intent-label">
-                      <span>報名決策狀態</span>
-                      <strong style="color:${regStatus==='已報名'?'#10b981':(regStatus==='不報名'?'#ef4444':'#f59e0b')}">${regStatus}</strong>
+                  <div class="card-details-box">
+                    <div class="detail-item full">
+                      <span class="detail-lbl">參賽組別</span>
+                      <span class="detail-val" title="${t.divisions}">${t.divisions || '各級組別'}</span>
                     </div>
-                    <div class="intent-btn-group">
-                      <button class="intent-btn ${regStatus==='已報名'?'active-reg':''}" onclick="updateRegistrationIntent(${t.id}, '已報名')">✅ 已報名</button>
-                      <button class="intent-btn ${regStatus==='未報名'?'active-unreg':''}" onclick="updateRegistrationIntent(${t.id}, '未報名')">⏳ 未報名</button>
-                      <button class="intent-btn ${regStatus==='不報名'?'active-declined':''}" onclick="updateRegistrationIntent(${t.id}, '不報名')">🚫 不報名</button>
+                    <div class="detail-item">
+                      <span class="detail-lbl">報名截止時間</span>
+                      <span class="detail-val" style="color:#b91c1c;">${t.reg_deadline || '待公告'}</span>
+                    </div>
+                    <div class="detail-item">
+                      <span class="detail-lbl">報名方式</span>
+                      <span class="detail-val" title="${t.reg_method}">${t.reg_method || '官方簡章規定'}</span>
+                    </div>
+                  </div>
+
+                  <!-- 報名確認三態按鈕組 -->
+                  <div class="intent-selector-container">
+                    <div class="intent-header-text">
+                      <span>報名決策確認</span>
+                      <strong style="color:${regStatus==='已報名'?'#047857':(regStatus==='不報名'?'#b91c1c':'#b45309')}">${regStatus}</strong>
+                    </div>
+                    <div class="intent-toggles">
+                      <button class="intent-toggle-btn ${regStatus==='已報名'?'btn-is-reg':''}" onclick="updateRegistrationIntent(${t.id}, '已報名')">✅ 已報名</button>
+                      <button class="intent-toggle-btn ${regStatus==='未報名'?'btn-is-unreg':''}" onclick="updateRegistrationIntent(${t.id}, '未報名')">⏳ 未報名</button>
+                      <button class="intent-toggle-btn ${regStatus==='不報名'?'btn-is-declined':''}" onclick="updateRegistrationIntent(${t.id}, '不報名')">🚫 不報名</button>
                     </div>
                   </div>
                 </div>
 
-                <div class="card-footer">
-                  <a href="${t.doc_url || '#'}" target="_blank" class="link-doc">📄 開啟簡章 ↗</a>
-                  <button class="btn-card-manage" onclick="showTournamentDetails(${t.id})">檢視完整資訊</button>
+                <div class="card-action-footer">
+                  <a href="${t.doc_url || '#'}" target="_blank" class="doc-link-btn">📄 開啟簡章 ↗</a>
+                  <button class="btn-detail-outline" onclick="showTournamentDetails(${t.id})">檢視完整資訊</button>
                 </div>
               </div>
             `;
           });
           html += '</div>';
           container.innerHTML = html;
-        } else if (currentViewMode === 'table') {
-          // 表格模式
+        } else if (currentView === 'table') {
           let html = `
-            <div class="table-container">
+            <div class="table-view-panel">
               <table>
                 <thead>
                   <tr>
                     <th>賽事名稱</th>
                     <th>種類</th>
                     <th>組別</th>
-                    <th>比賽時程</th>
+                    <th>比賽日期</th>
                     <th>地點</th>
                     <th>報名截止</th>
-                    <th>報名狀態確認</th>
-                    <th>簡章</th>
+                    <th>報名確認狀態</th>
+                    <th>簡章連結</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1431,67 +1521,66 @@
             html += `
               <tr>
                 <td><strong>${t.name}</strong></td>
-                <td><span style="font-weight:700;">${t.sport}</span></td>
+                <td><span style="font-weight:700; color:#1e40af;">${t.sport}</span></td>
                 <td style="max-width:200px; font-size:0.8rem;">${t.divisions || '-'}</td>
                 <td>${t.competition_dates}</td>
                 <td>${t.venue}</td>
-                <td><strong style="color:#e11d48;">${t.reg_deadline}</strong></td>
+                <td><strong style="color:#b91c1c;">${t.reg_deadline}</strong></td>
                 <td>
-                  <select class="select-dropdown" style="padding:4px 8px; font-size:0.8rem;" onchange="updateRegistrationIntent(${t.id}, this.value)">
+                  <select class="filter-dropdown" style="padding:4px 8px; font-size:0.8rem;" onchange="updateRegistrationIntent(${t.id}, this.value)">
                     <option value="未報名" ${regStatus==='未報名'?'selected':''}>⏳ 未報名</option>
                     <option value="已報名" ${regStatus==='已報名'?'selected':''}>✅ 已報名</option>
                     <option value="不報名" ${regStatus==='不報名'?'selected':''}>🚫 不報名</option>
                   </select>
                 </td>
-                <td><a href="${t.doc_url}" target="_blank" class="link-doc">📄 簡章</a></td>
+                <td><a href="${t.doc_url}" target="_blank" class="doc-link-btn">📄 簡章</a></td>
               </tr>
             `;
           });
           html += '</tbody></table></div>';
           container.innerHTML = html;
         } else {
-          // 月曆模式
           renderCalendarView();
         }
       } else {
-        // 大直出賽賽程 Tab
+        // 大直出賽賽程
         let list = schedules.filter(s => {
           const matchSearch = !search || s.tournament_name.toLowerCase().includes(search) || s.division.toLowerCase().includes(search) || s.venue.toLowerCase().includes(search);
           const matchSport = sport === '全部' || s.sport.includes(sport);
           return matchSearch && matchSport;
         });
 
-        if (currentViewMode === 'grid') {
-          let html = '<div class="cards-grid">';
+        if (currentView === 'grid') {
+          let html = '<div class="cards-grid-layout">';
           list.forEach(s => {
             html += `
-              <div class="tournament-card">
+              <div class="sport-card">
                 <div>
-                  <div class="card-top-row">
-                    <h3 class="card-title">${s.tournament_name}</h3>
-                    <span class="badge-status badge-active">${s.status}</span>
+                  <div class="card-head">
+                    <h3 class="card-title-text">${s.tournament_name}</h3>
+                    <span class="status-tag tag-active">${s.status}</span>
                   </div>
-                  <div class="card-location"><span>🏀</span> ${s.sport} · <strong>${s.division}</strong></div>
-                  <div class="card-date-badge"><span>📅</span> 日期：${s.match_date}</div>
+                  <div class="card-venue-row"><span>🏀</span> ${s.sport} · <strong>${s.division}</strong></div>
+                  <div class="card-date-chip"><span>📅</span> 比賽時程：${s.match_date}</div>
 
-                  <div class="card-metrics-grid">
-                    <div class="metric-item" style="grid-column: span 2;">
-                      <span class="metric-label">對手名單 / 分組籤位</span>
-                      <span class="metric-value" style="color:#1d4ed8; white-space:normal;">${s.opponents_draw}</span>
+                  <div class="card-details-box">
+                    <div class="detail-item full">
+                      <span class="detail-lbl">對戰隊伍 / 分組籤位</span>
+                      <span class="detail-val" style="color:#1e40af; white-space:normal;">${s.opponents_draw}</span>
                     </div>
-                    <div class="metric-item">
-                      <span class="metric-label">比賽場館</span>
-                      <span class="metric-value">${s.venue}</span>
+                    <div class="detail-item">
+                      <span class="detail-lbl">比賽場館</span>
+                      <span class="detail-val">${s.venue}</span>
                     </div>
-                    <div class="metric-item">
-                      <span class="metric-label">晉級規則</span>
-                      <span class="metric-value">${s.advancement_rule || '-'}</span>
+                    <div class="detail-item">
+                      <span class="detail-lbl">晉級賽制</span>
+                      <span class="detail-val">${s.advancement_rule || '-'}</span>
                     </div>
                   </div>
                 </div>
-                <div class="card-footer">
+                <div class="card-action-footer">
                   <span style="font-size:0.75rem; color:#64748b;">來源：${s.source_file}</span>
-                  <button class="btn-card-manage">籤表確認</button>
+                  <button class="btn-detail-outline">籤表已確定</button>
                 </div>
               </div>
             `;
@@ -1507,69 +1596,69 @@
     function renderCalendarView() {
       const container = document.getElementById('contentContainer');
       container.innerHTML = `
-        <div class="calendar-container">
-          <div style="text-align:center; font-weight:800; font-size:1.15rem; margin-bottom:12px; color:#0f172a;">
+        <div class="calendar-view-panel">
+          <div style="text-align:center; font-weight:900; font-size:1.15rem; margin-bottom:12px; color:var(--navy-dark);">
             📅 115 學年度 10 月 ～ 11 月 大直代表隊出賽賽程行事曆
           </div>
-          <div class="calendar-grid">
-            <div class="cal-header">週日</div>
-            <div class="cal-header">週一</div>
-            <div class="cal-header">週二</div>
-            <div class="cal-header">週三</div>
-            <div class="cal-header">週四</div>
-            <div class="cal-header">週五</div>
-            <div class="cal-header">週六</div>
+          <div class="calendar-matrix">
+            <div class="cal-day-col" style="background:#0f2942; color:white; min-height:auto; text-align:center; font-weight:800; padding:8px;">週日</div>
+            <div class="cal-day-col" style="background:#0f2942; color:white; min-height:auto; text-align:center; font-weight:800; padding:8px;">週一</div>
+            <div class="cal-day-col" style="background:#0f2942; color:white; min-height:auto; text-align:center; font-weight:800; padding:8px;">週二</div>
+            <div class="cal-day-col" style="background:#0f2942; color:white; min-height:auto; text-align:center; font-weight:800; padding:8px;">週三</div>
+            <div class="cal-day-col" style="background:#0f2942; color:white; min-height:auto; text-align:center; font-weight:800; padding:8px;">週四</div>
+            <div class="cal-day-col" style="background:#0f2942; color:white; min-height:auto; text-align:center; font-weight:800; padding:8px;">週五</div>
+            <div class="cal-day-col" style="background:#0f2942; color:white; min-height:auto; text-align:center; font-weight:800; padding:8px;">週六</div>
 
-            <div class="cal-day"><span class="cal-day-num">10/18</span></div>
-            <div class="cal-day">
-              <span class="cal-day-num">10/19</span>
-              <div class="cal-event-pill basketball">🏀 籃球教育盃 開打 (5組出賽)</div>
+            <div class="cal-day-col"><span class="cal-num-badge">10/18</span></div>
+            <div class="cal-day-col">
+              <span class="cal-num-badge">10/19</span>
+              <div class="cal-match-pill">🏀 籃球教育盃 開打 (5組出賽)</div>
             </div>
-            <div class="cal-day"><span class="cal-day-num">10/20</span></div>
-            <div class="cal-day"><span class="cal-day-num">10/21</span></div>
-            <div class="cal-day"><span class="cal-day-num">10/22</span></div>
-            <div class="cal-day"><span class="cal-day-num">10/23</span></div>
-            <div class="cal-day"><span class="cal-day-num">10/24</span></div>
+            <div class="cal-day-col"><span class="cal-num-badge">10/20</span></div>
+            <div class="cal-day-col"><span class="cal-num-badge">10/21</span></div>
+            <div class="cal-day-col"><span class="cal-num-badge">10/22</span></div>
+            <div class="cal-day-col"><span class="cal-num-badge">10/23</span></div>
+            <div class="cal-day-col"><span class="cal-num-badge">10/24</span></div>
 
-            <div class="cal-day"><span class="cal-day-num">10/25</span></div>
-            <div class="cal-day">
-              <span class="cal-day-num">10/26</span>
-              <div class="cal-event-pill volleyball">🏐 排球教育盃 (教女組 A組第3籤)</div>
+            <div class="cal-day-col"><span class="cal-num-badge">10/25</span></div>
+            <div class="cal-day-col">
+              <span class="cal-num-badge">10/26</span>
+              <div class="cal-match-pill" style="border-left-color:#2563eb;">🏐 排球教育盃 (教女組 A組第3籤)</div>
             </div>
-            <div class="cal-day"><span class="cal-day-num">10/27</span></div>
-            <div class="cal-day">
-              <span class="cal-day-num">10/28</span>
-              <div class="cal-event-pill volleyball">🏐 排球教育盃 (高男乙 I組27籤)</div>
+            <div class="cal-day-col"><span class="cal-num-badge">10/27</span></div>
+            <div class="cal-day-col">
+              <span class="cal-num-badge">10/28</span>
+              <div class="cal-match-pill" style="border-left-color:#2563eb;">🏐 排球教育盃 (高男乙 I組27籤)</div>
             </div>
-            <div class="cal-day"><span class="cal-day-num">10/29</span></div>
-            <div class="cal-day"><span class="cal-day-num">10/30</span></div>
-            <div class="cal-day"><span class="cal-day-num">10/31</span></div>
+            <div class="cal-day-col"><span class="cal-num-badge">10/29</span></div>
+            <div class="cal-day-col"><span class="cal-num-badge">10/30</span></div>
+            <div class="cal-day-col"><span class="cal-num-badge">10/31</span></div>
 
-            <div class="cal-day"><span class="cal-day-num">11/01</span></div>
-            <div class="cal-day">
-              <span class="cal-day-num">11/02</span>
-              <div class="cal-event-pill tennis">🎾 網球中正盃 (高男組 網球中心)</div>
+            <div class="cal-day-col"><span class="cal-num-badge">11/01</span></div>
+            <div class="cal-day-col">
+              <span class="cal-num-badge">11/02</span>
+              <div class="cal-match-pill" style="border-left-color:#047857; color:#047857; background:#ecfdf5;">🎾 網球中正盃 (高男組 網球中心)</div>
             </div>
-            <div class="cal-day"><span class="cal-day-num">11/03</span></div>
-            <div class="cal-day"><span class="cal-day-num">11/04</span></div>
-            <div class="cal-day"><span class="cal-day-num">11/05</span></div>
-            <div class="cal-day">
-              <span class="cal-day-num">11/06</span>
-              <div class="cal-event-pill" style="border-left-color:#8b5cf6; background:#f5f3ff; color:#6d28d9;">🥋 空手道中正盃 (板橋體育館)</div>
+            <div class="cal-day-col"><span class="cal-num-badge">11/03</span></div>
+            <div class="cal-day-col"><span class="cal-num-badge">11/04</span></div>
+            <div class="cal-day-col"><span class="cal-num-badge">11/05</span></div>
+            <div class="cal-day-col">
+              <span class="cal-num-badge">11/06</span>
+              <div class="cal-match-pill" style="border-left-color:#7c3aed; color:#7c3aed; background:#f5f3ff;">🥋 空手道中正盃 (板橋體育館)</div>
             </div>
-            <div class="cal-day"><span class="cal-day-num">11/07</span></div>
+            <div class="cal-day-col"><span class="cal-num-badge">11/07</span></div>
           </div>
         </div>
       `;
     }
 
     // ========================================================
-    // 語音識別模組 (HTML5 Web Speech API) (Requirement 2)
+    // 語音識別與智慧代入 (Web Speech API) (Requirement 2)
     // ========================================================
     function initSpeechRecognition() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        document.getElementById('voiceStatus').textContent = '⚠️ 您的瀏覽器不支援語音輸入，請手動填寫';
+        document.getElementById('voiceStatus').textContent = '⚠️ 您的瀏覽器不支援語音輸入，請直接手動填寫';
         document.getElementById('btnMic').disabled = true;
         return;
       }
@@ -1580,7 +1669,7 @@
 
       recognition.onstart = () => {
         isListening = true;
-        document.getElementById('btnMic').className = 'btn-mic listening';
+        document.getElementById('btnMic').className = 'mic-button recording';
         document.getElementById('voiceStatus').textContent = '🎙️ 正在聆聽中... 請說話';
       };
 
@@ -1595,12 +1684,12 @@
       recognition.onerror = (event) => {
         console.error('語音辨識錯誤:', event.error);
         stopListening();
-        document.getElementById('voiceStatus').textContent = '錄音中斷或未偵測到聲音，請再試一次';
+        document.getElementById('voiceStatus').textContent = '未偵測到聲音或麥克風被拒絕，請再試一次';
       };
 
       recognition.onend = () => {
         stopListening();
-        document.getElementById('voiceStatus').textContent = '錄音結束！可點擊下方「智慧代入表單」';
+        document.getElementById('voiceStatus').textContent = '錄音結束！可點擊下方「智慧解析並填入表單」';
       };
     }
 
@@ -1613,14 +1702,14 @@
         try {
           recognition.start();
         } catch (e) {
-          console.warn('Recognition start exception:', e);
+          console.warn(e);
         }
       }
     }
 
     function stopListening() {
       isListening = false;
-      document.getElementById('btnMic').className = 'btn-mic';
+      document.getElementById('btnMic').className = 'mic-button';
     }
 
     function smartParseVoice() {
@@ -1630,7 +1719,6 @@
         return;
       }
 
-      // 智慧萃取
       document.getElementById('formName').value = text;
       
       const sports = ['籃球', '排球', '網球', '羽球', '空手道', '棒球', '壘球', '足球', '擊劍', '游泳', '田徑', '桌球'];
@@ -1653,12 +1741,10 @@
         document.getElementById('formIntent').value = '未報名';
       }
 
-      showToast('✨ 語音內容已智慧解析並代入表單欄位！');
+      showToast('✨ 語音內容已自動智慧代入表單欄位！');
     }
 
-    // ========================================================
     // 手動新增賽事儲存
-    // ========================================================
     async function handleCreateTournament(e) {
       e.preventDefault();
       const newT = {
@@ -1676,11 +1762,9 @@
         registration_status: document.getElementById('formIntent').value
       };
 
-      // 1. 本地立即加入
       tournaments.unshift(newT);
       localStorage.setItem('dazhi_tournaments', JSON.stringify(tournaments));
 
-      // 2. 同步至 Supabase
       if (supabaseClient) {
         try {
           await supabaseClient.from('tournaments').insert([{
@@ -1703,13 +1787,12 @@
 
       closeCreateModal();
       showToast(`🎉 成功新增賽事：「${newT.name.substring(0, 10)}...」！`);
-      updatePillCounts();
-      populateDropdownFilters();
+      updateMetrics();
+      populateFilters();
       renderActiveView();
       document.getElementById('newTournamentForm').reset();
     }
 
-    // Modal 控制
     function openCreateModal() { document.getElementById('createModal').style.display = 'flex'; }
     function closeCreateModal() { document.getElementById('createModal').style.display = 'none'; stopListening(); }
     function openConfigModal() {
@@ -1726,13 +1809,13 @@
       localStorage.setItem('dazhi_supabase_key', k);
       closeConfigModal();
       initSupabase();
-      showToast('已更新 Supabase 設定並重新連線！');
+      showToast('已更新 Supabase 設定！');
     }
 
     function showTournamentDetails(id) {
       const t = tournaments.find(item => item.id === id);
       if (!t) return;
-      alert(`【${t.name}】\n項目：${t.sport}\n組別：${t.divisions}\n比賽日期：${t.competition_dates}\n場地：${t.venue}\n報名截止：${t.reg_deadline}\n手續：${t.reg_method}\n報名狀態：${t.registration_status || '未報名'}`);
+      alert(`【${t.name}】\n項目：${t.sport}\n組別：${t.divisions}\n比賽日期：${t.competition_dates}\n場地：${t.venue}\n報名截止：${t.reg_deadline}\n手續：${t.reg_method}\n報名確認：${t.registration_status || '未報名'}`);
     }
 
     function showToast(msg) {
