@@ -7,48 +7,46 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
-      /* 穩重專業藍白基調 (Dignified Academic Blue & White Palette) */
-      --navy-dark: #0a192f;        /* 頂級深藍，穩重權威 */
-      --navy-primary: #102a43;     /* 典雅海軍藍 */
-      --navy-sidebar: #0b1a30;     /* 側邊欄深藍底 */
-      --blue-accent: #1e40af;      /* 大直校徽標準皇家藍 */
-      --blue-royal: #2563eb;       /* 主互動藍 */
-      --blue-light: #3b82f6;       /* 亮藍亮點 */
-      --blue-ice: #eff6ff;         /* 冰藍淺色底 */
-      --blue-subtle: #f0f4f9;      /* 主工作區柔和淺灰藍 */
+      /* 穩重專業藍白基調 (Dignified Blue & White Palette) */
+      --navy-dark: #0f172a;        /* 頂級深藍黑，權威沉穩 */
+      --navy-primary: #1e3a8a;     /* 大直深海軍藍 */
+      --blue-royal: #2563eb;       /* 皇家藍主色 */
+      --blue-accent: #1d4ed8;      /* 校徽深藍 */
+      --blue-light: #3b82f6;       /* 亮藍裝飾 */
+      --blue-ice: #eff6ff;         /* 冰藍背景 */
+      --blue-subtle: #f8fafc;      /* 頁面工作區清爽背景 */
       
       --white-pure: #ffffff;       /* 純白 */
-      --border-color: #cbd5e1;     /* 沉穩邊框灰藍 */
+      --sidebar-bg: #ffffff;       /* 使用者需求2：最左列改為白色 */
+      --sidebar-border: #e2e8f0;
+      
+      --border-color: #cbd5e1;     /* 邊框灰藍 */
       --border-light: #e2e8f0;     /* 極細分隔線 */
       
-      --text-heading: #0f172a;     /* 標題炭黑深藍 */
-      --text-body: #334155;        /* 內文清晰深灰 */
-      --text-muted: #64748b;       /* 次要提示灰 */
-      --text-white: #ffffff;
+      --text-heading: #0f172a;
+      --text-body: #334155;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
       
-      /* 狀態色彩 (克制而權威) */
-      --status-urgent: #b91c1c;    /* 深紅急件 */
+      /* 狀態色彩 */
+      --status-urgent: #b91c1c;
       --status-urgent-bg: #fef2f2;
       --status-urgent-border: #fecaca;
       
-      --status-success: #047857;   /* 常春藤綠 */
+      --status-success: #047857;
       --status-success-bg: #ecfdf5;
       --status-success-border: #a7f3d0;
       
-      --status-warning: #b45309;   /* 琥珀金 */
+      --status-warning: #b45309;
       --status-warning-bg: #fffbeb;
       --status-warning-border: #fde68a;
-      
-      --status-info: #1d4ed8;      /* 蔚藍 */
-      --status-info-bg: #eff6ff;
-      --status-info-border: #bfdbfe;
       
       --radius-sm: 6px;
       --radius-md: 10px;
       --radius-lg: 14px;
       --radius-xl: 18px;
-      --shadow-card: 0 2px 8px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03);
-      --shadow-hover: 0 8px 20px rgba(15, 23, 42, 0.08), 0 3px 6px rgba(15, 23, 42, 0.04);
+      --shadow-card: 0 1px 4px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-hover: 0 6px 16px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(15, 23, 42, 0.04);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -63,131 +61,136 @@
     }
 
     /* ========================================================
-       1. 穩重深藍側邊欄 (Sidebar - Navy & White Professional)
+       1. 使用者需求2：最左列改為白色 (White Professional Sidebar)
        ======================================================== */
     .sidebar {
-      width: 270px;
-      background: var(--navy-sidebar);
-      color: #94a3b8;
+      width: 260px;
+      background: var(--sidebar-bg);
+      color: var(--text-body);
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
-      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      border-right: 1px solid var(--sidebar-border);
       position: sticky;
       top: 0;
       height: 100vh;
       overflow-y: auto;
       z-index: 100;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.02);
     }
     .sidebar-header {
-      padding: 24px 20px 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 20px 18px 16px;
+      border-bottom: 1px solid #f1f5f9;
     }
     .school-brand-box {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
-    /* 大直校徽圓盾容器 */
+    /* 校徽容器：確保完整顯示不遮蔽 */
     .school-crest-wrapper {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      background: white;
-      padding: 3px;
+      width: 48px;
+      height: 48px;
+      background: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
       flex-shrink: 0;
+      overflow: visible !important; /* 確保不被裁切 */
     }
-    .school-crest-svg {
-      width: 36px;
-      height: 36px;
+    .crest-display-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* 完整呈現不變形、不遮擋 */
+      display: block;
+    }
+    .crest-display-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
     }
     .brand-titles h2 {
       font-size: 0.95rem;
       font-weight: 800;
-      color: var(--text-white);
+      color: var(--navy-dark);
       line-height: 1.25;
-      letter-spacing: 0.5px;
     }
     .brand-titles .brand-en {
       font-size: 0.65rem;
-      color: #94a3b8;
+      color: var(--text-muted);
       line-height: 1.2;
       margin-top: 2px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     .brand-titles .dept-tag {
       display: inline-block;
       font-size: 0.65rem;
       font-weight: 700;
-      background: rgba(37, 99, 235, 0.25);
-      color: #93c5fd;
+      background: #eff6ff;
+      color: var(--navy-primary);
+      border: 1px solid #dbeafe;
       padding: 1px 6px;
       border-radius: 4px;
-      margin-top: 4px;
+      margin-top: 3px;
     }
 
     .btn-quick-create {
       width: 100%;
       background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
       color: white;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 11px 16px;
+      border: none;
+      padding: 10px 14px;
       border-radius: var(--radius-md);
       font-weight: 700;
       font-size: 0.85rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(30, 64, 175, 0.35);
+      box-shadow: 0 3px 10px rgba(30, 64, 175, 0.25);
       transition: all 0.2s;
     }
     .btn-quick-create:hover {
       background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
       transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(30, 64, 175, 0.45);
+      box-shadow: 0 5px 14px rgba(30, 64, 175, 0.35);
     }
 
     .sidebar-nav {
       flex: 1;
-      padding: 14px 12px;
+      padding: 12px 10px;
     }
     .nav-label {
       font-size: 0.68rem;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: #64748b;
+      letter-spacing: 1px;
+      color: #94a3b8;
       padding: 14px 10px 6px;
     }
     .nav-link {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 14px;
+      padding: 9px 12px;
       border-radius: var(--radius-md);
-      color: #94a3b8;
-      font-size: 0.85rem;
+      color: #475569;
+      font-size: 0.84rem;
       font-weight: 600;
       cursor: pointer;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
       transition: all 0.15s;
       text-decoration: none;
     }
     .nav-link:hover {
-      background: rgba(255, 255, 255, 0.05);
-      color: white;
+      background: #f8fafc;
+      color: #0f172a;
     }
     .nav-link.active {
-      background: rgba(37, 99, 235, 0.18);
-      color: white;
-      border-left: 3px solid #3b82f6;
+      background: #eff6ff;
+      color: var(--navy-primary);
+      border-left: 3px solid var(--navy-primary);
       font-weight: 700;
     }
     .nav-link-left {
@@ -199,29 +202,30 @@
       font-size: 0.72rem;
       padding: 2px 7px;
       border-radius: 10px;
-      background: rgba(255, 255, 255, 0.1);
-      color: #cbd5e1;
+      background: #f1f5f9;
+      color: #64748b;
       font-weight: 700;
     }
     .nav-link.active .nav-count-badge {
-      background: #1e40af;
-      color: #dbeafe;
+      background: #dbeafe;
+      color: var(--navy-primary);
     }
 
     .sidebar-footer {
-      padding: 16px;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 14px 16px;
+      border-top: 1px solid #f1f5f9;
+      background: #fafcff;
     }
     .sys-status-chip {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: white;
+      border: 1px solid var(--border-light);
       border-radius: var(--radius-sm);
-      padding: 8px 12px;
+      padding: 7px 10px;
       font-size: 0.75rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       cursor: pointer;
     }
     .sys-dot {
@@ -239,30 +243,29 @@
       gap: 10px;
     }
     .manager-avatar {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       background: #1e3a8a;
-      border: 2px solid #3b82f6;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
       font-weight: 800;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     .manager-meta h4 {
       font-size: 0.82rem;
-      color: white;
+      color: var(--navy-dark);
       font-weight: 700;
     }
     .manager-meta p {
       font-size: 0.7rem;
-      color: #94a3b8;
+      color: #64748b;
     }
 
     /* ========================================================
-       2. 主工作區頂部 (Header with Official Wordmark Logo)
+       2. 頂部 Header：整合大直高中官方中英標準字與完整校徽
        ======================================================== */
     .main-wrapper {
       flex: 1;
@@ -273,53 +276,54 @@
     }
     .top-header-bar {
       background: white;
-      border-bottom: 1px solid var(--border-color);
-      padding: 16px 36px;
+      border-bottom: 1px solid var(--border-light);
+      padding: 14px 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       position: sticky;
       top: 0;
       z-index: 50;
-      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
     }
     .official-wordmark-container {
       display: flex;
       align-items: center;
       gap: 16px;
     }
-    /* 整合使用者上傳的校徽與標準字排版 */
-    .official-crest-header {
-      width: 46px;
-      height: 46px;
+    .header-crest-wrapper {
+      width: 50px;
+      height: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
-      border: 1px solid var(--border-light);
-      background: #fafcff;
-      padding: 4px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      flex-shrink: 0;
+      overflow: visible !important; /* 確保校徽兩側無裁切 */
     }
     .official-text-block {
       display: flex;
       flex-direction: column;
     }
+    .wordmark-image {
+      max-height: 32px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
     .official-title-zh {
-      font-size: 1.35rem;
+      font-size: 1.3rem;
       font-weight: 900;
-      color: var(--text-heading);
+      color: var(--navy-dark);
       letter-spacing: 0.5px;
       line-height: 1.2;
     }
     .official-title-en {
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 600;
       color: var(--text-muted);
       letter-spacing: 0.3px;
-      margin-top: 2px;
     }
-    .official-sub-hub {
+    .official-sub-tag {
       font-size: 0.78rem;
       font-weight: 700;
       color: var(--blue-accent);
@@ -329,21 +333,21 @@
     .top-toolbar {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
     .btn-top-voice {
       background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
       color: white;
       border: none;
-      padding: 9px 18px;
+      padding: 8px 16px;
       border-radius: var(--radius-md);
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      box-shadow: 0 3px 8px rgba(30, 64, 175, 0.25);
+      box-shadow: 0 2px 6px rgba(30, 64, 175, 0.2);
       transition: all 0.15s;
     }
     .btn-top-voice:hover {
@@ -353,20 +357,18 @@
     .btn-top-refresh {
       background: white;
       border: 1px solid var(--border-color);
-      color: var(--text-heading);
-      padding: 8px 14px;
+      color: var(--navy-dark);
+      padding: 7px 12px;
       border-radius: var(--radius-md);
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      transition: all 0.15s;
+      gap: 5px;
     }
     .btn-top-refresh:hover { background: #f8fafc; border-color: #94a3b8; }
 
-    /* 檢視切換控制 */
     .view-control-pill {
       display: flex;
       border: 1px solid var(--border-color);
@@ -378,45 +380,43 @@
     .view-control-btn {
       border: none;
       background: transparent;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.8rem;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.78rem;
       font-weight: 700;
       color: var(--text-muted);
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 5px;
-      transition: all 0.15s;
+      gap: 4px;
     }
     .view-control-btn.active {
       background: white;
       color: var(--navy-primary);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
     }
 
     /* ========================================================
-       3. 核心內容區 (Content Container)
+       3. 核心內容區 (三欄或四欄並排響應式版面)
        ======================================================== */
     .main-body-container {
-      padding: 24px 36px 60px;
-      max-width: 1440px;
+      padding: 20px 28px 60px;
+      max-width: 1720px; /* 大螢幕展開 */
       width: 100%;
       margin: 0 auto;
     }
 
-    /* 頂部賽事數據快速指標 */
     .kpi-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 24px;
+      gap: 14px;
+      margin-bottom: 20px;
     }
     .kpi-card {
       background: white;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--border-light);
       border-radius: var(--radius-lg);
-      padding: 16px 20px;
+      padding: 14px 18px;
       box-shadow: var(--shadow-card);
       display: flex;
       justify-content: space-between;
@@ -425,32 +425,31 @@
     }
     .kpi-card.urgent { border-top-color: var(--status-urgent); }
     .kpi-card.success { border-top-color: var(--status-success); }
-    .kpi-num { font-size: 1.85rem; font-weight: 900; color: var(--navy-dark); line-height: 1; }
+    .kpi-num { font-size: 1.65rem; font-weight: 900; color: var(--navy-dark); line-height: 1; }
     .kpi-card.urgent .kpi-num { color: var(--status-urgent); }
     .kpi-card.success .kpi-num { color: var(--status-success); }
-    .kpi-label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-top: 4px; }
-    .kpi-icon { font-size: 2rem; opacity: 0.8; }
+    .kpi-label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-top: 3px; }
+    .kpi-icon { font-size: 1.8rem; opacity: 0.85; }
 
-    /* 報名意向 Pills 與過濾器 (Requirement 1) */
     .filter-card-bar {
       background: white;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--border-light);
       border-radius: var(--radius-lg);
-      padding: 16px 20px;
+      padding: 14px 18px;
       box-shadow: var(--shadow-card);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
     }
     .filter-intent-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 14px;
-      border-bottom: 1px solid var(--border-light);
-      padding-bottom: 14px;
+      gap: 12px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 12px;
     }
     .intent-pills {
       display: flex;
@@ -460,9 +459,9 @@
     .intent-pill {
       border: 1px solid var(--border-color);
       background: #f8fafc;
-      padding: 7px 16px;
-      border-radius: 24px;
-      font-size: 0.82rem;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
       font-weight: 700;
       color: var(--text-body);
       cursor: pointer;
@@ -471,12 +470,11 @@
       gap: 6px;
       transition: all 0.15s;
     }
-    .intent-pill:hover { background: #f1f5f9; border-color: #94a3b8; }
+    .intent-pill:hover { background: #f1f5f9; }
     .intent-pill.active {
       background: var(--navy-primary);
       color: white;
       border-color: var(--navy-primary);
-      box-shadow: 0 2px 6px rgba(16, 42, 67, 0.2);
     }
     .intent-pill.pill-registered.active {
       background: #047857;
@@ -495,8 +493,8 @@
     }
     .pill-num {
       font-size: 0.72rem;
-      padding: 1px 7px;
-      border-radius: 10px;
+      padding: 1px 6px;
+      border-radius: 8px;
       background: rgba(0,0,0,0.06);
     }
     .intent-pill.active .pill-num {
@@ -509,36 +507,36 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 14px;
+      gap: 12px;
     }
     .search-input-group {
       position: relative;
       flex: 1;
-      max-width: 480px;
+      max-width: 420px;
     }
     .search-field {
       width: 100%;
-      padding: 10px 14px 10px 38px;
+      padding: 8px 12px 8px 34px;
       border-radius: var(--radius-md);
       border: 1px solid var(--border-color);
-      font-size: 0.875rem;
+      font-size: 0.84rem;
       background: #fafcff;
       outline: none;
-      transition: border 0.15s;
     }
     .search-field:focus { border-color: var(--blue-royal); background: white; }
     .search-svg-icon {
       position: absolute;
-      left: 12px;
+      left: 10px;
       top: 50%;
       transform: translateY(-50%);
       color: #64748b;
+      font-size: 0.85rem;
     }
     .filter-dropdown {
-      padding: 10px 14px;
+      padding: 8px 12px;
       border-radius: var(--radius-md);
       border: 1px solid var(--border-color);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       background: #fafcff;
       color: var(--text-heading);
       cursor: pointer;
@@ -546,18 +544,43 @@
     }
 
     /* ========================================================
-       4. 穩重藍白卡片網格 (Blue & White Card Grid)
+       使用需求3：三欄或四欄並排網格 (3 to 4 Column Grid)
        ======================================================== */
     .cards-grid-layout {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
-      gap: 22px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
     }
+    /* 寬螢幕：四欄並排 */
+    @media (min-width: 1400px) {
+      .cards-grid-layout {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    /* 中等螢幕/一般筆電：三欄並排 */
+    @media (min-width: 1024px) and (max-width: 1399px) {
+      .cards-grid-layout {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    /* 平板螢幕：兩欄並排 */
+    @media (max-width: 1023px) {
+      .cards-grid-layout {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    /* 手機：單欄 */
+    @media (max-width: 640px) {
+      .cards-grid-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .sport-card {
       background: var(--white-pure);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--border-light);
       border-radius: var(--radius-lg);
-      padding: 20px;
+      padding: 16px;
       box-shadow: var(--shadow-card);
       display: flex;
       flex-direction: column;
@@ -569,10 +592,10 @@
     .sport-card:hover {
       transform: translateY(-2px);
       box-shadow: var(--shadow-hover);
-      border-color: #94a3b8;
+      border-color: #cbd5e1;
     }
     .sport-card.declined-mode {
-      opacity: 0.65;
+      opacity: 0.6;
       background: #f8fafc;
       border-top-color: #94a3b8;
       border-style: dashed;
@@ -581,20 +604,25 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 12px;
-      margin-bottom: 8px;
+      gap: 8px;
+      margin-bottom: 6px;
     }
     .card-title-text {
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       font-weight: 800;
       color: var(--navy-dark);
       line-height: 1.35;
       flex: 1;
+      min-height: 2.6em;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
     .status-tag {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 2px 7px;
       border-radius: var(--radius-sm);
       white-space: nowrap;
     }
@@ -604,109 +632,106 @@
     .tag-upcoming { background: var(--status-warning-bg); color: var(--status-warning); border: 1px solid var(--status-warning-border); }
 
     .card-venue-row {
-      font-size: 0.8125rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      margin-bottom: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .card-date-chip {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: #eff6ff;
       border: 1px solid #bfdbfe;
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: var(--radius-sm);
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 700;
       color: #1e40af;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
+      width: fit-content;
     }
 
     .card-details-box {
       background: #f8fafc;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #f1f5f9;
       border-radius: var(--radius-md);
-      padding: 10px 12px;
-      margin-bottom: 14px;
-      font-size: 0.78rem;
+      padding: 8px 10px;
+      margin-bottom: 12px;
+      font-size: 0.75rem;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      gap: 6px;
     }
     .detail-item { display: flex; flex-direction: column; }
     .detail-item.full { grid-column: span 2; }
-    .detail-lbl { color: var(--text-muted); font-size: 0.7rem; font-weight: 600; margin-bottom: 2px; }
+    .detail-lbl { color: var(--text-muted); font-size: 0.68rem; font-weight: 600; margin-bottom: 2px; }
     .detail-val { font-weight: 800; color: var(--text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* 報名確認三態按鈕組 */
+    /* 報名確認按鈕組 */
     .intent-selector-container {
-      margin-bottom: 16px;
-      padding: 8px 10px;
+      margin-bottom: 12px;
+      padding: 6px 8px;
       background: #f1f5f9;
       border-radius: var(--radius-md);
     }
     .intent-header-text {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       color: var(--text-muted);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       display: flex;
       justify-content: space-between;
     }
     .intent-toggles {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 6px;
+      gap: 4px;
     }
     .intent-toggle-btn {
       border: 1px solid transparent;
-      padding: 6px 8px;
-      border-radius: 6px;
-      font-size: 0.75rem;
+      padding: 5px 4px;
+      border-radius: 4px;
+      font-size: 0.72rem;
       font-weight: 700;
       cursor: pointer;
       background: white;
       color: var(--text-muted);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
       transition: all 0.15s;
       text-align: center;
     }
-    .intent-toggle-btn:hover { background: #fafcff; color: var(--text-heading); }
+    .intent-toggle-btn:hover { background: #fafcff; }
     .intent-toggle-btn.btn-is-reg {
       background: #047857;
       color: white;
-      border-color: #047857;
     }
     .intent-toggle-btn.btn-is-unreg {
       background: #b45309;
       color: white;
-      border-color: #b45309;
     }
     .intent-toggle-btn.btn-is-declined {
       background: #b91c1c;
       color: white;
-      border-color: #b91c1c;
     }
 
     .card-action-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-top: 1px solid var(--border-light);
-      padding-top: 12px;
-      margin-top: 4px;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 10px;
+      margin-top: 2px;
     }
     .btn-detail-outline {
       background: white;
       color: var(--navy-primary);
       border: 1px solid var(--border-color);
-      padding: 7px 14px;
-      border-radius: var(--radius-md);
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
       font-weight: 700;
-      font-size: 0.8125rem;
+      font-size: 0.75rem;
       cursor: pointer;
       transition: all 0.15s;
     }
@@ -716,23 +741,69 @@
       color: var(--blue-accent);
     }
     .doc-link-btn {
-      font-size: 0.8125rem;
+      font-size: 0.75rem;
       font-weight: 700;
       color: #1e40af;
       text-decoration: none;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
     }
     .doc-link-btn:hover { text-decoration: underline; color: #2563eb; }
 
-    /* ========================================================
-       5. 語音與文字手動新增彈窗 (Voice & Manual Modal)
-       ======================================================== */
+    /* 表格與月曆視圖 */
+    .table-view-panel {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-card);
+      overflow-x: auto;
+    }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
+    th { background: #f8fafc; color: var(--navy-dark); font-weight: 800; padding: 12px 14px; border-bottom: 2px solid var(--border-color); white-space: nowrap; }
+    td { padding: 12px 14px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
+    tr:hover td { background: #f8fafc; }
+
+    .calendar-view-panel {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+    }
+    .calendar-matrix {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .cal-day-col {
+      background: #f8fafc;
+      min-height: 110px;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .cal-num-badge { font-weight: 800; font-size: 0.78rem; color: #64748b; }
+    .cal-match-pill {
+      background: #eff6ff;
+      border-left: 3px solid #1e40af;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #1e40af;
+      line-height: 1.2;
+    }
+
+    /* 彈窗樣式 */
     .modal-backdrop {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(10, 25, 47, 0.7);
+      background: rgba(15, 23, 42, 0.65);
       backdrop-filter: blur(4px);
       display: none;
       align-items: center;
@@ -743,53 +814,52 @@
     .modal-dialog {
       background: white;
       border-radius: var(--radius-xl);
-      max-width: 660px;
+      max-width: 640px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
-      padding: 30px;
+      padding: 28px;
       box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
-      border: 1px solid var(--border-color);
     }
     .modal-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       border-bottom: 1px solid var(--border-light);
-      padding-bottom: 14px;
+      padding-bottom: 12px;
     }
-    .modal-head h3 { font-size: 1.25rem; font-weight: 900; color: var(--navy-dark); }
+    .modal-head h3 { font-size: 1.2rem; font-weight: 900; color: var(--navy-dark); }
     .close-modal-btn { background: none; border: none; font-size: 1.6rem; cursor: pointer; color: #94a3b8; }
 
     .voice-interactive-panel {
       background: #f8fafc;
       border: 1px dashed #93c5fd;
       border-radius: var(--radius-md);
-      padding: 16px;
-      margin-bottom: 20px;
+      padding: 14px;
+      margin-bottom: 18px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
     .mic-flex-row {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
     .mic-button {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       border: none;
       background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
       color: white;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba(30, 64, 175, 0.35);
+      box-shadow: 0 3px 10px rgba(30, 64, 175, 0.3);
       transition: all 0.2s;
     }
     .mic-button.recording {
@@ -802,29 +872,29 @@
       100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(185, 28, 28, 0); }
     }
     .transcript-box {
-      font-size: 0.8125rem;
+      font-size: 0.8rem;
       background: white;
-      padding: 10px 14px;
+      padding: 8px 12px;
       border-radius: 6px;
       border: 1px solid #cbd5e1;
       color: #334155;
-      min-height: 40px;
+      min-height: 38px;
     }
 
     .form-inputs-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: 12px;
     }
-    .field-wrapper { margin-bottom: 14px; }
+    .field-wrapper { margin-bottom: 12px; }
     .field-wrapper.full { grid-column: span 2; }
-    .field-wrapper label { display: block; font-size: 0.8125rem; font-weight: 700; color: var(--navy-dark); margin-bottom: 5px; }
+    .field-wrapper label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--navy-dark); margin-bottom: 4px; }
     .field-ctrl {
       width: 100%;
-      padding: 9px 12px;
+      padding: 8px 12px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border-color);
-      font-size: 0.875rem;
+      font-size: 0.84rem;
       outline: none;
       background: #fafcff;
     }
@@ -833,85 +903,38 @@
       display: flex;
       justify-content: flex-end;
       gap: 10px;
-      margin-top: 20px;
+      margin-top: 18px;
     }
     .btn-submit-form {
       background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
       color: white;
       border: none;
-      padding: 10px 22px;
+      padding: 9px 20px;
       border-radius: var(--radius-md);
       font-weight: 700;
+      font-size: 0.84rem;
       cursor: pointer;
     }
     .btn-dismiss-form {
       background: #e2e8f0;
       color: #334155;
       border: none;
-      padding: 10px 18px;
+      padding: 9px 16px;
       border-radius: var(--radius-md);
       font-weight: 700;
+      font-size: 0.84rem;
       cursor: pointer;
     }
 
-    /* 表格與行事曆視圖 */
-    .table-view-panel {
-      background: white;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-card);
-      overflow-x: auto;
-    }
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem; }
-    th { background: #f8fafc; color: var(--navy-dark); font-weight: 800; padding: 14px 16px; border-bottom: 2px solid var(--border-color); white-space: nowrap; }
-    td { padding: 14px 16px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
-    tr:hover td { background: #f8fafc; }
-
-    .calendar-view-panel {
-      background: white;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-color);
-      padding: 24px;
-      box-shadow: var(--shadow-card);
-    }
-    .calendar-matrix {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
-      margin-top: 16px;
-    }
-    .cal-day-col {
-      background: #f8fafc;
-      min-height: 120px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .cal-num-badge { font-weight: 800; font-size: 0.8125rem; color: #64748b; }
-    .cal-match-pill {
-      background: #eff6ff;
-      border-left: 3px solid #1e40af;
-      padding: 4px 6px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #1e40af;
-      line-height: 1.2;
-    }
-
-    /* Toast 通知 */
     .toast-popup {
       position: fixed;
       bottom: 24px;
       right: 24px;
       background: var(--navy-dark);
       color: white;
-      padding: 12px 22px;
+      padding: 12px 20px;
       border-radius: var(--radius-md);
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       font-weight: 700;
       box-shadow: var(--shadow-hover);
       display: none;
@@ -928,15 +951,16 @@
        1. 穩重深藍側邊欄 (Sidebar)
        ======================================================== -->
   <aside class="sidebar">
-    <div class="sidebar-header">
+        <div class="sidebar-header">
       <div class="school-brand-box">
         <div class="school-crest-wrapper">
-          <!-- 大直高中官方藍色校徽向量 SVG (方正校徽) -->
-          <svg class="school-crest-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="46" stroke="#0033cc" stroke-width="4" fill="none" opacity="0.15"/>
-            <!-- 飛翔之翼與幾何圓弧 (大直高中標誌) -->
-            <path d="M22 42C22 56 34 68 48 68C62 68 73 57 73 45C73 43 65 38 52 40C38 42 32 46 28 47C25 47 24 45 26 43C31 37 40 33 50 33C64 33 76 41 80 50C83 45 88 38 95 32C85 24 72 20 58 20C38 20 22 30 22 42Z" fill="#0033cc"/>
-            <path d="M28 48C28 58 37 66 48 66C56 66 63 61 66 54C58 56 46 54 39 49C33 45 29 46 28 48Z" fill="#002299"/>
+          <img src="方正校徽.jpg" alt="大直高中校徽" class="crest-display-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <!-- 大直高中官方藍色完整校徽 (無裁切、邊界充裕) -->
+          <svg class="crest-display-svg" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+            <!-- 圓形底弧與內凹空間 -->
+            <path d="M 180 500 C 180 680 320 810 500 810 C 660 810 790 700 810 550 C 720 590 620 580 530 540 C 420 490 350 490 280 530 C 230 560 210 540 210 500 C 210 450 250 420 310 400 C 440 360 580 380 720 340 C 820 310 900 240 940 180 C 840 260 700 320 560 330 C 400 340 300 290 230 360 C 190 400 180 450 180 500 Z" fill="#0022ee"/>
+            <!-- 飛揚右翼主動態 (完整呈現翼尖，不蓋掉) -->
+            <path d="M 230 460 C 330 460 480 430 630 380 C 760 340 880 270 960 160 C 880 270 750 370 600 420 C 450 470 320 480 230 460 Z" fill="#0011dd"/>
           </svg>
         </div>
         <div class="brand-titles">
@@ -1003,21 +1027,28 @@
        2. 主工作內容區 (Main Content)
        ======================================================== -->
   <main class="main-wrapper">
-    <!-- 頂部 Header：整合大直高中官方校名與標準字排版 -->
+        <!-- 頂部 Header：整合大直高中官方中英標準字與完整校徽 -->
     <header class="top-header-bar">
       <div class="official-wordmark-container">
-        <div class="official-crest-header">
-          <!-- 頂部校徽圖標 -->
-          <svg viewBox="0 0 100 100" width="36" height="36" fill="none">
-            <path d="M22 42C22 56 34 68 48 68C62 68 73 57 73 45C73 43 65 38 52 40C38 42 32 46 28 47C25 47 24 45 26 43C31 37 40 33 50 33C64 33 76 41 80 50C83 45 88 38 95 32C85 24 72 20 58 20C38 20 22 30 22 42Z" fill="#0033cc"/>
+        <div class="header-crest-wrapper">
+          <img src="方正校徽.jpg" alt="校徽" class="crest-display-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <!-- 大直高中官方藍色完整校徽 (無裁切、邊界充裕) -->
+          <svg class="crest-display-svg" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+            <!-- 圓形底弧與內凹空間 -->
+            <path d="M 180 500 C 180 680 320 810 500 810 C 660 810 790 700 810 550 C 720 590 620 580 530 540 C 420 490 350 490 280 530 C 230 560 210 540 210 500 C 210 450 250 420 310 400 C 440 360 580 380 720 340 C 820 310 900 240 940 180 C 840 260 700 320 560 330 C 400 340 300 290 230 360 C 190 400 180 450 180 500 Z" fill="#0022ee"/>
+            <!-- 飛揚右翼主動態 (完整呈現翼尖，不蓋掉) -->
+            <path d="M 230 460 C 330 460 480 430 630 380 C 760 340 880 270 960 160 C 880 270 750 370 600 420 C 450 470 320 480 230 460 Z" fill="#0011dd"/>
           </svg>
         </div>
         <div class="official-text-block">
-          <div class="official-title-zh">
-            臺北市立大直高級中學
-            <span class="official-sub-hub">· 運動賽事戰情看板</span>
+          <img src="logo - 複製 (2).png" alt="臺北市立大直高級中學" class="wordmark-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <div style="display:none;">
+            <div class="official-title-zh">臺北市立大直高級中學</div>
+            <div class="official-title-en">Taipei Municipal Dazhi High School</div>
           </div>
-          <div class="official-title-en">Taipei Municipal Dazhi High School · Sports Operations Hub</div>
+          <div style="font-size:0.75rem; font-weight:700; color:var(--blue-accent); margin-top:2px;">
+            體育組 · 運動賽事與賽程戰情看板
+          </div>
         </div>
       </div>
 
