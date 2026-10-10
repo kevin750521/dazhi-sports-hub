@@ -36,7 +36,7 @@
     }
 
     .container {
-      max-width: 1400px;
+      max-width: 1440px;
       margin: 0 auto;
     }
 
@@ -362,6 +362,7 @@
     .badge-active { background: #dbeafe; color: #1d4ed8; }
     .badge-wait { background: #fef3c7; color: #b45309; }
     .badge-done { background: #d1fae5; color: #047857; }
+    .badge-closed { background: #f1f5f9; color: #64748b; }
     .badge-purple { background: #ede9fe; color: #6d28d9; }
 
     /* Calendar Grid */
@@ -486,6 +487,7 @@
     .pill-green { background: #d1fae5; color: #065f46; border-left: 3px solid #10b981; }
     .pill-purple { background: #ede9fe; color: #5b21b6; border-left: 3px solid #7c3aed; }
     .pill-amber { background: #fef3c7; color: #92400e; border-left: 3px solid #d97706; }
+    .pill-gray { background: #f1f5f9; color: #475569; border-left: 3px solid #94a3b8; }
 
     /* Modal */
     .modal-overlay {
@@ -571,7 +573,7 @@
   <header class="header">
     <div class="header-info">
       <h1>🏃 臺北市立大直高中 · 運動賽事與賽程全方位戰情看板</h1>
-      <p>實時整合教育盃、學生聯賽與臺北市重點體育賽事報名進度及大直代表隊出賽場次</p>
+      <p>實時整合教育盃、學生聯賽與臺北市重點體育賽事報名進度及大直代表隊出賽場次（精確同步雲端庫 11 份文件）</p>
     </div>
     <div class="header-actions">
       <a href="https://docs.google.com/spreadsheets/d/1OTeWpux8arE7J25uRJbvEph39Ir0f2Vdz2IxFTfULgg/edit" target="_blank" class="btn btn-white">📊 開啟 Google 試算表 ↗</a>
@@ -585,15 +587,15 @@
     <div class="kpi-card">
       <div class="kpi-icon icon-blue">🏅</div>
       <div class="kpi-data">
-        <h3>6 項</h3>
-        <p>列管重大賽事</p>
+        <h3>9 項</h3>
+        <p>列管重大賽事（含足球、高爾夫、排球）</p>
       </div>
     </div>
     <div class="kpi-card">
       <div class="kpi-icon icon-red">🚨</div>
       <div class="kpi-data">
         <h3>1 場</h3>
-        <p>近 7 天緊急截止 (中正盃網球)</p>
+        <p>近期急件截止 (10/14 中正盃網球)</p>
       </div>
     </div>
     <div class="kpi-card">
@@ -621,7 +623,7 @@
         <span class="alert-desc">（截止日：115/10/14 星期三，倒數 4 天）— 須填寫線上報名表並完成每隊 2,000 元匯款且上傳收據。</span>
       </div>
     </div>
-    <a href="https://drive.google.com/drive/folders/16iBWHC9ilYKB442HuBessa37hWwNe-zm" target="_blank" class="badge badge-urgent">查閱簡章 ↗</a>
+    <a href="https://drive.google.com/file/d/1DF0Q-L0XppE7dsGulmnwKhpCs1oW3DxV/view?usp=drivesdk" target="_blank" class="badge badge-urgent">查閱簡章 ↗</a>
   </div>
 
   <div class="alert-banner">
@@ -629,7 +631,7 @@
       <span>📢</span>
       <div>
         <strong>賽程公告進度追蹤：115學年度教育盃籃球賽</strong>
-        <span class="alert-desc">大直高中 5 組分組籤位已確定。大會將於 <strong>10/12 (一) 16:00</strong> 公告各場次確切對戰時間表，屆時將自動更新至本看板！</span>
+        <span class="alert-desc">大直高中 5 組分組籤位已確定。大會將於 <strong>10/12 (一) 16:00</strong> 公告各場次確切對戰時間表，屆時將自動更新！</span>
       </div>
     </div>
     <span class="badge badge-wait">等待官方公告時間</span>
@@ -637,7 +639,7 @@
 
   <!-- Main Tabs -->
   <div class="tab-bar">
-    <button class="tab-btn active" onclick="switchMainTab('reg')">📋 賽事報名時程掌控 (6項)</button>
+    <button class="tab-btn active" onclick="switchMainTab('reg')">📋 賽事報名時程掌控 (9項)</button>
     <button class="tab-btn" onclick="switchMainTab('schedule')">🏆 大直高中出賽賽程 (12隊次)</button>
   </div>
 
@@ -645,11 +647,14 @@
   <div id="tab-reg" class="tab-pane active">
     <div class="controls-bar">
       <div class="filter-group">
-        <button class="filter-btn active" onclick="filterReg('all', this)">全部 (6)</button>
-        <button class="filter-btn" onclick="filterReg('籃球', this)">籃球 (2)</button>
+        <button class="filter-btn active" onclick="filterReg('all', this)">全部 (9)</button>
         <button class="filter-btn" onclick="filterReg('網球', this)">網球 (2)</button>
         <button class="filter-btn" onclick="filterReg('羽球', this)">羽球 (1)</button>
         <button class="filter-btn" onclick="filterReg('棒球', this)">棒球 (1)</button>
+        <button class="filter-btn" onclick="filterReg('籃球', this)">籃球 (2)</button>
+        <button class="filter-btn" onclick="filterReg('排球', this)">排球 (1)</button>
+        <button class="filter-btn" onclick="filterReg('高爾夫', this)">高爾夫 (1)</button>
+        <button class="filter-btn" onclick="filterReg('足球', this)">足球 (1)</button>
       </div>
       <input type="text" id="reg-search" class="search-input" placeholder="🔍 搜尋賽事、組別或地點..." onkeyup="searchRegTable()">
     </div>
@@ -670,39 +675,46 @@
           </tr>
         </thead>
         <tbody>
+          <!-- 1. 中正盃網球 -->
           <tr data-sport="網球">
-            <td><span class="badge badge-urgent">🚨 倒數 4 天</span></td>
+            <td><span class="badge badge-urgent">🚨 倒數 4 天急件</span></td>
             <td><strong>🎾 網球</strong></td>
             <td>115年臺北市中正盃網球錦標賽</td>
-            <td>高中組、國中組（男女混合三點雙單雙）</td>
+            <td>高中組(男女混合)、國中組(男女混合)、國小組、社會大專組</td>
             <td>115/10/31 ~ 11/01<br><small style="color:#64748b;">臺北市天母運動公園網球場</small></td>
-            <td>即日起</td>
+            <td>2026/09/15</td>
             <td><strong style="color:#dc2626;">115/10/14 (三)</strong></td>
             <td>填寫 Google 報名表單＋匯款每隊 2,000 元（元大銀行 806 帳號 21702000057503）上傳收據</td>
             <td><a href="https://drive.google.com/file/d/1DF0Q-L0XppE7dsGulmnwKhpCs1oW3DxV/view?usp=drivesdk" target="_blank" class="badge badge-active">檢視簡章 ↗</a></td>
           </tr>
+
+          <!-- 2. 教育盃網球 -->
           <tr data-sport="網球">
-            <td><span class="badge badge-wait">⏳ 10/12 開放</span></td>
+            <td><span class="badge badge-wait">⏳ 10/12 開放報名</span></td>
             <td><strong>🎾 網球</strong></td>
-            <td>115學年度教育盃中等學校網球錦標賽</td>
+            <td>臺北市115學年度教育盃中學網球錦標賽</td>
             <td>國中組、高中組（硬網甲組、軟網）</td>
             <td>硬網 115/11/09~11/17、軟網 11/18~11/19<br><small style="color:#64748b;">臺北市網球中心（內湖）</small></td>
             <td>115/10/12 (一)</td>
             <td><strong>115/10/23 (五) 16:00</strong></td>
-            <td>新興國中網站報名，列印報名表核章正本於 10/30 前送達 190 聯絡箱</td>
+            <td>新興國中網站首頁報名，列印報名表核章正本於 10/30 前送達 190 聯絡箱</td>
             <td><a href="https://www.hhjh.tp.edu.tw/" target="_blank" class="badge badge-active">報名網站 ↗</a></td>
           </tr>
+
+          <!-- 3. 教育盃羽球 -->
           <tr data-sport="羽球">
             <td><span class="badge badge-active">📝 報名中</span></td>
             <td><strong>🏸 羽球</strong></td>
-            <td>115學年度教育盃中等學校羽球錦標賽</td>
-            <td>國中組、高中組、教師組（團體賽／個人賽）</td>
-            <td>115/12/21 ~ 12/25<br><small style="color:#64748b;">臺北體育館7樓羽球場（紅館）</small></td>
-            <td>即日起</td>
+            <td>臺北市115學年度教育盃中等學校羽球錦標賽</td>
+            <td>國中組、高中組、教師組 (共 9 組)</td>
+            <td>115/12/21 ~ 12/25<br><small style="color:#64748b;">臺北體育館 7 樓羽球場（紅館）</small></td>
+            <td>2026/10/02</td>
             <td><strong>115/11/03 (二) 17:00</strong></td>
             <td>線上報名（mylivescore），下載核章報名表掛號郵寄至松山高中體育組</td>
             <td><a href="https://mylivescore.pse.is/9m4775" target="_blank" class="badge badge-active">報名系統 ↗</a></td>
           </tr>
+
+          <!-- 4. 高中軟式棒球 -->
           <tr data-sport="棒球">
             <td><span class="badge badge-active">📝 報名中</span></td>
             <td><strong>⚾ 棒球</strong></td>
@@ -714,27 +726,70 @@
             <td>學生棒聯網站線上登錄，12/18 前掛號郵寄正本核章表件與球員同意書</td>
             <td><a href="http://gameapply.ctsbf.edu.tw" target="_blank" class="badge badge-active">學生棒聯 ↗</a></td>
           </tr>
+
+          <!-- 5. 教育盃籃球 -->
           <tr data-sport="籃球">
-            <td><span class="badge badge-done">✅ 報名截止/排程中</span></td>
+            <td><span class="badge badge-done">✅ 報名截止 / 10/12公告時間</span></td>
             <td><strong>🏀 籃球</strong></td>
-            <td>115學年度教育盃中等學校籃球錦標賽</td>
+            <td>臺北市115學年度教育盃中等學校籃球錦標賽</td>
             <td>高男乙、高女乙、國男乙、國女乙、教男組</td>
             <td>115/10/19 ~ 11/08<br><small style="color:#64748b;">泰北/興雅/陽明/永春/和平暖身館</small></td>
-            <td>即日起</td>
+            <td>2026/09/15</td>
             <td>115/09/30 截止</td>
-            <td>已於 10/07 完成抽籤，待 10/12 公告賽程時間</td>
-            <td><a href="https://drive.google.com/file/d/1EuysMUBk8HbvzoefTmbsa9sULdtOiRgN/view?usp=drivesdk" target="_blank" class="badge badge-done">分組籤表 ↗</a></td>
+            <td>已於 10/07 完成抽籤，待 10/12 16:00 公告每日賽程時間表</td>
+            <td><a href="https://drive.google.com/file/d/1_ksrkEbZg9CPzWS2G8efhMbVFxnFjBK9/view?usp=drivesdk" target="_blank" class="badge badge-done">競賽規程 ↗</a></td>
           </tr>
+
+          <!-- 6. 教育盃排球 -->
+          <tr data-sport="排球">
+            <td><span class="badge badge-done">✅ 分組賽程已公告</span></td>
+            <td><strong>🏐 排球</strong></td>
+            <td>臺北市115學年度教育盃中等學校排球錦標賽</td>
+            <td>國男甲/乙、國女甲/乙、高男甲/乙、高女甲/乙、教男/女組</td>
+            <td>115年11月 (依大會公告)<br><small style="color:#64748b;">明湖國中體育館、內湖高中體育館</small></td>
+            <td>2026/09/01</td>
+            <td>115/09/20 截止</td>
+            <td>分組賽程表已出爐（大直教女A組、高男乙I組），決賽抽籤待定</td>
+            <td><a href="https://drive.google.com/file/d/106vzGXV4aFlu-O9JRcJHtbOU4mGcMSsq/view?usp=drivesdk" target="_blank" class="badge badge-done">分組賽程表 ↗</a></td>
+          </tr>
+
+          <!-- 7. HBL 籃球聯賽 -->
           <tr data-sport="籃球">
-            <td><span class="badge badge-wait">ℹ️ 公文知會</span></td>
+            <td><span class="badge badge-wait">ℹ️ 公文知會中</span></td>
             <td><strong>🏀 籃球</strong></td>
             <td>115學年度高級中等學校籃球聯賽 (HBL)</td>
             <td>高中男子乙組、女子乙組</td>
-            <td>依教育部體育署後續公文為準</td>
+            <td>依體育總會核定公告為準</td>
             <td>草案研擬中</td>
-            <td>待教育部核定備查</td>
-            <td>公文先行函知，俟體育署備查後正式發函報名</td>
-            <td><a href="https://drive.google.com/file/d/1ro-kmzTkV6XFafHQumjnH_P9-ixFqIAj/view?usp=drivesdk" target="_blank" class="badge badge-active">公文附件 ↗</a></td>
+            <td>待體育署核定備查</td>
+            <td>115/09/29 函發規程草案，俟教育部備查後正式發函報名</td>
+            <td><a href="https://drive.google.com/file/d/1ro-kmzTkV6XFafHQumjnH_P9-ixFqIAj/view?usp=drivesdk" target="_blank" class="badge badge-active">公文草案 ↗</a></td>
+          </tr>
+
+          <!-- 8. 教育盃高爾夫 -->
+          <tr data-sport="高爾夫">
+            <td><span class="badge badge-closed">⛳ 報名截止 / 10/19比賽</span></td>
+            <td><strong>⛳ 高爾夫</strong></td>
+            <td>臺北市115學年度教育盃中小學高爾夫錦標賽</td>
+            <td>國小組、國中組、高中組、教職員組</td>
+            <td>國中高中 115/10/19；國小 115/10/20<br><small style="color:#64748b;">北投國華高爾夫俱樂部（淡水小坪頂）</small></td>
+            <td>2026/08/27</td>
+            <td>115/09/24 截止</td>
+            <td>南湖高中網站下載 ods 檔，mail 並郵寄核章正本。領隊會議 10/8 已召開</td>
+            <td><a href="https://drive.google.com/file/d/1H5-DJV0Bdj9IgkHJKquqLujIbmeHuEAX/view?usp=drivesdk" target="_blank" class="badge badge-closed">競賽規程 ↗</a></td>
+          </tr>
+
+          <!-- 9. 教育盃足球 -->
+          <tr data-sport="足球">
+            <td><span class="badge badge-closed">⚽ 比賽已結束</span></td>
+            <td><strong>⚽ 足球</strong></td>
+            <td>臺北市115學年度教育盃中等學校11人制足球錦標賽</td>
+            <td>國中男/女組、高中(職)男/女組</td>
+            <td>115/09/14 ~ 115/10/02<br><small style="color:#64748b;">迎風河濱公園，人工足球場 A</small></td>
+            <td>2026/08/18</td>
+            <td>115/09/01 截止</td>
+            <td>E-mail 至 lyjh230@lyjh.tp.edu.tw，正本用印送蘭雅國中體育組</td>
+            <td><a href="https://drive.google.com/file/d/19pnbrItBu6NXdFCwwwl6FS4pNHB_sSex/view?usp=drivesdk" target="_blank" class="badge badge-closed">競賽規程 ↗</a></td>
           </tr>
         </tbody>
       </table>
@@ -745,7 +800,7 @@
   <div id="tab-schedule" class="tab-pane">
     <div class="controls-bar">
       <div class="filter-group">
-        <button class="filter-btn active" onclick="filterSched('all', this)">全部項目 (12)</button>
+        <button class="filter-btn active" onclick="filterSched('all', this)">全部代表隊 (12)</button>
         <button class="filter-btn" onclick="filterSched('籃球', this)">🏀 籃球 (5)</button>
         <button class="filter-btn" onclick="filterSched('排球', this)">🏐 排球 (2)</button>
         <button class="filter-btn" onclick="filterSched('網球', this)">🎾 網球 (2)</button>
@@ -771,7 +826,7 @@
             <th>出賽時間</th>
             <th>比賽場地 / 體育館</th>
             <th>對戰隊伍 / 籤位籤號</th>
-            <th>晉級機制 / 備註</th>
+            <th>晉級機制 / 說明</th>
             <th>狀態</th>
           </tr>
         </thead>
@@ -779,12 +834,34 @@
           <!-- 籃球 5 場 -->
           <tr data-sport="籃球">
             <td><strong>🏀 籃球</strong></td>
+            <td><span class="badge badge-purple">國男乙組</span></td>
+            <td>115學年度教育盃籃球賽</td>
+            <td>115/10/19 ~ 11/08</td>
+            <td><span style="color:#b45309; font-weight:600;">待 10/12 16:00 公告</span></td>
+            <td>泰北雙語學校體育館<br><small style="color:#64748b;">士林區福林路240號</small></td>
+            <td><strong>預賽 C 組</strong>：介壽國中、達人中學、古亭國中、<strong>大直高中</strong></td>
+            <td>4 取 2 晉級第二輪單淘汰 (更正：同組無南門國中)</td>
+            <td><span class="badge badge-done">官方籤表確認</span></td>
+          </tr>
+          <tr data-sport="籃球">
+            <td><strong>🏀 籃球</strong></td>
+            <td><span class="badge badge-purple">國女乙級</span></td>
+            <td>115學年度教育盃籃球賽</td>
+            <td>115/10/19 ~ 11/08</td>
+            <td><span style="color:#b45309; font-weight:600;">待 10/12 16:00 公告</span></td>
+            <td>興雅國中活動中心體育館<br><small style="color:#64748b;">信義區松德路168巷15號</small></td>
+            <td><strong>預賽 B 組</strong>：景美國中、中正國中、再興中學、<strong>大直高中</strong></td>
+            <td>4 取 2 晉級 1~4 名決賽</td>
+            <td><span class="badge badge-done">官方籤表確認</span></td>
+          </tr>
+          <tr data-sport="籃球">
+            <td><strong>🏀 籃球</strong></td>
             <td><span class="badge badge-purple">高男乙組</span></td>
             <td>115學年度教育盃籃球賽</td>
             <td>115/10/19 ~ 11/08</td>
             <td><span style="color:#b45309; font-weight:600;">待 10/12 16:00 公告</span></td>
-            <td>泰北雙語學校體育館<br><small style="color:#64748b;">臺北市士林區福林路240號</small></td>
-            <td><strong>預賽 F 組</strong>：麗山高中、松山家商、松山工農</td>
+            <td>泰北雙語學校體育館<br><small style="color:#64748b;">士林區福林路240號</small></td>
+            <td><strong>預賽 F 組</strong>：麗山高中、松山家商、松山工農、<strong>大直高中</strong></td>
             <td>4 取 2 晉級第二輪單淘汰</td>
             <td><span class="badge badge-done">官方籤表確認</span></td>
           </tr>
@@ -794,30 +871,8 @@
             <td>115學年度教育盃籃球賽</td>
             <td>115/10/19 ~ 11/08</td>
             <td><span style="color:#b45309; font-weight:600;">待 10/12 16:00 公告</span></td>
-            <td>興雅國中體育館<br><small style="color:#64748b;">臺北市信義區松德路168巷15號</small></td>
-            <td><strong>預賽 B 組</strong>：育成高中、華江高中、泰北高中</td>
-            <td>4 取 2 晉級 1~4 名決賽</td>
-            <td><span class="badge badge-done">官方籤表確認</span></td>
-          </tr>
-          <tr data-sport="籃球">
-            <td><strong>🏀 籃球</strong></td>
-            <td><span class="badge badge-purple">國男乙組</span></td>
-            <td>115學年度教育盃籃球賽</td>
-            <td>115/10/19 ~ 11/08</td>
-            <td><span style="color:#b45309; font-weight:600;">待 10/12 16:00 公告</span></td>
-            <td>泰北雙語學校體育館<br><small style="color:#64748b;">臺北市士林區福林路240號</small></td>
-            <td><strong>預賽 C 組</strong>：介壽國中、達人中學、古亭國中、南門國中</td>
-            <td>5 取 2 晉級第二輪單淘汰</td>
-            <td><span class="badge badge-done">官方籤表確認</span></td>
-          </tr>
-          <tr data-sport="籃球">
-            <td><strong>🏀 籃球</strong></td>
-            <td><span class="badge badge-purple">國女乙級</span></td>
-            <td>115學年度教育盃籃球賽</td>
-            <td>115/10/19 ~ 11/08</td>
-            <td><span style="color:#b45309; font-weight:600;">待 10/12 16:00 公告</span></td>
-            <td>興雅國中體育館<br><small style="color:#64748b;">臺北市信義區松德路168巷15號</small></td>
-            <td><strong>預賽 B 組</strong>：景美國中、中正國中、再興中學</td>
+            <td>興雅國中活動中心體育館<br><small style="color:#64748b;">信義區松德路168巷15號</small></td>
+            <td><strong>預賽 B 組</strong>：育成高中、華江高中、泰北高中、<strong>大直高中</strong></td>
             <td>4 取 2 晉級 1~4 名決賽</td>
             <td><span class="badge badge-done">官方籤表確認</span></td>
           </tr>
@@ -827,9 +882,9 @@
             <td>115學年度教育盃籃球賽</td>
             <td>115/10/19 ~ 11/08</td>
             <td><span style="color:#b45309; font-weight:600;">待 10/12 16:00 公告</span></td>
-            <td>永春高中體育館<br><small style="color:#64748b;">臺北市信義區松山路654號</small></td>
+            <td>永春高中活動中心體育館<br><small style="color:#64748b;">信義區松山路654號</small></td>
             <td><strong>單淘汰 第 11 籤</strong> vs 陽明高中 (第 10 籤)</td>
-            <td>勝隊晉級次輪對戰 (再興/忠孝勝隊)</td>
+            <td>首輪第 5 場比賽，勝隊晉級次輪對戰</td>
             <td><span class="badge badge-done">官方籤表確認</span></td>
           </tr>
 
@@ -841,8 +896,8 @@
             <td>115年11月 (待公佈)</td>
             <td>待賽程表排定</td>
             <td>明湖國中體育館</td>
-            <td><strong>預賽 A 組第 3 籤</strong>：中山女中 (1)、延平中學 (2)</td>
-            <td>小組循環取第 1 名參加決賽</td>
+            <td><strong>預賽 A 組第 3 籤</strong>：中山女中 (1)、延平中學 (2)、<strong>大直高中 (3)</strong></td>
+            <td>小組 3 隊循環取第 1 名參加決賽</td>
             <td><span class="badge badge-done">分組抽籤排定</span></td>
           </tr>
           <tr data-sport="排球">
@@ -851,8 +906,8 @@
             <td>115學年度教育盃排球賽</td>
             <td>115年11月 (待公佈)</td>
             <td>待賽程表排定</td>
-            <td>明湖國中 / 內湖高中</td>
-            <td><strong>預賽 I 組籤 27</strong>：景文高中 (25)、中正高中 (26)</td>
+            <td>明湖國中 / 內湖高中體育館</td>
+            <td><strong>預賽 I 組籤 27</strong>：景文高中 (25)、中正高中 (26)、<strong>大直高中 (27)</strong></td>
             <td>12 組循環每組取第 1 名晉級決賽</td>
             <td><span class="badge badge-done">分組抽籤排定</span></td>
           </tr>
@@ -866,7 +921,7 @@
             <td>待 10/21 抽籤排定</td>
             <td>天母運動公園網球場</td>
             <td>待 10/21 10:30 天母網球場抽籤</td>
-            <td>三點雙單雙制 (男生/女生混合)</td>
+            <td>三點雙單雙制 (男女混合)</td>
             <td><span class="badge badge-urgent">10/14 截止報名</span></td>
           </tr>
           <tr data-sport="網球">
@@ -902,7 +957,7 @@
             <td>115/12/19 ~ 116/04/27</td>
             <td>依分區賽程公告</td>
             <td>臺北市各棒球場</td>
-            <td>報名截止後由學生棒聯抽籤編配分區賽</td>
+            <td>待學生棒聯抽籤編配分區賽</td>
             <td>分區循環制，爭取全國賽門票</td>
             <td><span class="badge badge-active">12/14 截止報名</span></td>
           </tr>
@@ -1054,7 +1109,9 @@
     { date: '2026-10-12', title: '📢 16:00 籃球賽程公告', type: 'amber', desc: '教育盃籃球賽每日賽程與出場時間於永春高中官網正式公告。大直高中 5 組分組已排定。' },
     { date: '2026-10-12', title: '🎾 教育盃網球開放報名', type: 'blue', desc: '115學年度教育盃中學網球賽於新興國中網站開放網路報名至 10/23 16:00 止。' },
     { date: '2026-10-14', title: '🚨 中正盃網球截止', type: 'red', desc: '115年中正盃網球錦標賽報名截止！須填報 Google 表單並匯款 2,000 元上傳收據。' },
-    { date: '2026-10-19', title: '🏀 教育盃籃球開賽', type: 'purple', desc: '教育盃籃球錦標賽正式開打（10/19~11/08）。大直高男乙於泰北雙語、高女乙興雅國中。' },
+    { date: '2026-10-19', title: '🏀 教育盃籃球開賽', type: 'purple', desc: '教育盃籃球錦標賽正式開打（10/19~11/08）。大直高男乙於泰北雙語、高女乙興雅國中、教男組永春高中。' },
+    { date: '2026-10-19', title: '⛳ 教育盃高爾夫比賽 (國中高中)', type: 'gray', desc: '115學年度教育盃高爾夫錦標賽國中、高中組賽事（北投國華高爾夫俱樂部）。' },
+    { date: '2026-10-20', title: '⛳ 教育盃高爾夫比賽 (國小組)', type: 'gray', desc: '115學年度教育盃高爾夫錦標賽國小組賽事（北投國華高爾夫俱樂部）。' },
     { date: '2026-10-21', title: '🎾 中正盃網球抽籤', type: 'blue', desc: '上午 10:30 於天母網球場抽籤並排定賽程。' },
     { date: '2026-10-23', title: '🎾 教育盃網球報名截止', type: 'red', desc: '16:00 截止線上報名，核章正本須於 10/30 前送達新興國中。' },
     { date: '2026-10-30', title: '🎾 教育盃網球抽籤', type: 'blue', desc: '上午 09:00 於新興國中活動中心抽籤排定賽程。' },
