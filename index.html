@@ -659,39 +659,20 @@
     /* ========================================================
        使用需求3：三欄或四欄並排網格 (3 to 4 Column Grid)
        ======================================================== */
-    /* 使用者特別指定：改為三個比賽並排 (固定三欄式網格) */
+    /* ========================================================
+       使用需求3：網格配置 (大螢幕三欄、平板與手機雙欄)
+       ======================================================== */
     .cards-grid-layout {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
       gap: 16px;
     }
 
-    /* 平板螢幕 (小於900px) 降為兩欄 */
-    @media (max-width: 900px) {
+    /* 平板與手機螢幕 (小於1024px) 兩欄並排 */
+    @media (max-width: 1024px) {
       .cards-grid-layout {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 12px;
-      }
-    }
-
-    /* 手機 (小於600px) 單欄 */
-    @media (max-width: 600px) {
-      .cards-grid-layout {
-        grid-template-columns: 1fr !important;
-      }
-    }
-
-    /* 平板螢幕：兩欄並排 */
-    @media (max-width: 1023px) {
-      .cards-grid-layout {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    /* 手機：單欄 */
-    @media (max-width: 640px) {
-      .cards-grid-layout {
-        grid-template-columns: 1fr;
       }
     }
 
@@ -1303,6 +1284,395 @@
       z-index: 2000;
       border-left: 4px solid #3b82f6;
     }
+
+    /* ========================================================
+       手機瀏覽 & iPhone 16e 專屬最佳化 (Mobile Optimization)
+       1. 隱藏左側工具欄，全幅保留右側主視窗
+       2. 運動種類版面縮小緊湊化，固定呈現雙欄 (2 Columns)
+       ======================================================== */
+    .mobile-subnav-bar {
+      display: none;
+    }
+
+    @media (max-width: 860px) {
+      body {
+        display: block !important;
+        min-height: 100vh !important;
+        overflow-x: hidden !important;
+      }
+
+      /* 1. 手機瀏覽隱藏左側工具欄，保留 100% 右側視窗 */
+      .sidebar {
+        display: none !important;
+      }
+
+      .main-wrapper {
+        width: 100% !important;
+        min-width: 0 !important;
+        height: auto !important;
+        min-height: 100vh !important;
+        overflow-x: hidden !important;
+      }
+
+      .main-body-container {
+        padding: 8px 6px 36px !important;
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+
+      /* 手機專屬頂部分頁導航 (切換 賽事掌控 / 出賽賽程) */
+      .mobile-subnav-bar {
+        display: flex !important;
+        background: white;
+        border-bottom: 1px solid var(--border-light);
+        padding: 6px 8px;
+        gap: 6px;
+        position: sticky;
+        top: 0;
+        z-index: 55;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      }
+
+      .m-subnav-btn {
+        flex: 1;
+        padding: 7px 6px;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+        background: #f8fafc;
+        color: var(--text-body);
+        font-size: 0.76rem;
+        font-weight: 700;
+        cursor: pointer;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        transition: all 0.15s;
+      }
+
+      .m-subnav-btn.active {
+        background: var(--navy-primary);
+        color: white;
+        border-color: var(--navy-primary);
+        box-shadow: 0 1px 3px rgba(30, 58, 138, 0.25);
+      }
+
+      .m-badge {
+        font-size: 0.68rem;
+        padding: 1px 5px;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      .m-subnav-btn.active .m-badge {
+        background: rgba(255, 255, 255, 0.25);
+        color: white;
+      }
+
+      /* 頂部 Header 緊湊化 */
+      .top-header-bar {
+        padding: 8px 10px !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 6px !important;
+        position: relative !important;
+      }
+
+      .official-wordmark-container {
+        gap: 8px !important;
+      }
+
+      .header-crest-wrapper {
+        width: 32px !important;
+        height: 32px !important;
+      }
+
+      .wordmark-image {
+        max-height: 22px !important;
+      }
+
+      .official-title-zh {
+        font-size: 0.95rem !important;
+      }
+
+      .top-toolbar {
+        gap: 4px !important;
+        overflow-x: auto !important;
+        width: 100% !important;
+        padding-top: 3px !important;
+        justify-content: flex-start !important;
+        flex-wrap: nowrap !important;
+      }
+
+      .btn-top-refresh,
+      .btn-top-voice {
+        padding: 4px 8px !important;
+        font-size: 0.7rem !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+      }
+
+      .view-control-pill {
+        flex-shrink: 0 !important;
+      }
+
+      .view-control-btn {
+        padding: 4px 6px !important;
+        font-size: 0.68rem !important;
+      }
+
+      /* KPI 區塊：手機 2x2 緊湊排列 */
+      .kpi-row {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px !important;
+        margin-bottom: 8px !important;
+      }
+
+      .kpi-card {
+        padding: 8px 10px !important;
+        border-radius: 8px !important;
+      }
+
+      .kpi-num {
+        font-size: 1.3rem !important;
+      }
+
+      .kpi-label {
+        font-size: 0.68rem !important;
+      }
+
+      .kpi-icon {
+        font-size: 1.25rem !important;
+      }
+
+      /* 篩選工具列：手機橫向捲動 Pills */
+      .filter-card-bar {
+        padding: 8px 8px !important;
+        margin-bottom: 8px !important;
+        gap: 6px !important;
+      }
+
+      .filter-intent-row {
+        padding-bottom: 6px !important;
+        gap: 6px !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+      }
+
+      .intent-pills {
+        display: flex !important;
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        gap: 4px !important;
+        width: 100% !important;
+        padding-bottom: 2px !important;
+      }
+
+      .intent-pill {
+        padding: 4px 8px !important;
+        font-size: 0.72rem !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+      }
+
+      .filter-options-row {
+        flex-direction: column !important;
+        gap: 6px !important;
+      }
+
+      .search-input-group {
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+
+      .filter-options-row > div:last-child {
+        width: 100% !important;
+        display: flex !important;
+        gap: 6px !important;
+      }
+
+      .filter-dropdown {
+        flex: 1 !important;
+        width: 50% !important;
+        font-size: 0.72rem !important;
+        padding: 6px 6px !important;
+      }
+
+      /* 2. iPhone 16e 核心雙欄配置 (Two Columns Grid) */
+      .cards-grid-layout {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+      }
+
+      /* 縮小運動種類卡片整體版面大小 */
+      .sport-card {
+        padding: 8px 6px !important;
+        border-radius: 8px !important;
+        border-top-width: 3px !important;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+      }
+
+      .card-top-bar {
+        gap: 3px !important;
+        margin-bottom: 5px !important;
+      }
+
+      .sport-visual-pill {
+        padding: 2px 5px 2px 3px !important;
+        gap: 3px !important;
+        border-radius: 12px !important;
+      }
+
+      .sport-visual-icon-box {
+        width: 20px !important;
+        height: 20px !important;
+        font-size: 0.85rem !important;
+      }
+
+      .sport-visual-pill-name .sport-zh {
+        font-size: 0.72rem !important;
+        line-height: 1.1 !important;
+      }
+
+      .sport-visual-pill-name .sport-en {
+        font-size: 0.48rem !important;
+        line-height: 1 !important;
+      }
+
+      .status-tag {
+        font-size: 0.58rem !important;
+        padding: 2px 4px !important;
+        border-radius: 3px !important;
+        line-height: 1.2 !important;
+      }
+
+      .card-core-title-box {
+        margin-bottom: 4px !important;
+      }
+
+      .card-core-name {
+        font-size: 0.82rem !important;
+        font-weight: 800 !important;
+        line-height: 1.25 !important;
+        margin-bottom: 2px !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        min-height: 2.1em !important;
+      }
+
+      .card-full-name-sub {
+        font-size: 0.6rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 100% !important;
+      }
+
+      .card-venue-row {
+        font-size: 0.65rem !important;
+        margin-bottom: 3px !important;
+        line-height: 1.2 !important;
+        gap: 2px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+
+      .card-date-chip {
+        font-size: 0.62rem !important;
+        padding: 2px 4px !important;
+        margin-bottom: 5px !important;
+        line-height: 1.2 !important;
+        gap: 2px !important;
+        max-width: 100% !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+
+      .card-details-box {
+        padding: 5px 5px !important;
+        margin-bottom: 5px !important;
+        gap: 3px !important;
+        border-radius: 5px !important;
+      }
+
+      .detail-lbl {
+        font-size: 0.58rem !important;
+        margin-bottom: 1px !important;
+      }
+
+      .detail-val {
+        font-size: 0.66rem !important;
+        line-height: 1.25 !important;
+      }
+
+      /* 選手特殊徽章在手機雙欄模式精簡呈現 */
+      .sport-card div[style*="background:#faf5ff"],
+      .sport-card div[style*="background:#f0fdf4"] {
+        padding: 5px 5px !important;
+        margin-bottom: 5px !important;
+        border-radius: 5px !important;
+        font-size: 0.66rem !important;
+        line-height: 1.3 !important;
+      }
+
+      .sport-card div[style*="background:#faf5ff"] div,
+      .sport-card div[style*="background:#f0fdf4"] div {
+        font-size: 0.64rem !important;
+      }
+
+      .sport-card div[style*="background:#faf5ff"] a,
+      .sport-card div[style*="background:#f0fdf4"] a,
+      .sport-card div[style*="background:#faf5ff"] button,
+      .sport-card div[style*="background:#f0fdf4"] button {
+        padding: 2px 5px !important;
+        font-size: 0.62rem !important;
+      }
+
+      /* 報名確認三態按鈕在手機雙欄精簡 */
+      .intent-selector-container {
+        padding: 3px 3px !important;
+        margin-bottom: 5px !important;
+        border-radius: 5px !important;
+      }
+
+      .intent-header-text {
+        font-size: 0.58rem !important;
+        margin-bottom: 2px !important;
+      }
+
+      .intent-toggles {
+        gap: 2px !important;
+      }
+
+      .intent-toggle-btn {
+        padding: 3px 1px !important;
+        font-size: 0.6rem !important;
+        border-radius: 3px !important;
+      }
+
+      /* 底部操作鈕 */
+      .card-action-footer {
+        padding-top: 4px !important;
+        margin-top: 2px !important;
+        gap: 3px !important;
+        flex-wrap: wrap !important;
+      }
+
+      .btn-detail-outline {
+        padding: 2px 5px !important;
+        font-size: 0.62rem !important;
+        border-radius: 3px !important;
+      }
+
+      .doc-link-btn {
+        font-size: 0.62rem !important;
+      }
+    }
   </style>
 </head>
 
@@ -1436,6 +1806,16 @@
         </div>
       </div>
     </header>
+
+    <!-- 手機專屬功能導航列 (手機端隱藏左側工具欄時之主要功能切換) -->
+    <div class="mobile-subnav-bar" id="mobileSubnavBar">
+      <button class="m-subnav-btn active" id="mNavTournaments" onclick="switchNavTab('tournaments')">
+        🏆 賽事掌控 (<span id="mBadgeTournaments">11</span>)
+      </button>
+      <button class="m-subnav-btn" id="mNavSchedules" onclick="switchNavTab('schedules')">
+        🏀 出賽賽程 (<span id="mBadgeSchedules">15</span>)
+      </button>
+    </div>
 
     <div class="main-body-container">
       <!-- 頂部指標統計 (KPIs) -->
@@ -2240,12 +2620,25 @@
       document.getElementById('sideBadgeUnreg').textContent = unreg;
       document.getElementById('sideBadgeReg').textContent = reg;
       document.getElementById('sideBadgeDeclined').textContent = dec;
+
+      // 手機專屬徽章計數同步
+      const mBadgeTour = document.getElementById('mBadgeTournaments');
+      const mBadgeSched = document.getElementById('mBadgeSchedules');
+      if (mBadgeTour) mBadgeTour.textContent = total;
+      if (mBadgeSched && typeof schedules !== 'undefined') mBadgeSched.textContent = schedules.length;
     }
 
     function switchNavTab(tab) {
       currentNav = tab;
       document.getElementById('navTournaments').className = 'nav-link' + (tab === 'tournaments' ? ' active' : '');
       document.getElementById('navSchedules').className = 'nav-link' + (tab === 'schedules' ? ' active' : '');
+
+      // 手機專屬導航頁籤同步啟用樣式
+      const mTour = document.getElementById('mNavTournaments');
+      const mSched = document.getElementById('mNavSchedules');
+      if (mTour) mTour.className = 'm-subnav-btn' + (tab === 'tournaments' ? ' active' : '');
+      if (mSched) mSched.className = 'm-subnav-btn' + (tab === 'schedules' ? ' active' : '');
+
       document.getElementById('regFilterRow').style.display = tab === 'tournaments' ? 'flex' : 'none';
       document.getElementById('kpiSummaryRow').style.display = tab === 'tournaments' ? 'grid' : 'none';
       populateFilters();
