@@ -1,0 +1,25 @@
+name: Sync sports dashboard data
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dashboard-sync.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Sync Drive-audited data to Supabase
+        env:
+          SUPABASE_URL: https://hdxrublbpaptthmflnrn.supabase.co
+          SUPABASE_KEY: sb_publishable_n3ONLlgwYQ0TAOcxkKoNhg_ZwL6M9wP
+          SYNC_DATA_FILE: dashboard-sync.json
+        run: python scripts/sync_supabase.py
