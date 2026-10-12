@@ -1,0 +1,36 @@
+name: Compact schedule cards
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/compact_schedule_cards.py'
+      - '.github/workflows/compact-schedule-cards.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  compact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Apply compact schedule card layout
+        run: python scripts/compact_schedule_cards.py
+
+      - name: Commit compact layout
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No index.html changes needed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Compact schedule cards for mobile"
+          git push
