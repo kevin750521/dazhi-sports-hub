@@ -3,18 +3,22 @@
   "source_folder": "https://drive.google.com/drive/folders/16iBWHC9ilYKB442HuBessa37hWwNe-zm",
   "tournaments": [
     {
-      "match": {"name": "臺北市115學年度教育盃中等學校籃球錦標賽"},
+      "match": {
+        "name": "臺北市115學年度教育盃中等學校籃球錦標賽"
+      },
       "values": {
-        "divisions": "國男乙C組、高男乙F組、國女乙B組、國女甲B組、高女乙B組（大直高中已排定第一輪）",
-        "competition_dates": "115/10/18～10/29（大直高中已公告第一輪）",
-        "venue": "臺北市泰北國際雙語學校、臺北市立興雅國中",
+        "divisions": "國男乙C組、高男乙F組、國女乙B組、國女甲B組、高女乙B組、教職員男子組（大直高中已有明確場次）",
+        "competition_dates": "115/10/17～10/29（大直高中已公告明確場次）",
+        "venue": "臺北市泰北國際雙語學校、臺北市立興雅國中、臺北市立永春高級中學",
         "doc_url": "https://drive.google.com/file/d/1lrpNWC2XAUywhWmrGtgLGAoPm_j906iw/view",
-        "status": "✅ 最新賽程已整合：大直高中男、女子組共12場第一輪賽事",
+        "status": "✅ 最新賽程已整合：大直高中共13場明確賽程；面板隱藏同賽事區間摘要",
         "registration_status": "已報名"
       }
     },
     {
-      "match": {"name": "臺北市115學年度教育盃中等學校11人制足球錦標賽"},
+      "match": {
+        "name": "臺北市115學年度教育盃中等學校11人制足球錦標賽"
+      },
       "values": {
         "competition_dates": "115/09/14～10/02",
         "venue": "迎風河濱公園人工足球場A",
@@ -25,7 +29,9 @@
       }
     },
     {
-      "match": {"name": "臺北市115學年度教育盃中等學校擊劍錦標賽"},
+      "match": {
+        "name": "臺北市115學年度教育盃中等學校擊劍錦標賽"
+      },
       "values": {
         "competition_dates": "115/10/22～10/25",
         "venue": "臺北市南港區玉成國小學生活動中心3樓",
@@ -36,7 +42,9 @@
       }
     },
     {
-      "match": {"name": "中華民國115年度全國中正盃空手道錦標賽"},
+      "match": {
+        "name": "中華民國115年度全國中正盃空手道錦標賽"
+      },
       "values": {
         "competition_dates": "115/11/06～11/08",
         "venue": "新北市板橋體育館",
@@ -47,7 +55,9 @@
       }
     },
     {
-      "match": {"name": "臺北市115學年度教育盃中小學高爾夫錦標賽"},
+      "match": {
+        "name": "臺北市115學年度教育盃中小學高爾夫錦標賽"
+      },
       "values": {
         "sport": "高爾夫",
         "divisions": "國中男子/女子組、高中男子/女子組、教職員組",
@@ -77,7 +87,9 @@
   ],
   "schedules": [
     {
-      "match": {"tournament_name": "臺北市115學年度教育盃中等學校擊劍錦標賽"},
+      "match": {
+        "tournament_name": "臺北市115學年度教育盃中等學校擊劍錦標賽"
+      },
       "values": {
         "sport": "🤺 擊劍",
         "division": "國中男子鈍劍個人賽（劉○炘同學）",
@@ -92,7 +104,9 @@
       }
     },
     {
-      "match": {"tournament_name": "115年度全國中正盃空手道錦標賽"},
+      "match": {
+        "tournament_name": "115年度全國中正盃空手道錦標賽"
+      },
       "values": {
         "sport": "🥋 空手道",
         "division": "國中男子組個人對打/形（孔○誠同學）",
@@ -107,64 +121,277 @@
       }
     },
     {
-      "match": {"tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/18", "match_time": "14:20", "division": "國男乙C組"},
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/18",
+        "match_time": "14:20",
+        "division": "國男乙C組"
+      },
       "values": {},
-      "create": {"sport": "🏀 籃球", "division": "國男乙C組", "tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/18", "match_time": "14:20", "venue": "臺北市泰北國際雙語學校", "opponents_draw": "古亭國中 vs 大直高中", "advancement_rule": "第一輪分組預賽；10/28 16:00晉級第二輪抽籤", "source_file": "泰北高中（國男乙、高男乙預賽） 1012.pdf", "status": "賽程已公告"}
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "國男乙C組",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/18",
+        "match_time": "14:20",
+        "venue": "臺北市泰北國際雙語學校",
+        "opponents_draw": "古亭國中 vs 大直高中",
+        "advancement_rule": "第一輪分組預賽；10/28 16:00晉級第二輪抽籤",
+        "source_file": "泰北高中（國男乙、高男乙預賽） 1012.pdf",
+        "status": "賽程已公告"
+      }
     },
     {
-      "match": {"tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/21", "match_time": "09:00", "division": "高男乙F組"},
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/21",
+        "match_time": "09:00",
+        "division": "高男乙F組"
+      },
       "values": {},
-      "create": {"sport": "🏀 籃球", "division": "高男乙F組", "tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/21", "match_time": "09:00", "venue": "臺北市泰北國際雙語學校", "opponents_draw": "大直高中 vs 麗山高中", "advancement_rule": "第一輪分組預賽；10/28 16:00晉級第二輪抽籤", "source_file": "泰北高中（國男乙、高男乙預賽） 1012.pdf", "status": "賽程已公告"}
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "高男乙F組",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/21",
+        "match_time": "09:00",
+        "venue": "臺北市泰北國際雙語學校",
+        "opponents_draw": "大直高中 vs 麗山高中",
+        "advancement_rule": "第一輪分組預賽；10/28 16:00晉級第二輪抽籤",
+        "source_file": "泰北高中（國男乙、高男乙預賽） 1012.pdf",
+        "status": "賽程已公告"
+      }
     },
     {
-      "match": {"tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/22", "match_time": "12:30", "division": "國男乙C組"},
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/22",
+        "match_time": "12:30",
+        "division": "國男乙C組"
+      },
       "values": {},
-      "create": {"sport": "🏀 籃球", "division": "國男乙C組", "tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/22", "match_time": "12:30", "venue": "臺北市泰北國際雙語學校", "opponents_draw": "大直高中 vs 介壽國中", "advancement_rule": "第一輪分組預賽；10/28 16:00晉級第二輪抽籤", "source_file": "泰北高中（國男乙、高男乙預賽） 1012.pdf", "status": "賽程已公告"}
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "國男乙C組",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/22",
+        "match_time": "12:30",
+        "venue": "臺北市泰北國際雙語學校",
+        "opponents_draw": "大直高中 vs 介壽國中",
+        "advancement_rule": "第一輪分組預賽；10/28 16:00晉級第二輪抽籤",
+        "source_file": "泰北高中（國男乙、高男乙預賽） 1012.pdf",
+        "status": "賽程已公告"
+      }
     },
     {
-      "match": {"tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/24", "match_time": "08:30", "division": "高男乙F組"},
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/24",
+        "match_time": "08:30",
+        "division": "高男乙F組"
+      },
       "values": {},
-      "create": {"sport": "🏀 籃球", "division": "高男乙F組", "tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/24", "match_time": "08:30", "venue": "臺北市泰北國際雙語學校", "opponents_draw": "松山家商 vs 大直高中", "advancement_rule": "第一輪分組預賽；10/28 16:00晉級第二輪抽籤", "source_file": "泰北高中（國男乙、高男乙預賽） 1012.pdf", "status": "賽程已公告"}
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "高男乙F組",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/24",
+        "match_time": "08:30",
+        "venue": "臺北市泰北國際雙語學校",
+        "opponents_draw": "松山家商 vs 大直高中",
+        "advancement_rule": "第一輪分組預賽；10/28 16:00晉級第二輪抽籤",
+        "source_file": "泰北高中（國男乙、高男乙預賽） 1012.pdf",
+        "status": "賽程已公告"
+      }
     },
     {
-      "match": {"tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/25", "match_time": "13:10", "division": "國男乙C組"},
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/25",
+        "match_time": "13:10",
+        "division": "國男乙C組"
+      },
       "values": {},
-      "create": {"sport": "🏀 籃球", "division": "國男乙C組", "tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/25", "match_time": "13:10", "venue": "臺北市泰北國際雙語學校", "opponents_draw": "達人中學 vs 大直高中", "advancement_rule": "第一輪分組預賽；10/28 16:00晉級第二輪抽籤", "source_file": "泰北高中（國男乙、高男乙預賽） 1012.pdf", "status": "賽程已公告"}
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "國男乙C組",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/25",
+        "match_time": "13:10",
+        "venue": "臺北市泰北國際雙語學校",
+        "opponents_draw": "達人中學 vs 大直高中",
+        "advancement_rule": "第一輪分組預賽；10/28 16:00晉級第二輪抽籤",
+        "source_file": "泰北高中（國男乙、高男乙預賽） 1012.pdf",
+        "status": "賽程已公告"
+      }
     },
     {
-      "match": {"tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/27", "match_time": "17:10", "division": "高男乙F組"},
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/27",
+        "match_time": "17:10",
+        "division": "高男乙F組"
+      },
       "values": {},
-      "create": {"sport": "🏀 籃球", "division": "高男乙F組", "tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/27", "match_time": "17:10", "venue": "臺北市泰北國際雙語學校", "opponents_draw": "松山工農 vs 大直高中", "advancement_rule": "第一輪分組預賽；10/28 16:00晉級第二輪抽籤", "source_file": "泰北高中（國男乙、高男乙預賽） 1012.pdf", "status": "賽程已公告"}
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "高男乙F組",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/27",
+        "match_time": "17:10",
+        "venue": "臺北市泰北國際雙語學校",
+        "opponents_draw": "松山工農 vs 大直高中",
+        "advancement_rule": "第一輪分組預賽；10/28 16:00晉級第二輪抽籤",
+        "source_file": "泰北高中（國男乙、高男乙預賽） 1012.pdf",
+        "status": "賽程已公告"
+      }
     },
     {
-      "match": {"tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/27", "match_time": "12:30", "division": "國女乙B組"},
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/27",
+        "match_time": "12:30",
+        "division": "國女乙B組"
+      },
       "values": {},
-      "create": {"sport": "🏀 籃球", "division": "國女乙B組", "tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/27", "match_time": "12:30", "venue": "臺北市立興雅國中", "opponents_draw": "再興中學 vs 大直高中", "advancement_rule": "女子組第一輪預賽", "source_file": "使用者提供－興雅國中女子預賽賽程截圖", "status": "賽程已公告"}
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "國女乙B組",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/27",
+        "match_time": "12:30",
+        "venue": "臺北市立興雅國中",
+        "opponents_draw": "再興中學 vs 大直高中",
+        "advancement_rule": "女子組第一輪預賽",
+        "source_file": "使用者提供－興雅國中女子預賽賽程截圖",
+        "status": "賽程已公告"
+      }
     },
     {
-      "match": {"tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/27", "match_time": "14:50", "division": "高女乙B組"},
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/27",
+        "match_time": "14:50",
+        "division": "高女乙B組"
+      },
       "values": {},
-      "create": {"sport": "🏀 籃球", "division": "高女乙B組", "tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/27", "match_time": "14:50", "venue": "臺北市立興雅國中", "opponents_draw": "育成高中 vs 大直高中", "advancement_rule": "女子組第一輪預賽", "source_file": "使用者提供－興雅國中女子預賽賽程截圖", "status": "賽程已公告"}
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "高女乙B組",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/27",
+        "match_time": "14:50",
+        "venue": "臺北市立興雅國中",
+        "opponents_draw": "育成高中 vs 大直高中",
+        "advancement_rule": "女子組第一輪預賽",
+        "source_file": "使用者提供－興雅國中女子預賽賽程截圖",
+        "status": "賽程已公告"
+      }
     },
     {
-      "match": {"tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/28", "match_time": "09:00", "division": "國女甲B組"},
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/28",
+        "match_time": "09:00",
+        "division": "國女甲B組"
+      },
       "values": {},
-      "create": {"sport": "🏀 籃球", "division": "國女甲B組", "tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/28", "match_time": "09:00", "venue": "臺北市立興雅國中", "opponents_draw": "大直高中 vs 景美國中", "advancement_rule": "女子組第一輪預賽", "source_file": "使用者提供－興雅國中女子預賽賽程截圖", "status": "賽程已公告"}
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "國女甲B組",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/28",
+        "match_time": "09:00",
+        "venue": "臺北市立興雅國中",
+        "opponents_draw": "大直高中 vs 景美國中",
+        "advancement_rule": "女子組第一輪預賽",
+        "source_file": "使用者提供－興雅國中女子預賽賽程截圖",
+        "status": "賽程已公告"
+      }
     },
     {
-      "match": {"tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/28", "match_time": "16:00", "division": "高女乙B組"},
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/28",
+        "match_time": "16:00",
+        "division": "高女乙B組"
+      },
       "values": {},
-      "create": {"sport": "🏀 籃球", "division": "高女乙B組", "tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/28", "match_time": "16:00", "venue": "臺北市立興雅國中", "opponents_draw": "大直高中 vs 華江高中", "advancement_rule": "女子組第一輪預賽", "source_file": "使用者提供－興雅國中女子預賽賽程截圖", "status": "賽程已公告"}
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "高女乙B組",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/28",
+        "match_time": "16:00",
+        "venue": "臺北市立興雅國中",
+        "opponents_draw": "大直高中 vs 華江高中",
+        "advancement_rule": "女子組第一輪預賽",
+        "source_file": "使用者提供－興雅國中女子預賽賽程截圖",
+        "status": "賽程已公告"
+      }
     },
     {
-      "match": {"tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/29", "match_time": "12:30", "division": "國女乙B組"},
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/29",
+        "match_time": "12:30",
+        "division": "國女乙B組"
+      },
       "values": {},
-      "create": {"sport": "🏀 籃球", "division": "國女乙B組", "tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/29", "match_time": "12:30", "venue": "臺北市立興雅國中", "opponents_draw": "中正國中 vs 大直高中", "advancement_rule": "女子組第一輪預賽", "source_file": "使用者提供－興雅國中女子預賽賽程截圖", "status": "賽程已公告"}
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "國女乙B組",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/29",
+        "match_time": "12:30",
+        "venue": "臺北市立興雅國中",
+        "opponents_draw": "中正國中 vs 大直高中",
+        "advancement_rule": "女子組第一輪預賽",
+        "source_file": "使用者提供－興雅國中女子預賽賽程截圖",
+        "status": "賽程已公告"
+      }
     },
     {
-      "match": {"tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/29", "match_time": "16:00", "division": "高女乙B組"},
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/29",
+        "match_time": "16:00",
+        "division": "高女乙B組"
+      },
       "values": {},
-      "create": {"sport": "🏀 籃球", "division": "高女乙B組", "tournament_name": "115學年度教育盃籃球賽", "match_date": "115/10/29", "match_time": "16:00", "venue": "臺北市立興雅國中", "opponents_draw": "大直高中 vs 泰北高中", "advancement_rule": "女子組第一輪預賽", "source_file": "使用者提供－興雅國中女子預賽賽程截圖", "status": "賽程已公告"}
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "高女乙B組",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/29",
+        "match_time": "16:00",
+        "venue": "臺北市立興雅國中",
+        "opponents_draw": "大直高中 vs 泰北高中",
+        "advancement_rule": "女子組第一輪預賽",
+        "source_file": "使用者提供－興雅國中女子預賽賽程截圖",
+        "status": "賽程已公告"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/17",
+        "match_time": "13:40",
+        "division": "教職員男子組"
+      },
+      "values": {},
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "教職員男子組",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/17",
+        "match_time": "13:40",
+        "venue": "臺北市立永春高級中學活動中心4樓",
+        "opponents_draw": "陽明高中 vs 大直高中",
+        "advancement_rule": "教師男子組首輪；勝者進入後續淘汰賽",
+        "source_file": "使用者提供－永春高中教師男子組賽程截圖",
+        "status": "賽程已公告"
+      }
     }
   ]
 }
