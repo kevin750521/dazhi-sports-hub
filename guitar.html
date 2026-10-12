@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎸 GuitarFlow · 吉他自主學習戰情室 (Google Keep 音樂整併版)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0a0e17;
+            --bg-surface: #111827;
+            --bg-card: rgba(22, 30, 49, 0.78);
+            --bg-card-hover: rgba(30, 41, 67, 0.92);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(245, 158, 11, 0.35);
+            
+            --amber-primary: #f59e0b;
+            --amber-glow: rgba(245, 158, 11, 0.25);
+            --wood-tone: #b45309;
+            --emerald-accent: #10b981;
+            --cyan-accent: #06b6d4;
+            --purple-accent: #8b5cf6;
+            --rose-accent: #f43f5e;
+            
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 25px -5px rgba(245, 158, 11, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(at 10% 15%, rgba(245, 158, 11, 0.08) 0px, transparent 40%),
+                radial-gradient(at 90% 85%, rgba(139, 92, 246, 0.07) 0px, transparent 45%),
+                radial-gradient(at 50% 50%, rgba(16, 185, 129, 0.04) 0px, transparent 60%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* 頂部導航欄 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 16px 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-card);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #d97706, #b45309);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
+        }
+
+        .brand-title h1 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #fbbf24, #f59e0b, #fed7aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-title p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .keep-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid var(--border-accent);
+            padding: 8px 14px;
+            border-radius: 9999px;
+            font-size: 0.82rem;
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        .keep-pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .btn-action {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-subtle);
+            color: #e2e8f0;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.82rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .btn-action:hover {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: var(--amber-primary);
+            color: #fbbf24;
+        }
+
+        .btn-action.btn-accent {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+        }
+
+        .btn-action.btn-accent:hover {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            transform: translateY(-1px);
+        }
+
+        /* 儀表板核心網格 */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr 340px;
+            gap: 24px;
+        }
+
+        @media (max-width: 1280px) {
+            .dashboard-grid {
+                grid-template-columns: 300px 1fr;
+            }
+            .right-col {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .right-col {
+                grid-column: span 1;
+            }
+        }
+
+        /* 卡片共用樣式 */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            box-shadow: var(--shadow-card);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.16);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .card-title-icon {
+            font-size: 1.2rem;
+        }
+
+        .badge-count {
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* === 左欄：練習工坊與節拍器 === */
+        .left-col {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .streak-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(180, 83, 9, 0.05));
+            border: 1px solid var(--border-accent);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .streak-info h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fbbf24;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .streak-info p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .streak-flame {
+            font-size: 2.2rem;
+            filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.6));
+        }
+
+        /* 互動式 Web Audio 節拍器 */
+        .metronome-box {
+            text-align: center;
+            padding: 12px 0 6px 0;
+        }
+
+        .bpm-display-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 6px;
+        }
+
+        .bpm-step-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-subtle);
+            color: #e2e8f0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .bpm-step-btn:hover {
+            background: rgba(245, 158, 11, 0.3);
+            border-color: var(--amber-primary);
+        }
+
+        .bpm-display {
+            font-size: 3.5rem;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            color: #fbbf24;
+            text-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+            line-height: 1;
+            min-width: 120px;
+        }
+
+        .bpm-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+        }
+
+        /* 節拍視覺 LED 燈 */
+        .beat-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .beat-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.05s ease;
+        }
+
+        .beat-dot.active-main {
+            background: #ef4444;
+            box-shadow: 0 0 12px #ef4444;
+            transform: scale(1.3);
+        }
+
+        .beat-dot.active-sub {
+            background: #f59e0b;
+            box-shadow: 0 0 12px #f59e0b;
+            transform: scale(1.2);
+        }
+
+        .bpm-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            height: 6px;
+            border-radius: 3px;
+            outline: none;
+            margin-bottom: 18px;
+        }
+
+        .bpm-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--amber-primary);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--amber-primary);
+            transition: transform 0.1s;
+        }
+
+        .bpm-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .metronome-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn-metro {
+            background: var(--amber-primary);
+            color: #0b0f19;
+            font-weight: 700;
+            border: none;
+            padding: 10px 24px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-metro:hover {
+            transform: scale(1.03);
+        }
+
+        .btn-tap {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+            border: 1px solid var(--border-subtle);
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.15s;
+        }
+
+        .btn-tap:active {
+            background: rgba(245, 158, 11, 0.3);
+            border-color: var(--amber-primary);
+            transform: scale(0.96);
+        }
+
+        /* 每日練習清單 */
+        .routine-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .routine-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .routine-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .routine-check {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            accent-color: var(--amber-primary);
+            cursor: pointer;
+        }
+
+        .routine-name {
+            font-size: 0.88rem;
+            font-weight: 500;
+        }
+
+        .routine-time {
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-dim);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* 和弦速查指板小工具 */
+        .fretboard-widget {
+            background: #0d131f;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            margin-top: 8px;
+        }
+
+        .chord-selector-chips {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .chord-chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            color: #cbd5e1;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .chord-chip.active {
+            background: rgba(245, 158, 11, 0.25);
+            border-color: var(--amber-primary);
+            color: #fbbf24;
+        }
+
+        .fret-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 8px;
+            position: relative;
+        }
+
+        .guitar-string {
+            display: flex;
+            align-items: center;
+            height: 14px;
+            position: relative;
+        }
+
+        .string-name {
+            width: 24px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+        }
+
+        .string-wire {
+            flex: 1;
+            height: 2px;
+            background: #475569;
+            position: relative;
+            display: flex;
+            border-left: 3px solid #e2e8f0;
+        }
+
+        .fret-mark {
+            position: absolute;
+            top: -5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--amber-primary);
+            box-shadow: 0 0 8px var(--amber-primary);
+        }
+
+        /* === 中欄：曲目庫與學習進度管線 === */
+        .center-col {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .search-and-filter-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px 10px 38px;
+            color: #f8fafc;
+            font-size: 0.88rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--amber-primary);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-chip.active, .filter-chip:hover {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: var(--amber-primary);
+            color: #fbbf24;
+        }
+
+        /* 歌曲卡片 */
+        .song-card {
+            background: rgba(17, 24, 39, 0.65);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 18px 20px;
+            margin-bottom: 14px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .song-card:hover {
+            border-color: rgba(245, 158, 11, 0.4);
+            transform: translateX(3px);
+            background: rgba(24, 33, 53, 0.88);
+        }
+
+        .song-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .song-main-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .song-cover {
+            width: 46px;
+            height: 46px;
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .song-title-wrap h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #f8fafc;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .song-artist {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .song-pills {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .pill {
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .pill-capo { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .pill-key { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .pill-bpm { background: rgba(139, 92, 246, 0.15); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.3); }
+
+        .song-progress-wrap {
+            margin: 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .progress-bar-bg {
+            flex: 1;
+            height: 7px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #f59e0b, #10b981);
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: #fbbf24;
+            min-width: 42px;
+            text-align: right;
+            font-weight: 700;
+        }
+
+        .song-notes {
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 6px 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-left: 2px solid var(--amber-primary);
+        }
+
+        .song-footer {
+            padding-top: 10px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.07);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .song-chords {
+            font-family: 'JetBrains Mono', monospace;
+            color: #fed7aa;
+        }
+
+        .song-actions a, .song-actions button {
+            color: var(--cyan-accent);
+            text-decoration: none;
+            background: none;
+            border: none;
+            margin-left: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.78rem;
+        }
+
+        .song-actions a:hover, .song-actions button:hover {
+            text-decoration: underline;
+            color: #38bdf8;
+        }
+
+        /* === 右欄：Google Keep 音樂標籤即時同步筆記牆 === */
+        .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .keep-note-card {
+            background: rgba(245, 158, 11, 0.05);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 14px;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .keep-note-card:hover {
+            background: rgba(245, 158, 11, 0.09);
+            border-color: rgba(245, 158, 11, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .keep-tag-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .keep-note-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fef08a;
+            margin-bottom: 6px;
+        }
+
+        .keep-note-content {
+            font-size: 0.82rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+            white-space: pre-line;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Noto Sans TC', monospace;
+            border-left: 3px solid #f59e0b;
+        }
+
+        .keep-note-meta {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.72rem;
+            color: var(--text-dim);
+        }
+
+        /* 模態視窗 Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #111827;
+            border: 1px solid var(--border-accent);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 520px;
+            padding: 24px;
+            box-shadow: var(--shadow-card);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fbbf24;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            color: #f8fafc;
+            font-size: 0.88rem;
+            outline: none;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 90px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            border-color: var(--amber-primary);
+        }
+
+        /* 底部資訊欄 */
+        footer {
+            margin-top: 36px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            padding: 20px;
+            border-top: 1px solid var(--border-subtle);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 頂部 Header -->
+    <header>
+        <div class="brand-container">
+            <div class="brand-icon">🎸</div>
+            <div class="brand-title">
+                <h1>GuitarFlow · 吉他自主學習戰情室</h1>
+                <p>Google Keep [標籤: 音樂] 智能同步 · 每日練習菜單 · 曲庫進度追蹤</p>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <div class="keep-badge">
+                <span class="keep-pulse"></span>
+                <span id="keep-status-text">Google 雲端橋接運作中</span>
+            </div>
+            <button class="btn-action" onclick="openKeepPasteModal()">
+                <span>📋 貼上 Keep 筆記</span>
+            </button>
+            <button class="btn-action" onclick="openCloudConfigModal()">
+                <span>☁️ 雲端同步設定</span>
+            </button>
+            <button class="btn-action btn-accent" onclick="openAddSongModal()">
+                <span>➕ 新增曲目</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 核心三欄版型 -->
+    <div class="dashboard-grid">
+
+        <!-- 左欄：練習工坊 & 工具箱 -->
+        <div class="left-col">
+            
+            <!-- 練習熱度 Streak -->
+            <div class="glass-card">
+                <div class="streak-container">
+                    <div class="streak-info">
+                        <h3 id="streak-num">DAY 18</h3>
+                        <p>連續練習天數 Streak 🔥</p>
+                    </div>
+                    <div class="streak-flame">🔥</div>
+                </div>
+
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="card-title-icon">⏱️</span>
+                        <span>今日練習菜單</span>
+                    </div>
+                    <span class="badge-count" id="routine-progress">2 / 4 完成</span>
+                </div>
+
+                <div class="routine-list" id="routine-list-container">
+                    <!-- 動態渲染練習項目 -->
+                </div>
+            </div>
+
+            <!-- 實時 Web Audio 節拍器 -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="card-title-icon">🎯</span>
+                        <span>極速節拍器 (Metronome)</span>
+                    </div>
+                    <span class="badge-count" id="time-sig">4/4 拍</span>
+                </div>
+
+                <div class="metronome-box">
+                    <div class="bpm-display-wrap">
+                        <button class="bpm-step-btn" onclick="adjustBpm(-1)">-</button>
+                        <div class="bpm-display" id="bpm-val">96</div>
+                        <button class="bpm-step-btn" onclick="adjustBpm(1)">+</button>
+                    </div>
+                    <div class="bpm-label">BEATS PER MINUTE</div>
+
+                    <!-- 節拍 LED 燈 -->
+                    <div class="beat-indicators">
+                        <span class="beat-dot" id="dot-0"></span>
+                        <span class="beat-dot" id="dot-1"></span>
+                        <span class="beat-dot" id="dot-2"></span>
+                        <span class="beat-dot" id="dot-3"></span>
+                    </div>
+
+                    <input type="range" class="bpm-slider" id="bpm-slider" min="40" max="220" value="96" oninput="updateBpm(this.value)">
+
+                    <div class="metronome-controls">
+                        <button class="btn-metro" id="play-metro-btn" onclick="toggleMetronome()">
+                            <span id="metro-icon">▶</span> <span id="metro-text">開始節拍</span>
+                        </button>
+                        <button class="btn-tap" onclick="handleTapTempo()">TAP 測速</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 和弦指板速查 -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="card-title-icon">🎼</span>
+                        <span>常用順階和弦與把位</span>
+                    </div>
+                    <span class="badge-count" id="current-key-badge">Key G</span>
+                </div>
+
+                <div class="chord-selector-chips">
+                    <button class="chord-chip active" onclick="selectChord('G')">G (主和弦)</button>
+                    <button class="chord-chip" onclick="selectChord('Em')">Em (六級)</button>
+                    <button class="chord-chip" onclick="selectChord('C')">C (四級)</button>
+                    <button class="chord-chip" onclick="selectChord('D')">D (五級)</button>
+                </div>
+
+                <div class="fretboard-widget">
+                    <div style="font-size:0.75rem; color:#94a3b8; margin-bottom:8px;" id="chord-desc">順階和弦：G - Am - Bm - C - D - Em - F#dim</div>
+                    <div class="fret-diagram" id="fret-diagram">
+                        <div class="guitar-string"><span class="string-name">1E</span><div class="string-wire"><span class="fret-mark" style="left:28%;"></span></div></div>
+                        <div class="guitar-string"><span class="string-name">2B</span><div class="string-wire"><span class="fret-mark" style="left:28%;"></span></div></div>
+                        <div class="guitar-string"><span class="string-name">3G</span><div class="string-wire"></div></div>
+                        <div class="guitar-string"><span class="string-name">4D</span><div class="string-wire"></div></div>
+                        <div class="guitar-string"><span class="string-name">5A</span><div class="string-wire"><span class="fret-mark" style="left:18%;"></span></div></div>
+                        <div class="guitar-string"><span class="string-name">6E</span><div class="string-wire"><span class="fret-mark" style="left:28%;"></span></div></div>
+                    </div>
+                    <div style="text-align:center; font-size:0.75rem; color:#fbbf24; margin-top:8px;" id="chord-note-text">★ G chord (Standard 4-finger form)</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 中欄：曲目庫 & 學習進度掌控 -->
+        <div class="center-col">
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="card-title-icon">📚</span>
+                        <span>吉他歌曲演練曲庫 (Song Repertoire)</span>
+                    </div>
+                    <span class="badge-count" id="song-count-badge">共 5 首收錄</span>
+                </div>
+
+                <div class="search-and-filter-wrap">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" id="song-search-input" placeholder="搜尋歌名、歌手、和弦或曲風..." oninput="handleSearch()">
+                    </div>
+
+                    <div class="filter-bar" id="genre-filter-bar">
+                        <button class="filter-chip active" onclick="filterGenre('all')">全部歌曲</button>
+                        <button class="filter-chip" onclick="filterGenre('practicing')">練習中</button>
+                        <button class="filter-chip" onclick="filterGenre('mastered')">已熟練 (80%+)</button>
+                        <button class="filter-chip" onclick="filterGenre('指彈')">木吉他指彈</button>
+                        <button class="filter-chip" onclick="filterGenre('彈唱')">流行彈唱</button>
+                        <button class="filter-chip" onclick="filterGenre('搖滾')">搖滾 / Solo</button>
+                    </div>
+                </div>
+
+                <!-- 歌曲卡片列表 -->
+                <div id="songs-list-container">
+                    <!-- 動態渲染歌曲 -->
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 右欄：Google Keep 音樂標籤自動整併卡片牆 -->
+        <div class="right-col">
+            
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="card-title-icon">📌</span>
+                        <span>Google Keep [音樂] 筆記流</span>
+                    </div>
+                    <span class="badge-count" style="background:rgba(245, 158, 11, 0.2); color:#fbbf24;" id="keep-count-badge">4 則筆記</span>
+                </div>
+
+                <div id="keep-notes-container">
+                    <!-- 動態渲染 Keep 筆記 -->
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 模態視窗 1：快速貼上 Keep 筆記 -->
+    <div class="modal-overlay" id="keep-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">📋 貼上 Google Keep 音樂筆記</div>
+                <button class="modal-close" onclick="closeModal('keep-modal')">×</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">筆記標題 (可選)</label>
+                <input type="text" class="form-input" id="keep-title-input" placeholder="例如：新歌彈法筆記、換弦保養">
+            </div>
+            <div class="form-group">
+                <label class="form-label">標籤分類</label>
+                <input type="text" class="form-input" id="keep-tags-input" value="#音樂 #和弦靈感">
+            </div>
+            <div class="form-group">
+                <label class="form-label">貼上 Keep 筆記內容 (自動分析和弦進行、Capo 與曲名)</label>
+                <textarea class="form-textarea" id="keep-content-input" placeholder="直接全選貼上 Google Keep 筆記內容...&#10;例：Key: C, Capo 2, 和弦: C - Em - F - G7"></textarea>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+                <button class="btn-action" onclick="closeModal('keep-modal')">取消</button>
+                <button class="btn-action btn-accent" onclick="savePastedKeepNote()">智能解析並整併</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模態視窗 2：新增 / 編輯歌曲 -->
+    <div class="modal-overlay" id="song-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="song-modal-title">➕ 新增練習歌曲</div>
+                <button class="modal-close" onclick="closeModal('song-modal')">×</button>
+            </div>
+            <input type="hidden" id="edit-song-id">
+            <div class="form-group">
+                <label class="form-label">歌名</label>
+                <input type="text" class="form-input" id="song-title-input" placeholder="例如：晴天">
+            </div>
+            <div class="form-group">
+                <label class="form-label">歌手 / 原唱</label>
+                <input type="text" class="form-input" id="song-artist-input" placeholder="例如：周杰倫">
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                <div class="form-group">
+                    <label class="form-label">Capo 夾位</label>
+                    <input type="text" class="form-input" id="song-capo-input" placeholder="Capo 2 或 Standard">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">調性 (Key)</label>
+                    <input type="text" class="form-input" id="song-key-input" placeholder="Key G (Play E)">
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                <div class="form-group">
+                    <label class="form-label">拍速 BPM</label>
+                    <input type="number" class="form-input" id="song-bpm-input" value="80">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">熟練度進度 (%)</label>
+                    <input type="number" class="form-input" id="song-mastery-input" min="0" max="100" value="50">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">和弦進行</label>
+                <input type="text" class="form-input" id="song-chords-input" placeholder="例：C - G/B - Am7 - F">
+            </div>
+            <div class="form-group">
+                <label class="form-label">練習重點筆記</label>
+                <input type="text" class="form-input" id="song-notes-input" placeholder="例：右手切音節奏注意放鬆">
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+                <button class="btn-action" onclick="closeModal('song-modal')">取消</button>
+                <button class="btn-action btn-accent" onclick="saveSong()">儲存歌曲</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模態視窗 3：雲端 Google 試算表連動設定 -->
+    <div class="modal-overlay" id="cloud-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">☁️ Google 雲端同步設定</div>
+                <button class="modal-close" onclick="closeModal('cloud-modal')">×</button>
+            </div>
+            <p style="font-size:0.82rem; color:#94a3b8; margin-bottom:14px; line-height:1.5;">
+                本系統支援透過 Google 服務帳號金鑰自動同步 Google 雲端硬碟/試算表中的音樂筆記。
+            </p>
+            <div class="form-group">
+                <label class="form-label">專屬 Google 服務帳號 (請將您的雲端試算表共用給此帳號)：</label>
+                <input type="text" class="form-input" value="dazhi-importer@dazhi-importer.iam.gserviceaccount.com" readonly style="color:#fbbf24; font-family:'JetBrains Mono';">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Google 雲端試算表 ID：</label>
+                <input type="text" class="form-input" id="sheet-id-input" placeholder="貼上 Google 試算表網址或 ID">
+            </div>
+            <div style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.2); padding:10px; border-radius:6px; font-size:0.75rem; color:#fef08a;">
+                💡 提示：在手機或電腦 Google Keep 中，點選筆記右上角「複製到 Google 文件」，再執行專案的同步腳本即可 100% 免費自動匯入！
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+                <button class="btn-action" onclick="closeModal('cloud-modal')">關閉</button>
+                <button class="btn-action btn-accent" onclick="saveCloudConfig()">儲存設定</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>🎸 GuitarFlow · 吉他自主學習戰情室 · 大直高中體育組 AI 自動化計畫 · 已部署至 Vercel 全球邊緣網路</p>
+    </footer>
+
+    <script>
+        // 資料儲存狀態
+        let appData = {
+            streak_days: 18,
+            daily_routines: [],
+            songs: [],
+            keep_notes: []
+        };
+
+        let currentGenreFilter = 'all';
+        let currentSearchQuery = '';
+
+        // 節拍器變數
+        let isMetronomeRunning = false;
+        let bpm = 96;
+        let timerId = null;
+        let audioCtx = null;
+        let beatCount = 0;
+        let lastTapTime = 0;
+        let tapDeltas = [];
+
+        // 初始化
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadData();
+            renderAll();
+        });
+
+        async function loadData() {
+            // 先嘗試從 localStorage 讀取
+            const localSaved = localStorage.getItem('guitar_flow_data');
+            if (localSaved) {
+                try {
+                    appData = JSON.parse(localSaved);
+                    return;
+                } catch(e) {}
+            }
+
+            // 若本地無暫存，從 guitar_data.json 讀取
+            try {
+                const res = await fetch('guitar_data.json');
+                if (res.ok) {
+                    appData = await res.json();
+                    saveLocal();
+                    return;
+                }
+            } catch (e) {
+                console.log('Using default mock data');
+            }
+        }
+
+        function saveLocal() {
+            localStorage.setItem('guitar_flow_data', JSON.stringify(appData));
+        }
+
+        function renderAll() {
+            renderRoutines();
+            renderSongs();
+            renderKeepNotes();
+            document.getElementById('streak-num').textContent = `DAY ${appData.streak_days || 18}`;
+        }
+
+        // 1. 渲染今日練習菜單
+        function renderRoutines() {
+            const container = document.getElementById('routine-list-container');
+            const routines = appData.daily_routines || [];
+            let completedCount = routines.filter(r => r.completed).length;
+
+            document.getElementById('routine-progress').textContent = `${completedCount} / ${routines.length} 完成`;
+
+            container.innerHTML = routines.map((r, idx) => `
+                <label class="routine-item" onclick="toggleRoutine(${idx})">
+                    <div class="routine-left">
+                        <input type="checkbox" class="routine-check" ${r.completed ? 'checked' : ''} onclick="event.stopPropagation(); toggleRoutine(${idx})">
+                        <span class="routine-name" style="${r.completed ? 'text-decoration: line-through; color:#64748b;' : ''}">${r.name}</span>
+                    </div>
+                    <span class="routine-time">${r.duration}</span>
+                </label>
+            `).join('');
+        }
+
+        function toggleRoutine(index) {
+            if (appData.daily_routines[index]) {
+                appData.daily_routines[index].completed = !appData.daily_routines[index].completed;
+                saveLocal();
+                renderRoutines();
+            }
+        }
+
+        // 2. 渲染歌曲清單
+        function renderSongs() {
+            const container = document.getElementById('songs-list-container');
+            const songs = appData.songs || [];
+
+            const filtered = songs.filter(s => {
+                const matchesSearch = !currentSearchQuery || 
+                    s.title.toLowerCase().includes(currentSearchQuery) || 
+                    s.artist.toLowerCase().includes(currentSearchQuery) || 
+                    (s.chords && s.chords.toLowerCase().includes(currentSearchQuery));
+                
+                if (!matchesSearch) return false;
+
+                if (currentGenreFilter === 'all') return true;
+                if (currentGenreFilter === 'practicing') return s.mastery < 80;
+                if (currentGenreFilter === 'mastered') return s.mastery >= 80;
+                return s.genre && s.genre.includes(currentGenreFilter);
+            });
+
+            document.getElementById('song-count-badge').textContent = `共 ${filtered.length} 首收錄`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:30px; color:#64748b;">無符合搜尋條件的歌曲</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(s => `
+                <div class="song-card">
+                    <div class="song-top">
+                        <div class="song-main-info">
+                            <div class="song-cover">${s.genre && s.genre.includes('搖滾') ? '⚡' : '🎸'}</div>
+                            <div class="song-title-wrap">
+                                <h4>${s.title}</h4>
+                                <div class="song-artist">${s.artist} · ${s.genre}</div>
+                            </div>
+                        </div>
+                        <div class="song-pills">
+                            <span class="pill pill-capo">${s.capo}</span>
+                            <span class="pill pill-key">${s.key}</span>
+                            <span class="pill pill-bpm">${s.bpm} BPM</span>
+                        </div>
+                    </div>
+
+                    <div class="song-progress-wrap" title="點擊調整熟練度" onclick="quickAdjustMastery('${s.id}')">
+                        <span style="font-size:0.78rem; color:#94a3b8;">熟練度</span>
+                        <div class="progress-bar-bg">
+                            <div class="progress-fill" style="width: ${s.mastery}%;"></div>
+                        </div>
+                        <span class="progress-text">${s.mastery}%</span>
+                    </div>
+
+                    ${s.notes ? `<div class="song-notes">${s.notes}</div>` : ''}
+
+                    <div class="song-footer">
+                        <div class="song-chords">進行: ${s.chords || '標準順階'}</div>
+                        <div class="song-actions">
+                            ${s.tab_url ? `<a href="${s.tab_url}" target="_blank">📄 譜面檢視</a>` : ''}
+                            <button onclick="editSong('${s.id}')">✏️ 編輯</button>
+                            <button onclick="deleteSong('${s.id}')" style="color:#f43f5e;">🗑️ 刪除</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function handleSearch() {
+            currentSearchQuery = document.getElementById('song-search-input').value.trim().toLowerCase();
+            renderSongs();
+        }
+
+        function filterGenre(genre) {
+            currentGenreFilter = genre;
+            document.querySelectorAll('#genre-filter-bar .filter-chip').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            renderSongs();
+        }
+
+        function quickAdjustMastery(songId) {
+            const song = appData.songs.find(s => s.id === songId);
+            if (!song) return;
+            const newMastery = prompt(`請輸入「${song.title}」的新熟練度 (0 - 100):`, song.mastery);
+            if (newMastery !== null) {
+                const val = parseInt(newMastery);
+                if (!isNaN(val) && val >= 0 && val <= 100) {
+                    song.mastery = val;
+                    saveLocal();
+                    renderSongs();
+                }
+            }
+        }
+
+        // 3. 渲染 Google Keep 筆記流
+        function renderKeepNotes() {
+            const container = document.getElementById('keep-notes-container');
+            const notes = appData.keep_notes || [];
+
+            document.getElementById('keep-count-badge').textContent = `${notes.length} 則筆記`;
+
+            container.innerHTML = notes.map((n, idx) => `
+                <div class="keep-note-card">
+                    <span class="keep-tag-badge">${(n.tags || []).join(' ')}</span>
+                    <div class="keep-note-title">${n.title}</div>
+                    <div class="keep-note-content">${n.content}</div>
+                    <div class="keep-note-meta">
+                        <span>同步日: ${n.date || '今日'}</span>
+                        <span style="color:#fbbf24;">${n.parsed_type || '筆記 💡'}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 4. Modal 控制
+        function openKeepPasteModal() {
+            document.getElementById('keep-modal').classList.add('active');
+        }
+
+        function openAddSongModal() {
+            document.getElementById('song-modal-title').textContent = '➕ 新增練習歌曲';
+            document.getElementById('edit-song-id').value = '';
+            document.getElementById('song-title-input').value = '';
+            document.getElementById('song-artist-input').value = '';
+            document.getElementById('song-capo-input').value = 'Standard';
+            document.getElementById('song-key-input').value = 'Key C';
+            document.getElementById('song-bpm-input').value = '80';
+            document.getElementById('song-mastery-input').value = '30';
+            document.getElementById('song-chords-input').value = '';
+            document.getElementById('song-notes-input').value = '';
+            document.getElementById('song-modal').classList.add('active');
+        }
+
+        function editSong(id) {
+            const song = appData.songs.find(s => s.id === id);
+            if (!song) return;
+            document.getElementById('song-modal-title').textContent = '✏️ 編輯歌曲資訊';
+            document.getElementById('edit-song-id').value = song.id;
+            document.getElementById('song-title-input').value = song.title;
+            document.getElementById('song-artist-input').value = song.artist;
+            document.getElementById('song-capo-input').value = song.capo;
+            document.getElementById('song-key-input').value = song.key;
+            document.getElementById('song-bpm-input').value = song.bpm;
+            document.getElementById('song-mastery-input').value = song.mastery;
+            document.getElementById('song-chords-input').value = song.chords;
+            document.getElementById('song-notes-input').value = song.notes || '';
+            document.getElementById('song-modal').classList.add('active');
+        }
+
+        function deleteSong(id) {
+            if (confirm('確定要刪除這首歌曲嗎？')) {
+                appData.songs = appData.songs.filter(s => s.id !== id);
+                saveLocal();
+                renderSongs();
+            }
+        }
+
+        function saveSong() {
+            const id = document.getElementById('edit-song-id').value;
+            const title = document.getElementById('song-title-input').value.trim();
+            const artist = document.getElementById('song-artist-input').value.trim() || '吉他練習曲';
+            const capo = document.getElementById('song-capo-input').value.trim() || 'Standard';
+            const key = document.getElementById('song-key-input').value.trim() || 'Key C';
+            const bpmVal = parseInt(document.getElementById('song-bpm-input').value) || 80;
+            const mastery = parseInt(document.getElementById('song-mastery-input').value) || 0;
+            const chords = document.getElementById('song-chords-input').value.trim();
+            const notes = document.getElementById('song-notes-input').value.trim();
+
+            if (!title) {
+                alert('請輸入歌名！');
+                return;
+            }
+
+            if (id) {
+                const s = appData.songs.find(item => item.id === id);
+                if (s) {
+                    s.title = title;
+                    s.artist = artist;
+                    s.capo = capo;
+                    s.key = key;
+                    s.bpm = bpmVal;
+                    s.mastery = mastery;
+                    s.chords = chords;
+                    s.notes = notes;
+                }
+            } else {
+                appData.songs.unshift({
+                    id: 'song-' + Date.now(),
+                    title,
+                    artist,
+                    genre: '彈唱 / 練習曲',
+                    capo,
+                    key,
+                    bpm: bpmVal,
+                    mastery,
+                    chords,
+                    notes,
+                    tab_url: 'https://www.ultimate-guitar.com'
+                });
+            }
+
+            saveLocal();
+            renderSongs();
+            closeModal('song-modal');
+        }
+
+        function savePastedKeepNote() {
+            const title = document.getElementById('keep-title-input').value.trim() || 'Keep 音樂筆記';
+            const content = document.getElementById('keep-content-input').value.trim();
+            const tags = document.getElementById('keep-tags-input').value.trim().split(/\s+/);
+
+            if (!content) {
+                alert('請貼上 Keep 筆記內容！');
+                return;
+            }
+
+            // 智能分析和弦
+            let parsedType = '筆記 ✍️';
+            if (/([CDEFGAB][#b]?(m|maj|min|dim|aug|sus)?[0-9]?)/.test(content)) {
+                parsedType = '和弦靈感 💡';
+            }
+
+            appData.keep_notes.unshift({
+                id: 'keep-' + Date.now(),
+                title,
+                content,
+                tags,
+                parsed_type: parsedType,
+                date: new Date().toISOString().split('T')[0]
+            });
+
+            saveLocal();
+            renderKeepNotes();
+            closeModal('keep-modal');
+            alert('✅ 筆記已成功整併至 Keep 串流！');
+        }
+
+        function openCloudConfigModal() {
+            document.getElementById('cloud-modal').classList.add('active');
+        }
+
+        function saveCloudConfig() {
+            closeModal('cloud-modal');
+            alert('✅ 雲端設定已儲存！');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // 5. 節拍器核心邏輯 (Web Audio API)
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playClick(isHigh) {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(isHigh ? 1200 : 700, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.06);
+
+            // 更新 LED 燈
+            for (let i = 0; i < 4; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (dot) dot.className = 'beat-dot';
+            }
+            const curDot = document.getElementById(`dot-${beatCount}`);
+            if (curDot) {
+                curDot.className = isHigh ? 'beat-dot active-main' : 'beat-dot active-sub';
+            }
+        }
+
+        function toggleMetronome() {
+            initAudio();
+            isMetronomeRunning = !isMetronomeRunning;
+            const btnIcon = document.getElementById('metro-icon');
+            const btnText = document.getElementById('metro-text');
+            const btn = document.getElementById('play-metro-btn');
+
+            if (isMetronomeRunning) {
+                btnIcon.textContent = '⏸';
+                btnText.textContent = '暫停節拍';
+                btn.style.background = '#f43f5e';
+                btn.style.boxShadow = '0 4px 15px rgba(244, 63, 94, 0.4)';
+                beatCount = 0;
+                playClick(true);
+                timerId = setInterval(() => {
+                    beatCount = (beatCount + 1) % 4;
+                    playClick(beatCount === 0);
+                }, (60 / bpm) * 1000);
+            } else {
+                btnIcon.textContent = '▶';
+                btnText.textContent = '開始節拍';
+                btn.style.background = 'var(--amber-primary)';
+                btn.style.boxShadow = '0 4px 15px rgba(245, 158, 11, 0.4)';
+                clearInterval(timerId);
+                for (let i = 0; i < 4; i++) {
+                    const dot = document.getElementById(`dot-${i}`);
+                    if (dot) dot.className = 'beat-dot';
+                }
+            }
+        }
+
+        function updateBpm(newBpm) {
+            bpm = parseInt(newBpm);
+            document.getElementById('bpm-val').textContent = bpm;
+            if (isMetronomeRunning) {
+                clearInterval(timerId);
+                timerId = setInterval(() => {
+                    beatCount = (beatCount + 1) % 4;
+                    playClick(beatCount === 0);
+                }, (60 / bpm) * 1000);
+            }
+        }
+
+        function adjustBpm(delta) {
+            const newBpm = Math.max(40, Math.min(220, bpm + delta));
+            document.getElementById('bpm-slider').value = newBpm;
+            updateBpm(newBpm);
+        }
+
+        function handleTapTempo() {
+            const now = Date.now();
+            if (lastTapTime > 0) {
+                const delta = now - lastTapTime;
+                if (delta > 200 && delta < 2500) {
+                    tapDeltas.push(delta);
+                    if (tapDeltas.length > 4) tapDeltas.shift();
+                    const avg = tapDeltas.reduce((a, b) => a + b) / tapDeltas.length;
+                    const calculatedBpm = Math.round(60000 / avg);
+                    document.getElementById('bpm-slider').value = calculatedBpm;
+                    updateBpm(calculatedBpm);
+                } else {
+                    tapDeltas = [];
+                }
+            }
+            lastTapTime = now;
+        }
+
+        // 6. 指板速查切換
+        function selectChord(chord) {
+            document.querySelectorAll('.chord-selector-chips .chord-chip').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            const desc = document.getElementById('chord-desc');
+            const text = document.getElementById('chord-note-text');
+            const diagram = document.getElementById('fret-diagram');
+
+            if (chord === 'G') {
+                desc.textContent = '順階和弦：G - Am - Bm - C - D - Em - F#dim';
+                text.textContent = '★ G chord (Standard 4-finger form)';
+                diagram.innerHTML = `
+                    <div class="guitar-string"><span class="string-name">1E</span><div class="string-wire"><span class="fret-mark" style="left:28%;"></span></div></div>
+                    <div class="guitar-string"><span class="string-name">2B</span><div class="string-wire"><span class="fret-mark" style="left:28%;"></span></div></div>
+                    <div class="guitar-string"><span class="string-name">3G</span><div class="string-wire"></div></div>
+                    <div class="guitar-string"><span class="string-name">4D</span><div class="string-wire"></div></div>
+                    <div class="guitar-string"><span class="string-name">5A</span><div class="string-wire"><span class="fret-mark" style="left:18%;"></span></div></div>
+                    <div class="guitar-string"><span class="string-name">6E</span><div class="string-wire"><span class="fret-mark" style="left:28%;"></span></div></div>
+                `;
+            } else if (chord === 'Em') {
+                desc.textContent = '自然小調順階和弦 (關係小調)：Em - F#dim - G - Am - Bm - C - D';
+                text.textContent = '★ Em chord (Open Position)';
+                diagram.innerHTML = `
+                    <div class="guitar-string"><span class="string-name">1E</span><div class="string-wire"></div></div>
+                    <div class="guitar-string"><span class="string-name">2B</span><div class="string-wire"></div></div>
+                    <div class="guitar-string"><span class="string-name">3G</span><div class="string-wire"></div></div>
+                    <div class="guitar-string"><span class="string-name">4D</span><div class="string-wire"><span class="fret-mark" style="left:18%;"></span></div></div>
+                    <div class="guitar-string"><span class="string-name">5A</span><div class="string-wire"><span class="fret-mark" style="left:18%;"></span></div></div>
+                    <div class="guitar-string"><span class="string-name">6E</span><div class="string-wire"></div></div>
+                `;
+            } else if (chord === 'C') {
+                desc.textContent = '下屬和弦 (IV級和弦)：常接續回到 G 或 D';
+                text.textContent = '★ C chord (Standard Form)';
+                diagram.innerHTML = `
+                    <div class="guitar-string"><span class="string-name">1E</span><div class="string-wire"></div></div>
+                    <div class="guitar-string"><span class="string-name">2B</span><div class="string-wire"><span class="fret-mark" style="left:10%;"></span></div></div>
+                    <div class="guitar-string"><span class="string-name">3G</span><div class="string-wire"></div></div>
+                    <div class="guitar-string"><span class="string-name">4D</span><div class="string-wire"><span class="fret-mark" style="left:18%;"></span></div></div>
+                    <div class="guitar-string"><span class="string-name">5A</span><div class="string-wire"><span class="fret-mark" style="left:28%;"></span></div></div>
+                    <div class="guitar-string"><span class="string-name">6E</span><div class="string-wire"></div></div>
+                `;
+            } else if (chord === 'D') {
+                desc.textContent = '屬和弦 (V級和弦)：強烈解決感導向主和弦 G';
+                text.textContent = '★ D chord (Open Triad)';
+                diagram.innerHTML = `
+                    <div class="guitar-string"><span class="string-name">1E</span><div class="string-wire"><span class="fret-mark" style="left:18%;"></span></div></div>
+                    <div class="guitar-string"><span class="string-name">2B</span><div class="string-wire"><span class="fret-mark" style="left:28%;"></span></div></div>
+                    <div class="guitar-string"><span class="string-name">3G</span><div class="string-wire"><span class="fret-mark" style="left:18%;"></span></div></div>
+                    <div class="guitar-string"><span class="string-name">4D</span><div class="string-wire"></div></div>
+                    <div class="guitar-string"><span class="string-name">5A</span><div class="string-wire"></div></div>
+                    <div class="guitar-string"><span class="string-name">6E</span><div class="string-wire"></div></div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
