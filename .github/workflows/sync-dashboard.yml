@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'dashboard-sync.json'
+      - 'scripts/sync_supabase.py'
+      - '.github/workflows/sync-dashboard.yml'
   workflow_dispatch:
 
 permissions:
