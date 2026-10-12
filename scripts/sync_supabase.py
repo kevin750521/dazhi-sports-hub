@@ -49,14 +49,23 @@ def same(record, match):
     return True
 
 
+def sanitize_for_table(table, payload):
+    cleaned = dict(payload or {})
+    # The current schedules table does not have a doc_url column.
+    # Keep source_file/status and omit doc_url so REST writes succeed.
+    if table == "schedules":
+        cleaned.pop("doc_url", None)
+    return cleaned
+
+
 def sync_table(table, operations):
     existing = fetch_all(table)
     print(f"{table}: existing {len(existing)} rows")
 
     for op in operations:
         match = op.get("match", {})
-        values = op.get("values", {})
-        create = op.get("create", values)
+        values = sanitize_for_table(table, op.get("values", {}))
+        create = sanitize_for_table(table, op.get("create", values))
         found = next((row for row in existing if same(row, match)), None)
 
         if found is not None:
@@ -64,13 +73,14 @@ def sync_table(table, operations):
             if row_id is None:
                 raise RuntimeError(f"Matched {table} row has no id: {found}")
             encoded = urllib.parse.quote(str(row_id), safe="")
-            request(
-                "PATCH",
-                f"{table}?id=eq.{encoded}",
-                values,
-                {"Prefer": "return=minimal"},
-            )
-            found.update(values)
+            if values:
+                request(
+                    "PATCH",
+                    f"{table}?id=eq.{encoded}",
+                    values,
+                    {"Prefer": "return=minimal"},
+                )
+                found.update(values)
             print(f"UPDATED {table} id={row_id}: {match}")
         else:
             inserted = request(
