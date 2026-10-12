@@ -51,8 +51,6 @@ def same(record, match):
 
 def sanitize_for_table(table, payload):
     cleaned = dict(payload or {})
-    # The current schedules table does not have a doc_url column.
-    # Keep source_file/status and omit doc_url so REST writes succeed.
     if table == "schedules":
         cleaned.pop("doc_url", None)
     return cleaned
@@ -65,7 +63,9 @@ def sync_table(table, operations):
     for op in operations:
         match = op.get("match", {})
         values = sanitize_for_table(table, op.get("values", {}))
-        create = sanitize_for_table(table, op.get("create", values))
+        default_create = dict(match)
+        default_create.update(values)
+        create = sanitize_for_table(table, op.get("create", default_create))
         found = next((row for row in existing if same(row, match)), None)
 
         if found is not None:
