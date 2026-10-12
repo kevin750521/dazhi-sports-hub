@@ -3206,8 +3206,7 @@
               `;
               opponentsDrawHtml = `
                 <div class="detail-item">
-                  <span class="detail-lbl">🎯 對戰隊伍 / 分組籤位 (查核來源)</span>
-                  <span class="detail-val" style="color:#6d28d9; font-weight:800;">${s.opponents_draw}</span>
+                  <span class="detail-val" style="color:#6d28d9; font-weight:800;">🎯 ${s.opponents_draw}</span>
                   <div style="margin-top:5px; display:flex; gap:5px; flex-wrap:wrap;">
                     <a href="https://kfcjc.neoqqf.com.tw/" target="_blank" style="font-size:0.72rem; background:#faf5ff; color:#6b21a8; border:1px solid #ddd6fe; padding:2px 7px; border-radius:4px; text-decoration:none; font-weight:700;">🎯 線上籤表查詢 ↗</a>
                     <a href="https://www.dcsh.tp.edu.tw/" target="_blank" style="font-size:0.72rem; background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; padding:2px 7px; border-radius:4px; text-decoration:none; font-weight:700;">🔍 大直校網 ↗</a>
@@ -3239,8 +3238,7 @@
               `;
               opponentsDrawHtml = `
                 <div class="detail-item">
-                  <span class="detail-lbl">🎯 對戰隊伍 / 分組籤位 (查核來源)</span>
-                  <span class="detail-val" style="color:#047857; font-weight:800;">${s.opponents_draw}</span>
+                  <span class="detail-val" style="color:#047857; font-weight:800;">🎯 ${s.opponents_draw}</span>
                   <div style="margin-top:5px; display:flex; gap:5px; flex-wrap:wrap;">
                     <a href="https://www.ccjh.tp.edu.tw/" target="_blank" style="font-size:0.72rem; background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; padding:2px 7px; border-radius:4px; text-decoration:none; font-weight:700;">🎯 誠正國中抽籤處 ↗</a>
                     <button type="button" onclick="openDrawVerificationModal('fencing')" style="font-size:0.72rem; background:#fffbeb; color:#b45309; border:1px solid #fde68a; padding:2px 7px; border-radius:4px; font-weight:800; cursor:pointer;">💡 為什麼搜不到抽籤？</button>
@@ -3250,8 +3248,7 @@
             } else {
               opponentsDrawHtml = `
                 <div class="detail-item">
-                  <span class="detail-lbl">🎯 對戰隊伍 / 分組籤位</span>
-                  <span class="detail-val" style="color:#1e40af;">${s.opponents_draw}</span>
+                  <span class="detail-val" style="color:#1e40af;">🎯 ${s.opponents_draw}</span>
                 </div>
               `;
             }
@@ -3272,7 +3269,6 @@
 
                   <div class="card-core-title-box">
                     <h3 class="card-core-name">${coreTitle}</h3>
-                    <span class="card-full-name-sub" title="${s.tournament_name}">📋 ${s.tournament_name}</span>
                   </div>
 
                   ${athleteSchedBadge}
@@ -3289,17 +3285,14 @@
                   <div class="card-details-box">
                     ${opponentsDrawHtml}
                     <div class="detail-item">
-                      <span class="detail-lbl">📍 比賽場館</span>
-                      <span class="detail-val">${s.venue}</span>
+                      <span class="detail-val">📍 ${s.venue}</span>
                     </div>
                     <div class="detail-item">
-                      <span class="detail-lbl">🏆 晉級賽制</span>
-                      <span class="detail-val">${s.advancement_rule || '-'}</span>
+                      <span class="detail-val">🏆 ${s.advancement_rule || '-'}</span>
                     </div>
                   </div>
                 </div>
-                <div class="card-action-footer">
-                  <span style="font-size:0.75rem; color:#64748b;">來源：${s.source_file || '官方公文'}</span>
+                <div class="card-action-footer" style="justify-content:flex-end;">
                   <div style="display:flex; gap:6px;">
                     ${s.sport && s.sport.includes('擊劍') ? `
                       <a href="https://www.ccjh.tp.edu.tw/" target="_blank" class="doc-link-btn" style="color:#16a34a;">🎯 承辦校籤表 ↗</a>
