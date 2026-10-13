@@ -3243,7 +3243,23 @@
 
           let html = '<div class="cards-grid-layout">';
 
-          groupedCompetitions.forEach(group => {
+          // Confirmed date/time competitions first; interval/pending schedules are pushed to the bottom.
+          const orderedCompetitionGroups = Array.from(groupedCompetitions.values()).sort((a, b) => {
+            const aPrecise = a.rows.some(hasPreciseDateTime);
+            const bPrecise = b.rows.some(hasPreciseDateTime);
+            if (aPrecise !== bPrecise) return aPrecise ? -1 : 1;
+
+            const firstDate = group => {
+              const row = group.rows.slice().sort((x, y) =>
+                String(x.match_date || '').localeCompare(String(y.match_date || ''), 'zh-Hant', { numeric:true }) ||
+                String(x.match_time || '').localeCompare(String(y.match_time || ''), 'zh-Hant', { numeric:true })
+              )[0];
+              return `${row?.match_date || ''} ${row?.match_time || ''}`;
+            };
+            return firstDate(a).localeCompare(firstDate(b), 'zh-Hant', { numeric:true });
+          });
+
+          orderedCompetitionGroups.forEach(group => {
             const rows = sortRows(group.rows);
             const preciseRows = rows.filter(hasPreciseDateTime);
 

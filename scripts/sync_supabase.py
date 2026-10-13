@@ -195,10 +195,60 @@ def cleanup_superseded_schedule_ranges():
     print(f"cleanup: deleted {deleted} superseded range schedule rows")
 
 
+def cleanup_known_basketball_division_error():
+    """Force the 115/10/28 09:00 Dazhi vs Jingmei game to 國女乙B組 and delete duplicates."""
+    rows = fetch_all("schedules")
+    targets = []
+    for row in rows:
+        tournament = str(row.get("tournament_name", ""))
+        date = date_base(row.get("match_date", ""))
+        time = str(row.get("match_time", "")).strip()
+        opponents = str(row.get("opponents_draw", ""))
+        if (
+            "籃球" in tournament
+            and date == "115/10/28"
+            and time == "09:00"
+            and "大直高中" in opponents
+            and "景美國中" in opponents
+        ):
+            targets.append(row)
+
+    if not targets:
+        print("basketball correction: no matching row found")
+        return
+
+    # Keep one canonical row; patch it to the correct division.
+    targets.sort(key=lambda r: int(r.get("id", 0)) if str(r.get("id", "")).isdigit() else 0)
+    keep = targets[0]
+    keep_id = urllib.parse.quote(str(keep.get("id")), safe="")
+    request(
+        "PATCH",
+        f"schedules?id=eq.{keep_id}",
+        {"division": "國女乙B組"},
+        {"Prefer": "return=minimal"},
+    )
+    print(f"basketball correction: patched id={keep.get('id')} to 國女乙B組")
+
+    # Remove any duplicate rows for the same game, regardless of their old division label.
+    for row in targets[1:]:
+        row_id = row.get("id")
+        if row_id is None:
+            continue
+        encoded = urllib.parse.quote(str(row_id), safe="")
+        request(
+            "DELETE",
+            f"schedules?id=eq.{encoded}",
+            None,
+            {"Prefer": "return=minimal"},
+        )
+        print(f"basketball correction: deleted duplicate id={row_id} division={row.get('division')}")
+
+
 with open(DATA_FILE, "r", encoding="utf-8") as f:
     data = json.load(f)
 
 sync_table("tournaments", data.get("tournaments", []))
 sync_table("schedules", data.get("schedules", []))
+cleanup_known_basketball_division_error()
 cleanup_superseded_schedule_ranges()
 print("Dashboard sync completed.")
