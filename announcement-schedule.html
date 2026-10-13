@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大直高中運動賽事公告</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft JhengHei",sans-serif;background:#fff;color:#0f172a}
+    .wrap{max-width:1600px;margin:0 auto;padding:16px}
+    .head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px}
+    h1{font-size:1.35rem;margin:0 0 4px;font-weight:900}.sub{font-size:.82rem;color:#64748b}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap}.toolbar input,.toolbar select{border:1px solid #cbd5e1;border-radius:7px;padding:8px 10px;font-size:.82rem;background:#fff}
+    .tablebox{border:1px solid #dbe3ee;border-radius:12px;overflow:auto;box-shadow:0 2px 8px rgba(15,23,42,.05)}
+    table{width:100%;border-collapse:collapse;min-width:1180px} th,td{padding:11px 12px;border-bottom:1px solid #e2e8f0;text-align:left;vertical-align:middle;font-size:.82rem}
+    th{background:#f8fafc;font-weight:900;white-space:nowrap;cursor:pointer;position:sticky;top:0;z-index:2}.filterrow th{top:41px;padding:8px;background:#f8fafc}
+    .filterrow input{width:100%;min-width:74px;border:1px solid #cbd5e1;border-radius:6px;padding:6px 8px;font-size:.76rem}
+    tr:hover td{background:#fbfdff}.sport{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-weight:800;white-space:nowrap;border:1px solid #dbeafe;background:#eff6ff;color:#1d4ed8}
+    .status{display:inline-block;padding:3px 8px;border-radius:999px;background:#ecfdf5;border:1px solid #a7f3d0;color:#047857;font-size:.74rem;font-weight:800;white-space:nowrap}
+    .match{font-weight:800}.muted{color:#64748b}.empty{padding:40px;text-align:center;color:#94a3b8;font-weight:700}.foot{font-size:.72rem;color:#94a3b8;margin-top:8px;text-align:right}
+    @media(max-width:700px){.wrap{padding:8px}h1{font-size:1.08rem}.toolbar{width:100%}.toolbar input,.toolbar select{flex:1;min-width:135px}.tablebox{border-radius:8px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div><h1>臺北市立大直高級中學｜運動賽事公告</h1><div class="sub">賽程資料自動同步；可依欄位篩選，點欄名可排序。</div></div>
+    <div class="toolbar"><input id="q" placeholder="搜尋賽事、組別、場地…"><select id="sport"><option value="">全部運動種類</option></select></div>
+  </div>
+  <div class="tablebox"><table id="tbl"><thead><tr>
+    <th data-k="sport">運動種類</th><th data-k="tournament_name">賽事名稱</th><th data-k="division">大直出賽組別</th><th data-k="match_date">比賽日期 ▲</th><th data-k="venue">比賽場館 / 地點</th><th data-k="opponents_draw">對戰隊伍 / 分組籤位</th><th data-k="advancement_rule">晉級賽制</th><th data-k="status">籤表狀態</th><th data-k="source_file">來源檔案</th>
+  </tr><tr class="filterrow">${'<th><input placeholder="篩選"></th>'.repeat(9)}</tr></thead><tbody></tbody></table></div>
+  <div class="foot">資料來源：大直高中運動賽事管理系統</div>
+</div>
+<script>
+const SUPABASE_URL='https://hdxrublbpaptthmflnrn.supabase.co';
+const SUPABASE_KEY='sb_publishable_n3ONLlgwYQ0TAOcxkKoNhg_ZwL6M9wP';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let rows=[], sortKey='match_date', sortDir=1;
+const keys=['sport','tournament_name','division','match_date','venue','opponents_draw','advancement_rule','status','source_file'];
+const tbody=document.querySelector('tbody');
+const filters=[...document.querySelectorAll('.filterrow input')];
+function norm(v){return String(v??'').trim()} function dateKey(v){const s=norm(v).split(' ')[0];const m=s.match(/^(\d{2,4})\/(\d{1,2})\/(\d{1,2})$/);if(m){let y=+m[1];if(y<1911)y+=1911;return y*10000+(+m[2])*100+(+m[3]);}return 99999999}
+function esc(s){return norm(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))}
+function sportLabel(s){const x=norm(s).replace(/^[^\w\u4e00-\u9fff]+/,'').trim();const emo=x.includes('籃球')?'🏀':x.includes('排球')?'🏐':x.includes('擊劍')?'🤺':x.includes('空手道')?'🥋':x.includes('網球')?'🎾':x.includes('棒球')?'⚾':x.includes('足球')?'⚽':'🏅';return `${emo} ${x||'其他'}`}
+function filtered(){const q=norm(document.getElementById('q').value).toLowerCase(),sp=document.getElementById('sport').value;return rows.filter(r=>{if(sp&&norm(r.sport)!==sp)return false;if(q&&!keys.some(k=>norm(r[k]).toLowerCase().includes(q)))return false;return filters.every((f,i)=>!norm(f.value)||norm(r[keys[i]]).toLowerCase().includes(norm(f.value).toLowerCase()))}).sort((a,b)=>{let av=a[sortKey],bv=b[sortKey];if(sortKey==='match_date'){av=dateKey(av);bv=dateKey(bv);return (av-bv)*sortDir}return norm(av).localeCompare(norm(bv),'zh-Hant',{numeric:true})*sortDir})}
+function render(){const data=filtered();tbody.innerHTML=data.length?data.map(r=>`<tr><td><span class="sport">${esc(sportLabel(r.sport))}</span></td><td><strong>${esc(r.tournament_name)}</strong></td><td>${esc(r.division)}</td><td><strong>${esc(r.match_date)}</strong></td><td>${esc(r.venue)}</td><td class="match">${esc(r.opponents_draw)}</td><td>${esc(r.advancement_rule||'-')}</td><td><span class="status">${esc(r.status||'-')}</span></td><td class="muted">${esc(r.source_file||'-')}</td></tr>`).join(''):`<tr><td colspan="9" class="empty">目前沒有符合條件的資料</td></tr>`}
+async function load(){const {data,error}=await sb.from('schedules').select('*');if(error){tbody.innerHTML=`<tr><td colspan="9" class="empty">資料載入失敗：${esc(error.message)}</td></tr>`;return}rows=data||[];const sports=[...new Set(rows.map(r=>norm(r.sport)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));document.getElementById('sport').innerHTML='<option value="">全部運動種類</option>'+sports.map(s=>`<option>${esc(s)}</option>`).join('');render()}
+document.getElementById('q').addEventListener('input',render);document.getElementById('sport').addEventListener('change',render);filters.forEach(f=>f.addEventListener('input',render));document.querySelectorAll('th[data-k]').forEach(th=>th.addEventListener('click',()=>{const k=th.dataset.k;if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1}document.querySelectorAll('th[data-k]').forEach(x=>x.textContent=x.textContent.replace(/\s[▲▼]$/,''));th.textContent+=sortDir===1?' ▲':' ▼';render()}));load();
+</script>
+</body>
+</html>
