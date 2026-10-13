@@ -26,4 +26,4 @@ jobs:
           SYNC_DATA_FILE: dashboard-sync.json
         run: python scripts/sync_supabase.py
 
-# 2026-10-13: trigger sync after Education Cup volleyball schedule import
+# 2026-10-13: force direct sync after definitive 國女乙B組 correction and card priority update
