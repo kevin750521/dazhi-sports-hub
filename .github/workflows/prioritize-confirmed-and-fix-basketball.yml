@@ -1,0 +1,34 @@
+name: Prioritize confirmed schedules and fix basketball division
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/prioritize_confirmed_and_fix_basketball.py'
+      - '.github/workflows/prioritize-confirmed-and-fix-basketball.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Apply card priority and basketball correction
+        run: python scripts/prioritize_confirmed_and_fix_basketball.py
+
+      - name: Commit generated changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard-sync.json scripts/sync_supabase.py index.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Prioritize confirmed schedules and fix 國女乙B組"
+            git push
+          fi
