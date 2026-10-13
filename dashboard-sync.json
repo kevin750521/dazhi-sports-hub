@@ -1,5 +1,5 @@
 {
-  "audit_date": "2026-10-12",
+  "audit_date": "2026-10-13",
   "source_folder": "https://drive.google.com/drive/folders/16iBWHC9ilYKB442HuBessa37hWwNe-zm",
   "tournaments": [
     {
@@ -82,6 +82,27 @@
         "doc_url": "https://drive.google.com/file/d/1H5-DJV0Bdj9IgkHJKquqLujIbmeHuEAX/view",
         "status": "報名已截止；10/19國高中組比賽，尚未在資料夾看到大直高中編組表",
         "registration_status": "未報名"
+      }
+    },
+    {
+      "match": {
+        "name": "臺北市115學年度教育盃中等學校排球錦標賽"
+      },
+      "values": {
+        "competition_dates": "115/10/22～10/27",
+        "venue": "臺北市立明湖國民中學學生活動中心4樓、臺北市立內湖高級中學學生活動中心4樓",
+        "reg_deadline": "115/09/29",
+        "status": "✅ 官方更新：10/07已公告抽籤分組表；正式比賽10/22～10/27。因目前尚未取得可核實的大直高中逐場日期與時間，LINE晨報暫不列入排球賽程。",
+        "reg_method": "依競賽規程辦理；抽籤已於115/10/07 10:00在明湖國中完成；領隊會議115/10/22 10:00於明湖國中學生活動中心4樓。"
+      },
+      "create": {
+        "name": "臺北市115學年度教育盃中等學校排球錦標賽",
+        "sport": "排球",
+        "competition_dates": "115/10/22～10/27",
+        "venue": "臺北市立明湖國民中學學生活動中心4樓、臺北市立內湖高級中學學生活動中心4樓",
+        "reg_deadline": "115/09/29",
+        "status": "✅ 官方更新：10/07已公告抽籤分組表；正式比賽10/22～10/27。因目前尚未取得可核實的大直高中逐場日期與時間，LINE晨報暫不列入排球賽程。",
+        "reg_method": "依競賽規程辦理；抽籤已於115/10/07 10:00在明湖國中完成；領隊會議115/10/22 10:00於明湖國中學生活動中心4樓。"
       }
     }
   ],
