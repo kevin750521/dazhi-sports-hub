@@ -217,8 +217,7 @@ function groupBubble(g, dashboardUrl) {
           t(g.tournament_name,'lg','#0F172A','bold')
         ]},
         {type:'box', layout:'horizontal', margin:'sm', contents:[
-          {type:'text', text:g.division, size:'sm', weight:'bold', color:'#1D4ED8',
-           backgroundColor:'#DBEAFE', paddingAll:'6px', flex:0}
+          {type:'text', text:g.division, size:'sm', weight:'bold', color:'#1D4ED8', flex:0}
         ]},
         ...g.matches.map((m,i)=>matchBlock(m, i===g.matches.length-1))
       ]
