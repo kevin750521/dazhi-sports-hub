@@ -3174,104 +3174,115 @@
         });
 
         if (currentView === 'grid') {
-          // 卡片網格：同一運動賽事彙整在同一個資訊框中。
-          // 例如教育盃籃球的高男、高女、國男、國女與教職員組，全部整併為一張賽事卡。
-          // 表格式頁面維持逐場條列，不受此邏輯影響。
+          // 混合卡片模式：
+          // 1. 已有多場明確日期+時間的賽事，彙整為同一張寬卡。
+          // 2. 尚未抽籤 / 僅有區間日期 / 資訊量少的賽事，維持舊式小卡並排。
+          // 3. 表格式頁面完全不受影響。
           if (list.length === 0) {
             container.innerHTML = '<div style="text-align:center; padding:60px; color:#94a3b8; font-weight:700;">無符合條件之賽程紀錄</div>';
             return;
           }
 
-          const groupedCompetitions = new Map();
+          const hasPreciseDateTime = s => {
+            const d = String(s.match_date || '');
+            const t = String(s.match_time || '');
+            if (/[～~至]/.test(d)) return false;
+            if (/待公告|待抽籤|待排定|待確認|未定/.test(t)) return false;
+            return /\b([01]?\d|2[0-3]):[0-5]\d\b/.test(d) || /\b([01]?\d|2[0-3]):[0-5]\d\b/.test(t);
+          };
 
+          const groupedCompetitions = new Map();
           list.forEach(s => {
             const visual = getSportVisual(s.sport);
             const coreTitle = extractCoreTournamentName(s.tournament_name, s.sport);
-            // sport + 核心賽事名稱作為彙整鍵，可容忍正式名稱前綴略有不同。
             const groupKey = `${visual.cleanName}|||${coreTitle}`;
-
             if (!groupedCompetitions.has(groupKey)) {
-              groupedCompetitions.set(groupKey, {
-                visual,
-                coreTitle,
-                officialNames: new Set(),
-                rows: []
-              });
+              groupedCompetitions.set(groupKey, { visual, coreTitle, rows: [] });
             }
-
-            const group = groupedCompetitions.get(groupKey);
-            group.officialNames.add(s.tournament_name || coreTitle);
-            group.rows.push(s);
+            groupedCompetitions.get(groupKey).rows.push(s);
           });
 
-          const sortScheduleRows = rows => rows.slice().sort((a, b) =>
-            String(a.match_date || '').localeCompare(String(b.match_date || ''), 'zh-Hant', { numeric: true }) ||
-            String(a.match_time || '').localeCompare(String(b.match_time || ''), 'zh-Hant', { numeric: true })
+          const sortRows = rows => rows.slice().sort((a, b) =>
+            String(a.match_date || '').localeCompare(String(b.match_date || ''), 'zh-Hant', { numeric:true }) ||
+            String(a.match_time || '').localeCompare(String(b.match_time || ''), 'zh-Hant', { numeric:true })
           );
+
+          const compactCard = s => {
+            const visual = getSportVisual(s.sport);
+            const coreTitle = extractCoreTournamentName(s.tournament_name, s.sport);
+            return `
+              <div class="sport-card" style="border-top-color:${visual.color};">
+                <div>
+                  <div class="card-top-bar">
+                    <div class="sport-visual-pill" style="background:${visual.bg}; border:1px solid ${visual.border}; color:${visual.accent};">
+                      <div class="sport-visual-icon-box">${visual.icon}</div>
+                      <div class="sport-visual-pill-name">
+                        <span class="sport-zh">${visual.cleanName}</span>
+                        <span class="sport-en">${visual.en}</span>
+                      </div>
+                    </div>
+                    <span class="status-tag tag-active">${s.status || '資料待補'}</span>
+                  </div>
+                  <div class="card-core-title-box">
+                    <h3 class="card-core-name">${coreTitle}</h3>
+                  </div>
+                  <div class="card-venue-row" style="align-items:flex-start;">
+                    <span style="margin-top:2px;">👥</span>
+                    <div style="flex:1;"><strong>${s.division || '組別待確認'}</strong></div>
+                  </div>
+                  <div class="card-date-chip"><span>📅</span> ${s.match_date || '日期待確認'}</div>
+                  <div class="card-details-box">
+                    <div class="detail-item"><span class="detail-val">🎯 ${s.opponents_draw || '尚未抽籤 / 對戰待確認'}</span></div>
+                    <div class="detail-item"><span class="detail-val">📍 ${s.venue || '場地待確認'}</span></div>
+                    <div class="detail-item"><span class="detail-val">🏆 ${s.advancement_rule || '-'}</span></div>
+                  </div>
+                </div>
+              </div>
+            `;
+          };
 
           let html = '<div class="cards-grid-layout">';
 
           groupedCompetitions.forEach(group => {
-            const rows = sortScheduleRows(group.rows);
-            const divisions = new Map();
+            const rows = sortRows(group.rows);
+            const preciseRows = rows.filter(hasPreciseDateTime);
 
-            rows.forEach(s => {
+            // 資訊量不足時維持舊的小卡並排，不硬撐成一張超寬空卡。
+            if (preciseRows.length < 2) {
+              rows.forEach(s => { html += compactCard(s); });
+              return;
+            }
+
+            const divisions = new Map();
+            preciseRows.forEach(s => {
               const division = (s.division || '未標示組別').trim();
               if (!divisions.has(division)) divisions.set(division, []);
               divisions.get(division).push(s);
             });
 
-            const first = rows[0];
-            const officialName = first?.tournament_name || group.coreTitle;
             const visual = group.visual;
-            const groupCount = divisions.size;
-            const matchCount = rows.length;
-
+            const first = preciseRows[0];
             let divisionBlocks = '';
             divisions.forEach((divisionRows, division) => {
-              const divisionVisual = divisionRows.map((s, idx) => {
-                const opponent = s.opponents_draw || '對戰 / 籤位待確認';
-                const venue = s.venue || '場地待確認';
-                const rule = s.advancement_rule || '';
-                const status = s.status || '';
-                return `
-                  <div style="padding:10px 0; ${idx ? 'border-top:1px solid #e2e8f0;' : ''}">
-                    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:5px;">
-                      <div style="font-size:0.92rem; font-weight:900; color:#0f172a;">📅 ${s.match_date || '日期待確認'}</div>
-                      ${status ? `<span style="font-size:0.7rem; font-weight:800; color:#047857; background:#ecfdf5; border:1px solid #a7f3d0; border-radius:999px; padding:2px 7px;">${status}</span>` : ''}
-                    </div>
-                    <div style="font-size:0.88rem; font-weight:800; color:#1e3a8a; line-height:1.45; margin-bottom:4px;">🎯 ${opponent}</div>
-                    <div style="font-size:0.78rem; color:#475569; line-height:1.45;">📍 ${venue}</div>
-                    ${rule ? `<div style="font-size:0.76rem; color:#64748b; line-height:1.45; margin-top:3px;">🏆 ${rule}</div>` : ''}
-                  </div>
-                `;
-              }).join('');
-
               divisionBlocks += `
-                <section style="border:1px solid #dbe3ee; border-radius:12px; background:#ffffff; padding:12px 14px; min-width:0;">
-                  <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:2px;">
+                <section style="border:1px solid #dbe3ee; border-radius:12px; background:#fff; padding:12px 14px; min-width:0;">
+                  <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:4px;">
                     <div style="font-size:0.92rem; font-weight:900; color:${visual.accent};">👥 ${division}</div>
-                    <span style="font-size:0.68rem; color:#64748b; background:#f8fafc; border:1px solid #e2e8f0; border-radius:999px; padding:2px 7px; white-space:nowrap;">${divisionRows.length} 場</span>
+                    <span style="font-size:0.68rem; color:#64748b; background:#f8fafc; border:1px solid #e2e8f0; border-radius:999px; padding:2px 7px;">${divisionRows.length} 場</span>
                   </div>
-                  ${divisionVisual}
+                  ${divisionRows.map((s, idx) => `
+                    <div style="padding:9px 0; ${idx ? 'border-top:1px solid #e2e8f0;' : ''}">
+                      <div style="display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-bottom:4px;">
+                        <strong style="color:#0f172a;">📅 ${s.match_date || ''}</strong>
+                        ${s.status ? `<span style="font-size:0.68rem; font-weight:800; color:#047857; background:#ecfdf5; border:1px solid #a7f3d0; border-radius:999px; padding:2px 7px;">${s.status}</span>` : ''}
+                      </div>
+                      <div style="font-size:0.86rem; font-weight:800; color:#1e3a8a;">🎯 ${s.opponents_draw || '對戰待確認'}</div>
+                      <div style="font-size:0.76rem; color:#475569; margin-top:3px;">📍 ${s.venue || '場地待確認'}</div>
+                    </div>
+                  `).join('')}
                 </section>
               `;
             });
-
-            let footerActions = '';
-            if (first?.sport && first.sport.includes('擊劍')) {
-              footerActions = `
-                <a href="https://www.ccjh.tp.edu.tw/" target="_blank" class="doc-link-btn" style="color:#16a34a;">🎯 承辦校籤表 ↗</a>
-                <button class="btn-detail-outline" onclick="openDrawVerificationModal('fencing')">💡 查核說明</button>
-              `;
-            } else if (first?.sport && first.sport.includes('空手道')) {
-              footerActions = `
-                <a href="https://kfcjc.neoqqf.com.tw/" target="_blank" class="doc-link-btn" style="color:#7c3aed;">🎯 查核籤表 ↗</a>
-                <button class="btn-detail-outline" onclick="openDrawVerificationModal('karate')">💡 查核說明</button>
-              `;
-            } else {
-              footerActions = `<span style="font-size:0.74rem; color:#64748b; font-weight:700;">共 ${groupCount} 個組別・${matchCount} 場明確賽程</span>`;
-            }
 
             html += `
               <div class="sport-card" style="border-top-color:${visual.color}; grid-column:1 / -1;">
@@ -3284,23 +3295,18 @@
                         <span class="sport-en">${visual.en}</span>
                       </div>
                     </div>
-                    <span class="status-tag tag-active">${groupCount} 組・${matchCount} 場</span>
+                    <span class="status-tag tag-active">${divisions.size} 組・${preciseRows.length} 場</span>
                   </div>
-
                   <div class="card-core-title-box" style="margin-bottom:12px;">
                     <h3 class="card-core-name">${group.coreTitle}</h3>
-                    <div style="font-size:0.74rem; color:#64748b; margin-top:2px;">${officialName}</div>
+                    <div style="font-size:0.74rem; color:#64748b; margin-top:2px;">${first?.tournament_name || group.coreTitle}</div>
                   </div>
-
                   <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:10px; align-items:start;">
                     ${divisionBlocks}
                   </div>
                 </div>
-
                 <div class="card-action-footer" style="justify-content:flex-end; margin-top:12px;">
-                  <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
-                    ${footerActions}
-                  </div>
+                  <span style="font-size:0.74rem; color:#64748b; font-weight:700;">共 ${divisions.size} 個組別・${preciseRows.length} 場明確賽程</span>
                 </div>
               </div>
             `;

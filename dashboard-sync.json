@@ -7,7 +7,7 @@
         "name": "臺北市115學年度教育盃中等學校籃球錦標賽"
       },
       "values": {
-        "divisions": "國男乙C組、高男乙F組、國女乙B組、國女甲B組、高女乙B組、教職員男子組（大直高中已有明確場次）",
+        "divisions": "國男乙C組、高男乙F組、國女乙B組、高女乙B組、教職員男子組（大直高中已有明確場次）",
         "competition_dates": "115/10/17～10/29（大直高中已公告明確場次）",
         "venue": "臺北市泰北國際雙語學校、臺北市立興雅國中、臺北市立永春高級中學",
         "doc_url": "https://drive.google.com/file/d/1lrpNWC2XAUywhWmrGtgLGAoPm_j906iw/view",
@@ -316,13 +316,14 @@
       "match": {
         "tournament_name": "115學年度教育盃籃球賽",
         "match_date": "115/10/28",
-        "match_time": "09:00",
-        "division": "國女甲B組"
+        "match_time": "09:00"
       },
-      "values": {},
+      "values": {
+        "division": "國女乙B組"
+      },
       "create": {
         "sport": "🏀 籃球",
-        "division": "國女甲B組",
+        "division": "國女乙B組",
         "tournament_name": "115學年度教育盃籃球賽",
         "match_date": "115/10/28",
         "match_time": "09:00",
