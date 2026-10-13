@@ -2,5 +2,6 @@
   "version": 2,
   "name": "dazhi-sports-hub",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "crons": [{"path":"/api/line-sports-push","schedule":"0 23 * * *"}]
 }
