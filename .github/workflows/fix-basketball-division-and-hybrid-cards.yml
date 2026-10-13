@@ -1,0 +1,34 @@
+name: Fix basketball division and hybrid cards
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/fix_basketball_division_and_hybrid_cards.py'
+      - '.github/workflows/fix-basketball-division-and-hybrid-cards.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Apply basketball division correction and hybrid card layout
+        run: python scripts/fix_basketball_division_and_hybrid_cards.py
+
+      - name: Commit updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html dashboard-sync.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Correct 國女乙B組 and hybridize schedule cards"
+            git push
+          fi
