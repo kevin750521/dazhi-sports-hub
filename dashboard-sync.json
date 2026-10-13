@@ -89,20 +89,23 @@
         "name": "臺北市115學年度教育盃中等學校排球錦標賽"
       },
       "values": {
-        "competition_dates": "115/10/22～10/27",
-        "venue": "臺北市立明湖國民中學學生活動中心4樓、臺北市立內湖高級中學學生活動中心4樓",
-        "reg_deadline": "115/09/29",
-        "status": "✅ 官方更新：10/07已公告抽籤分組表；正式比賽10/22～10/27。因目前尚未取得可核實的大直高中逐場日期與時間，LINE晨報暫不列入排球賽程。",
-        "reg_method": "依競賽規程辦理；抽籤已於115/10/07 10:00在明湖國中完成；領隊會議115/10/22 10:00於明湖國中學生活動中心4樓。"
+        "sport": "排球",
+        "divisions": "高男乙I組、教女A組（大直高中已有明確預賽）",
+        "competition_dates": "115/10/23～10/25（大直高中4場明確預賽）",
+        "venue": "臺北市立明湖國中、臺北市立內湖高中",
+        "doc_url": "https://drive.google.com/file/d/1OR97vdJ0Wcr148m_eGpetPL-87LpO4Wr/view",
+        "status": "✅ 最新賽程已整合：大直高中高男乙I組2場、教女A組2場，共4場明確賽程；決賽資格賽程待預賽結果後再補",
+        "registration_status": "已報名"
       },
       "create": {
         "name": "臺北市115學年度教育盃中等學校排球錦標賽",
         "sport": "排球",
-        "competition_dates": "115/10/22～10/27",
-        "venue": "臺北市立明湖國民中學學生活動中心4樓、臺北市立內湖高級中學學生活動中心4樓",
-        "reg_deadline": "115/09/29",
-        "status": "✅ 官方更新：10/07已公告抽籤分組表；正式比賽10/22～10/27。因目前尚未取得可核實的大直高中逐場日期與時間，LINE晨報暫不列入排球賽程。",
-        "reg_method": "依競賽規程辦理；抽籤已於115/10/07 10:00在明湖國中完成；領隊會議115/10/22 10:00於明湖國中學生活動中心4樓。"
+        "divisions": "高男乙I組、教女A組（大直高中已有明確預賽）",
+        "competition_dates": "115/10/23～10/25（大直高中4場明確預賽）",
+        "venue": "臺北市立明湖國中、臺北市立內湖高中",
+        "doc_url": "https://drive.google.com/file/d/1OR97vdJ0Wcr148m_eGpetPL-87LpO4Wr/view",
+        "status": "✅ 最新賽程已整合：大直高中高男乙I組2場、教女A組2場，共4場明確賽程；決賽資格賽程待預賽結果後再補",
+        "registration_status": "已報名"
       }
     }
   ],
@@ -411,6 +414,94 @@
         "opponents_draw": "陽明高中 vs 大直高中",
         "advancement_rule": "教師男子組首輪；勝者進入後續淘汰賽",
         "source_file": "使用者提供－永春高中教師男子組賽程截圖",
+        "status": "賽程已公告"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "臺北市115學年度教育盃中等學校排球錦標賽",
+        "match_date": "115/10/23",
+        "match_time": "14:20",
+        "division": "高男乙I組"
+      },
+      "values": {},
+      "create": {
+        "sport": "🏐 排球",
+        "division": "高男乙I組",
+        "tournament_name": "臺北市115學年度教育盃中等學校排球錦標賽",
+        "match_date": "115/10/23",
+        "match_time": "14:20",
+        "venue": "臺北市立明湖國中（第一場地）",
+        "opponents_draw": "中正高中 vs 大直高中",
+        "advancement_rule": "高男乙預賽I組循環；分組第1名晉級決賽",
+        "source_file": "教育盃排球賽總賽程表.pdf",
+        "doc_url": "https://drive.google.com/file/d/1OR97vdJ0Wcr148m_eGpetPL-87LpO4Wr/view",
+        "status": "賽程已公告"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "臺北市115學年度教育盃中等學校排球錦標賽",
+        "match_date": "115/10/24",
+        "match_time": "11:00",
+        "division": "高男乙I組"
+      },
+      "values": {},
+      "create": {
+        "sport": "🏐 排球",
+        "division": "高男乙I組",
+        "tournament_name": "臺北市115學年度教育盃中等學校排球錦標賽",
+        "match_date": "115/10/24",
+        "match_time": "11:00",
+        "venue": "臺北市立明湖國中（第一場地）",
+        "opponents_draw": "大直高中 vs 景文高中",
+        "advancement_rule": "高男乙預賽I組循環；分組第1名晉級決賽",
+        "source_file": "教育盃排球賽總賽程表.pdf",
+        "doc_url": "https://drive.google.com/file/d/1OR97vdJ0Wcr148m_eGpetPL-87LpO4Wr/view",
+        "status": "賽程已公告"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "臺北市115學年度教育盃中等學校排球錦標賽",
+        "match_date": "115/10/25",
+        "match_time": "11:50",
+        "division": "教女A組"
+      },
+      "values": {},
+      "create": {
+        "sport": "🏐 排球",
+        "division": "教女A組",
+        "tournament_name": "臺北市115學年度教育盃中等學校排球錦標賽",
+        "match_date": "115/10/25",
+        "match_time": "11:50",
+        "venue": "臺北市立內湖高中（第四場地）",
+        "opponents_draw": "延平中學 vs 大直高中",
+        "advancement_rule": "教女預賽A組循環；分組第1名晉級決賽",
+        "source_file": "教育盃排球賽總賽程表.pdf",
+        "doc_url": "https://drive.google.com/file/d/1OR97vdJ0Wcr148m_eGpetPL-87LpO4Wr/view",
+        "status": "賽程已公告"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "臺北市115學年度教育盃中等學校排球錦標賽",
+        "match_date": "115/10/25",
+        "match_time": "15:30",
+        "division": "教女A組"
+      },
+      "values": {},
+      "create": {
+        "sport": "🏐 排球",
+        "division": "教女A組",
+        "tournament_name": "臺北市115學年度教育盃中等學校排球錦標賽",
+        "match_date": "115/10/25",
+        "match_time": "15:30",
+        "venue": "臺北市立內湖高中（第三場地）",
+        "opponents_draw": "大直高中 vs 中山女中",
+        "advancement_rule": "教女預賽A組循環；分組第1名晉級決賽",
+        "source_file": "教育盃排球賽總賽程表.pdf",
+        "doc_url": "https://drive.google.com/file/d/1OR97vdJ0Wcr148m_eGpetPL-87LpO4Wr/view",
         "status": "賽程已公告"
       }
     }
