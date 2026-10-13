@@ -62,7 +62,10 @@ def same(record, match):
 
 def is_range_date(value):
     text = str(value or "")
-    return any(mark in text for mark in ("～", "~", "至"))
+    if any(mark in text for mark in ("～", "~", "至")):
+        return True
+    # Also treat 10/26-10/28, 115/10/26 - 115/10/28, etc. as ranges.
+    return bool(re.search(r"\d{1,4}[/.\-]\d{1,2}(?:[/.\-]\d{1,2})?\s*[-–—]\s*\d{1,4}[/.\-]\d{1,2}", text))
 
 
 def is_placeholder_time(value):
@@ -72,14 +75,31 @@ def is_placeholder_time(value):
     return any(word in text for word in ("待公告", "待大會", "待抽籤", "待排定", "待確認"))
 
 
+def canonical_tournament_name(value):
+    """Normalize equivalent tournament labels used by old summary rows and new detailed rows.
+
+    Example:
+      '115學年度 教育盃錦標賽'
+      '115學年度教育盃排球賽'
+      '臺北市115學年度教育盃中等學校排球錦標賽'
+    all map to the same practical key: '115學年度教育盃'.
+    """
+    text = str(value or "").strip().lower()
+    text = re.sub(r"\s+", "", text)
+    for token in (
+        "臺北市", "台北市", "中等學校", "中小學", "高級中學", "國民中學",
+        "籃球", "排球", "羽球", "足球", "擊劍", "空手道", "高爾夫",
+        "錦標賽", "競賽", "比賽", "賽",
+    ):
+        text = text.replace(token, "")
+    return text
+
+
 def sanitize_for_table(table, payload):
     cleaned = dict(payload or {})
     if table == "schedules":
-        # Supabase schedules schema目前沒有 doc_url 欄位。
         cleaned.pop("doc_url", None)
 
-        # 表列模式只顯示 match_date，因此在有明確時間時把時間併入顯示欄位。
-        # match_time 仍保留，之後若前端新增獨立時間欄可直接使用。
         match_date = str(cleaned.get("match_date", "")).strip()
         match_time = str(cleaned.get("match_time", "")).strip()
         if match_date and match_time and not is_range_date(match_date) and not is_placeholder_time(match_time):
@@ -106,8 +126,6 @@ def sync_table(table, operations):
                 raise RuntimeError(f"Matched {table} row has no id: {found}")
             encoded = urllib.parse.quote(str(row_id), safe="")
 
-            # Even when dashboard-sync values is {}, keep display date/time current from create.
-            # This is needed because older rows stored only the date in match_date.
             if table == "schedules" and create:
                 for key in ("match_date", "match_time"):
                     if key in create:
@@ -138,15 +156,17 @@ def sync_table(table, operations):
 
 
 def cleanup_superseded_schedule_ranges():
-    """
-    User rule: once a tournament has precise schedule rows, remove its old date-range summary rows.
-    This keeps the dashboard from showing both '10/18～10/29' and individual game times.
+    """Delete old range-summary rows once precise rows for the same tournament exist.
+
+    Tournament names in legacy rows are not always identical to the newer official name,
+    so comparison is done with canonical_tournament_name(), not raw text equality.
     """
     rows = fetch_all("schedules")
-    precise_tournaments = {
-        str(r.get("tournament_name", "")).strip()
+
+    precise_keys = {
+        canonical_tournament_name(r.get("tournament_name", ""))
         for r in rows
-        if str(r.get("tournament_name", "")).strip()
+        if canonical_tournament_name(r.get("tournament_name", ""))
         and not is_range_date(r.get("match_date", ""))
         and not is_placeholder_time(r.get("match_time", ""))
     }
@@ -154,7 +174,8 @@ def cleanup_superseded_schedule_ranges():
     deleted = 0
     for row in rows:
         tournament = str(row.get("tournament_name", "")).strip()
-        if tournament in precise_tournaments and is_range_date(row.get("match_date", "")):
+        tournament_key = canonical_tournament_name(tournament)
+        if tournament_key in precise_keys and is_range_date(row.get("match_date", "")):
             row_id = row.get("id")
             if row_id is None:
                 continue
@@ -166,7 +187,10 @@ def cleanup_superseded_schedule_ranges():
                 {"Prefer": "return=minimal"},
             )
             deleted += 1
-            print(f"DELETED superseded range schedule id={row_id}: {tournament} / {row.get('match_date')}")
+            print(
+                "DELETED superseded range schedule "
+                f"id={row_id}: {tournament} / {row.get('match_date')} / key={tournament_key}"
+            )
 
     print(f"cleanup: deleted {deleted} superseded range schedule rows")
 
