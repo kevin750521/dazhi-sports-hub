@@ -1,0 +1,35 @@
+name: Apply volleyball schedule 2026-10-13
+
+on:
+  push:
+    paths:
+      - 'scripts/apply_volleyball_schedule_20261013.py'
+      - '.github/workflows/apply-volleyball-schedule-20261013.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Apply volleyball schedule data
+        run: python scripts/apply_volleyball_schedule_20261013.py
+
+      - name: Commit dashboard-sync update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard-sync.json
+          if git diff --cached --quiet; then
+            echo "No dashboard-sync changes needed."
+          else
+            git commit -m "Update Education Cup volleyball schedules"
+            git push
+          fi
