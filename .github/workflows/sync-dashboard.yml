@@ -25,3 +25,5 @@ jobs:
           SUPABASE_KEY: sb_publishable_n3ONLlgwYQ0TAOcxkKoNhg_ZwL6M9wP
           SYNC_DATA_FILE: dashboard-sync.json
         run: python scripts/sync_supabase.py
+
+# 2026-10-13: trigger sync after Education Cup volleyball schedule import
