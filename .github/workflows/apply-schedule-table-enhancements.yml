@@ -1,0 +1,47 @@
+name: Apply schedule table enhancements
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'schedule-table-enhancements.js'
+      - '.github/workflows/apply-schedule-table-enhancements.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Inject enhancement script into index.html
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
+          tag = '<script src="schedule-table-enhancements.js"></script>'
+          if tag not in text:
+              if '</body>' not in text:
+                  raise SystemExit('Cannot find </body> in index.html')
+              text = text.replace('</body>', f'  {tag}\n</body>', 1)
+              p.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit index update
+        run: |
+          if git diff --quiet; then
+            echo 'No changes needed.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Enable schedule table sorting and filtering'
+          git push
