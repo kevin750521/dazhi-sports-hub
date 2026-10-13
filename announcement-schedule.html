@@ -106,6 +106,19 @@ const tbody=document.querySelector('tbody');
 const filters=[...document.querySelectorAll('.filterrow input')];
 function norm(v){return String(v??'').trim()}
 function dateKey(v){const s=norm(v).split(' ')[0];const m=s.match(/^(\d{2,4})\/(\d{1,2})\/(\d{1,2})$/);if(m){let y=+m[1];if(y<1911)y+=1911;return y*10000+(+m[2])*100+(+m[3]);}return 99999999}
+function formatMatchDate(v){
+  const raw=norm(v);
+  const m=raw.match(/^(\d{2,4})\/(\d{1,2})\/(\d{1,2})(.*)$/);
+  if(!m)return raw;
+  let y=+m[1];
+  const month=+m[2],day=+m[3];
+  const displayYear=y;
+  if(y<1911)y+=1911;
+  const d=new Date(y,month-1,day);
+  if(d.getFullYear()!==y||d.getMonth()!==month-1||d.getDate()!==day)return raw;
+  const weekday=['日','一','二','三','四','五','六'][d.getDay()];
+  return `${displayYear}/${m[2]}/${m[3]}（${weekday}）${m[4]||''}`;
+}
 function esc(s){return norm(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))}
 function sportLabel(s){const x=norm(s).replace(/^[^\w\u4e00-\u9fff]+/,'').trim();const emo=x.includes('籃球')?'🏀':x.includes('排球')?'🏐':x.includes('擊劍')?'🤺':x.includes('空手道')?'🥋':x.includes('網球')?'🎾':x.includes('棒球')?'⚾':x.includes('足球')?'⚽':'🏅';return `${emo} ${x||'其他'}`}
 function filtered(){
@@ -122,7 +135,7 @@ function filtered(){
 }
 function render(){
   const data=filtered();
-  tbody.innerHTML=data.length?data.map(r=>`<tr><td><span class="sport">${esc(sportLabel(r.sport))}</span></td><td><strong>${esc(r.tournament_name)}</strong></td><td>${esc(r.division)}</td><td><strong>${esc(r.match_date)}</strong></td><td>${esc(r.venue)}</td><td class="match">${esc(r.opponents_draw)}</td><td>${esc(r.advancement_rule||'-')}</td><td><span class="status">${esc(r.status||'-')}</span></td><td class="muted">${esc(r.source_file||'-')}</td></tr>`).join(''):`<tr><td colspan="9" class="empty">目前沒有符合條件的資料</td></tr>`
+  tbody.innerHTML=data.length?data.map(r=>`<tr><td><span class="sport">${esc(sportLabel(r.sport))}</span></td><td><strong>${esc(r.tournament_name)}</strong></td><td>${esc(r.division)}</td><td><strong>${esc(formatMatchDate(r.match_date))}</strong></td><td>${esc(r.venue)}</td><td class="match">${esc(r.opponents_draw)}</td><td>${esc(r.advancement_rule||'-')}</td><td><span class="status">${esc(r.status||'-')}</span></td><td class="muted">${esc(r.source_file||'-')}</td></tr>`).join(''):`<tr><td colspan="9" class="empty">目前沒有符合條件的資料</td></tr>`
 }
 async function load(){
   const {data,error}=await sb.from('schedules').select('*');
