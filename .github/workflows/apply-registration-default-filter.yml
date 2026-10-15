@@ -32,3 +32,5 @@ jobs:
             git commit -m "Hide registered tournaments from default registration control view"
             git push
           fi
+
+# 2026-10-16: default registration-control view hides completed decisions
