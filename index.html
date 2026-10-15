@@ -1876,7 +1876,7 @@
           <label
             style="font-size:0.82rem; font-weight:700; color:var(--text-muted); cursor:pointer; display:flex; align-items:center; gap:6px;">
             <input type="checkbox" id="chkHideDeclined" onchange="renderActiveView()" checked>
-            預設過濾「不報名」項目 (精簡介面)
+            預設隱藏「已報名」與「不報名」項目 (只看待處理)
           </label>
         </div>
 
@@ -2941,6 +2941,9 @@
           const matchSport = sport === '全部' || t.sport.includes(sport);
           const regStatus = t.registration_status || '未報名';
           const matchRegPill = currentRegFilter === '全部' || regStatus === currentRegFilter;
+          // 報名掌控的預設「全部」視圖只保留仍需處理的項目：
+          // 已報名與不報名都先隱藏；若使用者主動點選對應狀態仍可查看。
+          if (currentRegFilter === '全部' && regStatus === '已報名') return false;
           if (hideDeclined && currentRegFilter === '全部' && regStatus === '不報名') return false;
           return matchSearch && matchSport && matchRegPill;
         });
