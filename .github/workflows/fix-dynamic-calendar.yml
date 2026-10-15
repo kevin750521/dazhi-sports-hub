@@ -1,0 +1,124 @@
+name: Fix dynamic schedule calendar
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-dynamic-calendar.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Replace static calendar with live schedule calendar
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
+
+          new_func = r'''    function renderCalendarView() {
+      const container = document.getElementById('contentContainer');
+
+      // 月曆直接由目前 Supabase schedules 資料產生，不再使用寫死的靜態賽程。
+      const displayedDates = [];
+      const start = new Date(2026, 9, 18);  // 2026/10/18
+      const end = new Date(2026, 10, 7);   // 2026/11/07
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        displayedDates.push(new Date(d));
+      }
+
+      const eventMap = {};
+      const pad = n => String(n).padStart(2, '0');
+      const mmdd = d => `${pad(d.getMonth() + 1)}/${pad(d.getDate())}`;
+      const isRange = v => /[～~]|\s至\s|\d\s*[-–—]\s*\d/.test(String(v || ''));
+      const isPlaceholder = v => !String(v || '').trim() || /(待公告|待大會|待抽籤|待排定|待確認)/.test(String(v || ''));
+      const dateBase = v => String(v || '').trim().split(' ')[0];
+      const toMMDD = v => {
+        const m = dateBase(v).match(/^(?:\d{2,4})\/(\d{1,2})\/(\d{1,2})$/);
+        return m ? `${pad(+m[1])}/${pad(+m[2])}` : '';
+      };
+      const displayTime = s => String(s.match_time || '').trim() || String(s.match_date || '').trim().split(' ').slice(1).join(' ');
+
+      schedules.forEach(s => {
+        if (isRange(s.match_date) || isPlaceholder(displayTime(s))) return;
+        const key = toMMDD(s.match_date);
+        if (!key) return;
+        if (!eventMap[key]) eventMap[key] = [];
+        eventMap[key].push(s);
+      });
+
+      Object.values(eventMap).forEach(list => list.sort((a,b) => displayTime(a).localeCompare(displayTime(b), 'zh-Hant', {numeric:true})));
+
+      function eventStyle(s) {
+        const sport = String(s.sport || '');
+        if (sport.includes('籃球')) return ['#1d4ed8','#eff6ff','#1e3a8a','🏀'];
+        if (sport.includes('排球')) return ['#7c3aed','#f5f3ff','#6d28d9','🏐'];
+        if (sport.includes('擊劍')) return ['#16a34a','#f0fdf4','#14532d','🤺'];
+        if (sport.includes('空手道')) return ['#9333ea','#faf5ff','#7e22ce','🥋'];
+        if (sport.includes('網球')) return ['#059669','#ecfdf5','#047857','🎾'];
+        if (sport.includes('棒球') || String(s.tournament_name || '').includes('黑豹旗')) return ['#dc2626','#fef2f2','#991b1b','⚾'];
+        return ['#475569','#f8fafc','#334155','🏅'];
+      }
+
+      const headers = ['週日','週一','週二','週三','週四','週五','週六']
+        .map(x => `<div class="cal-day-col" style="background:#0f2942;color:white;min-height:auto;text-align:center;font-weight:800;padding:8px;">${x}</div>`)
+        .join('');
+
+      const cells = displayedDates.map(d => {
+        const key = mmdd(d);
+        const events = eventMap[key] || [];
+        const pills = events.map(s => {
+          const [border,bg,color,icon] = eventStyle(s);
+          const time = displayTime(s);
+          const division = String(s.division || '').replace(/級/g,'');
+          const matchup = String(s.opponents_draw || '').replace(/⊕/g,'vs');
+          const title = `${time}｜${division}｜${matchup}｜${s.venue || ''}`;
+          return `<div class="cal-match-pill" title="${title.replace(/"/g,'&quot;')}" style="border-left-color:${border};background:${bg};color:${color};white-space:normal;line-height:1.35;margin-bottom:5px;">
+            <div style="font-weight:900;">${icon} ${time}｜${division}</div>
+            <div style="font-size:.68rem;font-weight:700;">${matchup}</div>
+          </div>`;
+        }).join('');
+        return `<div class="cal-day-col"><span class="cal-num-badge">${key}</span>${pills}</div>`;
+      }).join('');
+
+      container.innerHTML = `
+        <div class="calendar-view-panel">
+          <div style="text-align:center;font-weight:900;font-size:1.15rem;margin-bottom:12px;color:var(--navy-dark);">
+            📅 115 學年度 10 月 ～ 11 月 大直代表隊出賽賽程行事曆
+          </div>
+          <div style="text-align:center;font-size:.72rem;color:#64748b;margin:-6px 0 10px;">僅顯示已有明確日期與時間的場次；資料直接同步自賽程資料庫</div>
+          <div class="calendar-matrix">${headers}${cells}</div>
+        </div>`;
+    }
+'''
+
+          pattern = re.compile(
+              r"    function renderCalendarView\(\) \{.*?^    // ========================================================\n    // 語音識別與智慧代入",
+              re.S | re.M,
+          )
+          m = pattern.search(text)
+          if not m:
+              raise SystemExit('Could not locate renderCalendarView block')
+
+          replacement = new_func + "\n    // ========================================================\n    // 語音識別與智慧代入"
+          text = text[:m.start()] + replacement + text[m.end():]
+          p.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit fixed calendar
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Render calendar from live schedules data"
+          git push
