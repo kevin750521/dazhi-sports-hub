@@ -3,5 +3,10 @@
   "name": "dazhi-sports-hub",
   "cleanUrls": true,
   "trailingSlash": false,
-  "crons": [{"path":"/api/line-sports-push","schedule":"0 23 * * *"}]
+  "rewrites": [
+    { "source": "/", "destination": "/api/home" }
+  ],
+  "crons": [
+    {"path":"/api/line-sports-push","schedule":"0 23 * * *"}
+  ]
 }
