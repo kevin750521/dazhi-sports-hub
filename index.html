@@ -2944,6 +2944,9 @@
           // 報名掌控的預設「全部」視圖只保留仍需處理的項目：
           // 已報名與不報名都先隱藏；若使用者主動點選對應狀態仍可查看。
           if (currentRegFilter === '全部' && regStatus === '已報名') return false;
+          // 報名掌控的預設「全部」視圖只保留仍需處理的項目：
+          // 已報名與不報名都先隱藏；若使用者主動點選對應狀態仍可查看。
+          if (currentRegFilter === '全部' && regStatus === '已報名') return false;
           if (hideDeclined && currentRegFilter === '全部' && regStatus === '不報名') return false;
           return matchSearch && matchSport && matchRegPill;
         });
