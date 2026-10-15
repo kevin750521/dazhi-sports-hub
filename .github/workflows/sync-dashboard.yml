@@ -7,6 +7,7 @@ on:
       - 'dashboard-sync.json'
       - 'scripts/sync_supabase.py'
       - 'scripts/fix_high_girls_basketball.py'
+      - 'scripts/sync_new_education_cup_regulations.py'
       - 'scripts/patch_calendar.py'
       - '.github/workflows/sync-dashboard.yml'
   workflow_dispatch:
@@ -34,6 +35,12 @@ jobs:
           SUPABASE_KEY: sb_publishable_n3ONLlgwYQ0TAOcxkKoNhg_ZwL6M9wP
         run: python scripts/fix_high_girls_basketball.py
 
+      - name: Sync new Education Cup tennis and table tennis regulations
+        env:
+          SUPABASE_URL: https://hdxrublbpaptthmflnrn.supabase.co
+          SUPABASE_KEY: sb_publishable_n3ONLlgwYQ0TAOcxkKoNhg_ZwL6M9wP
+        run: python scripts/sync_new_education_cup_regulations.py
+
       - name: Patch calendar to use live schedule data
         run: python scripts/patch_calendar.py
 
@@ -49,4 +56,4 @@ jobs:
             git push
           fi
 
-# 2026-10-15: revised 高女乙B schedule and live calendar sync
+# 2026-10-15: revised 高女乙B schedule, live calendar sync, and new Education Cup tennis/table tennis regulations
