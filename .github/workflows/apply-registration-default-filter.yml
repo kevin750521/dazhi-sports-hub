@@ -1,0 +1,34 @@
+name: Apply registration default filter
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/hide_registered_from_default_registration_view.py'
+      - '.github/workflows/apply-registration-default-filter.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-ui:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Hide registered tournaments in default registration control view
+        run: python scripts/hide_registered_from_default_registration_view.py
+
+      - name: Commit UI update if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No index.html changes needed"
+          else
+            git commit -m "Hide registered tournaments from default registration control view"
+            git push
+          fi
