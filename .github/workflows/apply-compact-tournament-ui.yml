@@ -1,0 +1,34 @@
+name: Apply compact tournament UI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/remove_tournament_divisions_display.py'
+      - '.github/workflows/apply-compact-tournament-ui.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-ui:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Hide tournament division details
+        run: python scripts/remove_tournament_divisions_display.py
+
+      - name: Commit UI update if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No index.html changes needed"
+          else
+            git commit -m "Hide tournament division details to compact cards"
+            git push
+          fi
