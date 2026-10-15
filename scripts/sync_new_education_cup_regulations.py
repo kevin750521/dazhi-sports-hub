@@ -57,18 +57,20 @@ def upsert_by_sport(rows, sport_keyword, payload):
 
 rows = fetch_tournaments()
 
-# 臺北市115學年度教育盃中學網球錦標賽競賽規程（BJ115.pdf）
+# 最新版：臺北市政府教育局115/10/14北市教體字第1153108248號函附件
+# Drive 檔案：29714949_1153108248_ATTCH1.pdf
+# 舊 BJ115.pdf 已由使用者自 Drive 刪除，不再作為來源。
 tennis = {
     "name": "臺北市115學年度教育盃中學網球錦標賽",
     "sport": "網球",
     "divisions": "硬式：高男甲、高女甲、國男甲、國女甲、高中甲混雙、國中甲混雙；軟式：高男、高女、國男、國女、高中混雙、國中混雙",
     "competition_dates": "115/11/09～11/17（硬式）；115/11/18～11/19（軟式）",
     "venue": "臺北市網球中心（臺北市內湖區民權東路六段208號）",
-    "reg_start": "115/10/12",
+    "reg_start": "115/10/15",
     "reg_deadline": "115/10/23 16:00",
-    "reg_method": "新興國中網站線上報名；核章報名表於115/10/30 16:00前送190聯絡箱－新興國中學務處體育組",
-    "doc_url": "https://drive.google.com/file/d/1PcSsn3YOqx8d7AkapGTtXW9YLZ9OK03L/view",
-    "status": "競賽規程已取得；115/10/26 16:00前公布接受名單；115/10/30 09:00抽籤；大直高中實際報名組別與籤表待後續確認"
+    "reg_method": "新興國中網站『中學教育盃網球賽報名』線上報名；核章報名表於115/10/30 16:00前送190聯絡箱－新興國中學務處體育組",
+    "doc_url": "https://drive.google.com/file/d/1sR_PTX845Oeq9wQGCxBUSCMztRoiLgRc/view",
+    "status": "✅ 最新115/10/14正式規程已校正；115/10/26 16:00前公布接受名單；115/11/02 09:00於新興國中抽籤；大直高中實際報名組別與籤表待後續確認"
 }
 upsert_by_sport(rows, "網球", tennis)
 
