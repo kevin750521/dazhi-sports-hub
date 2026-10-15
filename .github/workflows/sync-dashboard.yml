@@ -6,6 +6,7 @@ on:
     paths:
       - 'dashboard-sync.json'
       - 'scripts/sync_supabase.py'
+      - 'scripts/fix_high_girls_basketball.py'
       - '.github/workflows/sync-dashboard.yml'
   workflow_dispatch:
 
@@ -26,4 +27,10 @@ jobs:
           SYNC_DATA_FILE: dashboard-sync.json
         run: python scripts/sync_supabase.py
 
-# 2026-10-13: force direct sync after definitive 國女乙B組 correction and card priority update
+      - name: Apply updated high girls basketball schedule
+        env:
+          SUPABASE_URL: https://hdxrublbpaptthmflnrn.supabase.co
+          SUPABASE_KEY: sb_publishable_n3ONLlgwYQ0TAOcxkKoNhg_ZwL6M9wP
+        run: python scripts/fix_high_girls_basketball.py
+
+# 2026-10-15: apply 10/14 revised 高女乙B schedule from 興雅國中
