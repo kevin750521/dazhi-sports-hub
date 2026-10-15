@@ -7,11 +7,12 @@ on:
       - 'dashboard-sync.json'
       - 'scripts/sync_supabase.py'
       - 'scripts/fix_high_girls_basketball.py'
+      - 'scripts/patch_calendar.py'
       - '.github/workflows/sync-dashboard.yml'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   sync:
@@ -33,4 +34,19 @@ jobs:
           SUPABASE_KEY: sb_publishable_n3ONLlgwYQ0TAOcxkKoNhg_ZwL6M9wP
         run: python scripts/fix_high_girls_basketball.py
 
-# 2026-10-15: apply 10/14 revised 高女乙B schedule from 興雅國中
+      - name: Patch calendar to use live schedule data
+        run: python scripts/patch_calendar.py
+
+      - name: Commit calendar patch if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No index.html changes needed"
+          else
+            git commit -m "Render calendar from live schedules data"
+            git push
+          fi
+
+# 2026-10-15: revised 高女乙B schedule and live calendar sync
