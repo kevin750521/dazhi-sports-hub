@@ -131,6 +131,11 @@ def sync_table(table, operations):
                     if key in create:
                         values[key] = create[key]
 
+            # Preserve manually entered match results against later official-sheet re-syncs.
+            # Only schedule metadata from source documents may change; result remains authoritative.
+            if table == "schedules" and "已完賽" in str(found.get("status", "")):
+                values.pop("status", None)
+
             if values:
                 request(
                     "PATCH",
