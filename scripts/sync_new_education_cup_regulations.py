@@ -89,4 +89,21 @@ table_tennis = {
 }
 upsert_by_sport(rows, "桌球", table_tennis)
 
-print("Education Cup tennis/table tennis regulations sync completed.")
+
+# 臺北市115學年度教育盃中小學滑輪溜冰錦標賽
+# 最新來源：115/10/15 北市教體字第1153109189號函附件（2026/10/20 上傳）
+skating = {
+    "name": "臺北市115學年度教育盃中小學滑輪溜冰錦標賽",
+    "sport": "滑輪溜冰",
+    "divisions": "國中男、國中女、高中男、高中女、教師男、教師女；競速、自由式輪滑、花式溜冰（實際報名組別待確認）",
+    "competition_dates": "自由式輪滑：115/12/07；競速：115/12/15～12/16（雨備12/17～12/18）；花式：116/05/03～05/04",
+    "venue": "自由式輪滑、花式：臺北市大同運動中心5樓；競速：臺北市立迎風河濱公園",
+    "reg_start": "115/10/19（競速、自由式輪滑）；116/03/22（花式）",
+    "reg_deadline": "115/10/30 16:00（競速、自由式輪滑）；116/03/29 16:00（花式）",
+    "reg_method": "葫蘆國小網站『溜冰錦標賽』或 https://tpska.neoqqf.com.tw/index.php 線上報名；列印核章後掃描，於各類截止前寄至 ckh5225@hrps.tp.edu.tw。競速／自由式輪滑抽籤115/11/09 14:00；花式抽籤116/04/12 10:00，均在葫蘆國小",
+    "doc_url": "https://drive.google.com/file/d/1HbHAibau9z4dfNvRXjWe3oHJceFL1UM-/view",
+    "status": "最新115/10/15正式規程；競速與自由式輪滑115/10/30 16:00截止，花式116/03/29 16:00截止；大直是否報名、選手名單及各場時間均待確認"
+}
+upsert_by_sport(rows, "滑輪溜冰", skating)
+
+print("Education Cup regulations sync completed.")
