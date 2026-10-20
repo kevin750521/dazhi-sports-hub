@@ -24,6 +24,8 @@
     .filterrow input{width:100%;min-width:74px;border:1px solid #cbd5e1;border-radius:6px;padding:6px 8px;font-size:.76rem}
     tr:hover td{background:#fbfdff}
     .sport{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-weight:800;white-space:nowrap;border:1px solid #dbeafe;background:#eff6ff;color:#1d4ed8}
+    tr.completed td{background:#f8fafc;color:#64748b}
+    tr.completed .status{background:#e2e8f0;border-color:#cbd5e1;color:#475569}
     .status{display:inline-block;padding:3px 8px;border-radius:999px;background:#ecfdf5;border:1px solid #a7f3d0;color:#047857;font-size:.74rem;font-weight:800;white-space:nowrap}
     .match{font-weight:800}
     .muted{color:#64748b}
@@ -121,6 +123,16 @@ function formatMatchDate(v){
 }
 function esc(s){return norm(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))}
 function sportLabel(s){const x=norm(s).replace(/^[^\w\u4e00-\u9fff]+/,'').trim();const emo=x.includes('籃球')?'🏀':x.includes('排球')?'🏐':x.includes('擊劍')?'🤺':x.includes('空手道')?'🥋':x.includes('網球')?'🎾':x.includes('棒球')?'⚾':x.includes('足球')?'⚽':'🏅';return `${emo} ${x||'其他'}`}
+function isCompleted(r){return /已完賽|已結束|比賽結束/.test(norm(r.status))}
+function rowPriority(r){
+  if(isCompleted(r))return 3;
+  const date=dateKey(r.match_date);
+  if(date===99999999)return 2;
+  const now=new Date();
+  const today=now.getFullYear()*10000+(now.getMonth()+1)*100+now.getDate();
+  return date>=today?0:1;
+}
+function sortDateTime(r){const d=norm(r.match_date);const t=norm(r.match_time);return d.includes(':')?d.slice(d.search(/\d\d:\d\d/)):t}
 function filtered(){
   const q=norm(document.getElementById('q').value).toLowerCase(),sp=document.getElementById('sport').value;
   return rows.filter(r=>{
@@ -128,14 +140,22 @@ function filtered(){
     if(q&&!keys.some(k=>norm(r[k]).toLowerCase().includes(q)))return false;
     return filters.every((f,i)=>!norm(f.value)||norm(r[keys[i]]).toLowerCase().includes(norm(f.value).toLowerCase()))
   }).sort((a,b)=>{
+    const groupA=rowPriority(a),groupB=rowPriority(b);
+    if(groupA!==groupB)return groupA-groupB;
     let av=a[sortKey],bv=b[sortKey];
-    if(sortKey==='match_date'){av=dateKey(av);bv=dateKey(bv);return (av-bv)*sortDir}
+    if(sortKey==='match_date'){
+      const da=dateKey(av),db=dateKey(bv);
+      // 未來比賽依日期近到遠；歷史未標記場次依最近到最遠；已完賽永遠放最後。
+      const dir=groupA===0?1:groupA===1?-1:sortDir;
+      if(da!==db)return (da-db)*dir;
+      return sortDateTime(a).localeCompare(sortDateTime(b),'zh-Hant',{numeric:true})*dir;
+    }
     return norm(av).localeCompare(norm(bv),'zh-Hant',{numeric:true})*sortDir
   })
 }
 function render(){
   const data=filtered();
-  tbody.innerHTML=data.length?data.map(r=>`<tr><td><span class="sport">${esc(sportLabel(r.sport))}</span></td><td><strong>${esc(r.tournament_name)}</strong></td><td>${esc(r.division)}</td><td><strong>${esc(formatMatchDate(r.match_date))}</strong></td><td>${esc(r.venue)}</td><td class="match">${esc(r.opponents_draw)}</td><td>${esc(r.advancement_rule||'-')}</td><td><span class="status">${esc(r.status||'-')}</span></td><td class="muted">${esc(r.source_file||'-')}</td></tr>`).join(''):`<tr><td colspan="9" class="empty">目前沒有符合條件的資料</td></tr>`
+  tbody.innerHTML=data.length?data.map(r=>`<tr class="${isCompleted(r)?'completed':''}"><td><span class="sport">${esc(sportLabel(r.sport))}</span></td><td><strong>${esc(r.tournament_name)}</strong></td><td>${esc(r.division)}</td><td><strong>${esc(formatMatchDate(r.match_date))}</strong></td><td>${esc(r.venue)}</td><td class="match">${esc(r.opponents_draw)}</td><td>${esc(r.advancement_rule||'-')}</td><td><span class="status">${esc(r.status||'-')}</span></td><td class="muted">${esc(r.source_file||'-')}</td></tr>`).join(''):`<tr><td colspan="9" class="empty">目前沒有符合條件的資料</td></tr>`
 }
 async function load(){
   const {data,error}=await sb.from('schedules').select('*');
