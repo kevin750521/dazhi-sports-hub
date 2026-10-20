@@ -1678,6 +1678,48 @@
 
 <body>
 
+<style>
+#matchResultModal{position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,.62);display:none;align-items:center;justify-content:center;padding:12px}
+#matchResultModal .mr-panel{background:white;width:min(650px,100%);max-height:93vh;overflow:auto;border-radius:14px;padding:22px;box-shadow:0 18px 60px #172d4266}
+#matchResultModal label{font-weight:700;font-size:.85rem;display:block;margin-top:10px}
+#matchResultModal input,#matchResultModal select{width:100%;padding:9px;border:1px solid #cbd5e1;border-radius:7px;margin-top:4px;background:white;color:#0f172a}
+#matchResultModal .mr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px}
+#matchResultModal .mr-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;flex-wrap:wrap}
+#matchResultModal button{padding:9px 16px;border:1px solid #cbd5e1;border-radius:8px;cursor:pointer;font-weight:800;background:white}
+#matchResultModal button[type=submit]{background:#1d4ed8;color:white;border-color:#1d4ed8}
+@media(max-width:550px){#matchResultModal .mr-grid{grid-template-columns:1fr}}
+</style>
+<div id="matchResultModal" role="dialog" aria-modal="true" aria-labelledby="matchResultTitle">
+<form class="mr-panel" onsubmit="saveMatchResult(event)">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+<h3 id="matchResultTitle" style="margin:0">🏆 登錄比賽成績與晉級</h3>
+<button type="button" onclick="closeMatchResultModal()" aria-label="關閉">✕</button>
+</div>
+<div id="matchResultSummary" style="font-size:.82rem;color:#475569;margin-top:8px"></div>
+<input type="hidden" id="mrId">
+<div class="mr-grid">
+<label>比賽結果
+<select id="mrState"><option value="已完賽">已完賽</option><option value="賽程已公告">尚未完賽（修正紀錄）</option></select></label>
+<label>比分／成績（例如 58:52、勝 2:0 或第3名）
+<input id="mrScore" maxlength="120" placeholder="輸入正式成績"></label>
+<label>是否晉級
+<select id="mrAdv"><option value="待確認">待確認</option><option value="是">晉級</option><option value="否">未晉級</option><option value="不適用">不適用</option></select></label>
+</div>
+<hr style="border:0;border-top:1px solid #e2e8f0;margin:18px 0">
+<div style="font-weight:900">📅 新增晉級後賽程（選填）</div>
+<div style="font-size:.78rem;color:#64748b">有正式日期與時間才新增，不確定時請留空。</div>
+<div class="mr-grid">
+<label>下一場日期<input id="mrNextDate" type="date"></label>
+<label>下一場時間<input id="mrNextTime" type="time"></label>
+<label>下一場對手／對戰內容<input id="mrNextOpponent" placeholder="例如 大直高中 vs ○○高中"></label>
+<label>下一場比賽地點<input id="mrNextVenue" placeholder="正式公告場地"></label>
+<label>下一輪／分組（選填）<input id="mrNextDivision" placeholder="沿用原組別"></label>
+</div>
+<div class="mr-actions"><button type="button" onclick="closeMatchResultModal()">取消</button><button type="submit" id="mrSaveBtn">儲存至資料庫</button></div>
+</form>
+</div>
+
+
   <!-- ========================================================
        1. 穩重深藍側邊欄 (Sidebar)
        ======================================================== -->
@@ -2929,6 +2971,72 @@
     // ========================================================
     // 渲染主畫面
     // ========================================================
+
+    // 既有 schedules 表無新增欄位權限：將結果以可讀結構保存在 status 欄位。
+    // 例如：已完賽｜成績：58:52｜晉級：是；不修改原對戰資料與來源。
+    function mrEsc(v){return String(v ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+    function matchResultParts(status){
+      const x=String(status||'');
+      return {state:x.includes('已完賽')?'已完賽':'賽程已公告',
+        score:(x.match(/(?:^|｜)成績：([^｜]*)/)||[])[1]||'',
+        adv:(x.match(/(?:^|｜)晉級：([^｜]*)/)||[])[1]||'待確認'};
+    }
+    function closeMatchResultModal(){document.getElementById('matchResultModal').style.display='none';}
+    function openMatchResultModal(id){
+      const row=schedules.find(s=>String(s.id)===String(id));if(!row)return;
+      const parts=matchResultParts(row.status);
+      document.getElementById('mrId').value=row.id;
+      document.getElementById('matchResultSummary').textContent=[row.tournament_name,row.division,row.match_date,row.opponents_draw].filter(Boolean).join('｜');
+      document.getElementById('mrState').value=parts.state;
+      document.getElementById('mrScore').value=parts.score;
+      document.getElementById('mrAdv').value=['是','否','待確認','不適用'].includes(parts.adv)?parts.adv:'待確認';
+      ['mrNextDate','mrNextTime','mrNextOpponent','mrNextVenue','mrNextDivision'].forEach(k=>document.getElementById(k).value='');
+      document.getElementById('matchResultModal').style.display='flex';
+    }
+    async function saveMatchResult(e){
+      e.preventDefault();
+      const btn=document.getElementById('mrSaveBtn');
+      const row=schedules.find(s=>String(s.id)===document.getElementById('mrId').value);
+      if(!row)return;
+      if(!supabaseClient){alert('目前尚未連上 Supabase，不能儲存成績，請先確認網路連線。');return;}
+      const state=document.getElementById('mrState').value;
+      const score=document.getElementById('mrScore').value.trim().replace(/[｜\r\n]/g,' ');
+      const adv=document.getElementById('mrAdv').value;
+      const date=document.getElementById('mrNextDate').value,time=document.getElementById('mrNextTime').value;
+      const opponents=document.getElementById('mrNextOpponent').value.trim();
+      const venue=document.getElementById('mrNextVenue').value.trim();
+      const division=document.getElementById('mrNextDivision').value.trim()||row.division;
+      if(state==='已完賽'&&!score){alert('請先輸入正式比分或比賽成績。');return;}
+      if(date&&(!time||!opponents||!venue)){alert('新增下一場需填齊日期、時間、對戰內容與場地。');return;}
+      if(!date&&(time||opponents||venue)){alert('若要新增下一場，請補上正式比賽日期。');return;}
+      if(date&&adv!=='是'){alert('只有確認晉級後才能新增晉級賽程。');return;}
+      const newStatus=state+(score?'｜成績：'+score:'')+'｜晉級：'+adv;
+      btn.disabled=true;btn.textContent='儲存中…';
+      try{
+        const result=await supabaseClient.from('schedules').update({status:newStatus}).eq('id',row.id).select('id');
+        if(result.error)throw result.error;
+        row.status=newStatus;
+        if(date){
+          const yy=Number(date.slice(0,4))-1911;
+          const rocDate=yy+'/'+date.slice(5,7)+'/'+date.slice(8,10);
+          const next={
+            sport:row.sport, tournament_name:row.tournament_name,division:division,
+            match_date:rocDate+' '+time, match_time:time,
+            opponents_draw:opponents,venue:venue,advancement_rule:row.advancement_rule||'',
+            source_file:'賽程更新（晉級後）',status:'晉級賽程已公告'
+          };
+          const {data:existing,error:checkErr}=await supabaseClient.from('schedules').select('id').eq('tournament_name',row.tournament_name).eq('match_date',next.match_date).eq('division',division).limit(1);
+          if(checkErr)throw checkErr;
+          if(existing&&existing.length){throw new Error('成績已儲存，但相同日期與組別的下一場賽程已存在，請先確認，避免重複。');}
+          const ins=await supabaseClient.from('schedules').insert([next]).select('*');
+          if(ins.error)throw ins.error;
+          if(ins.data?.[0])schedules.push(ins.data[0]);
+        }
+        closeMatchResultModal();renderActiveView();showToast('✅ 成績、晉級狀態與賽程已儲存！');
+      }catch(err){renderActiveView();alert('儲存未完全成功：'+(err.message||err)+'。請檢查資料後再操作。');}
+      finally{btn.disabled=false;btn.textContent='儲存至資料庫';}
+    }
+
     function renderActiveView() {
       const container = document.getElementById('contentContainer');
       const search = document.getElementById('searchInput').value.trim().toLowerCase();
@@ -3236,6 +3344,7 @@
                     <div class="detail-item"><span class="detail-val">🎯 ${s.opponents_draw || '尚未抽籤 / 對戰待確認'}</span></div>
                     <div class="detail-item"><span class="detail-val">📍 ${s.venue || '場地待確認'}</span></div>
                     <div class="detail-item"><span class="detail-val">🏆 ${s.advancement_rule || '-'}</span></div>
+                    <button class="btn-detail-outline" style="padding:4px 7px;font-size:.72rem;margin-top:5px" onclick="openMatchResultModal(${s.id})">🏆 成績／晉級</button>
                   </div>
                 </div>
               </div>
@@ -3295,6 +3404,7 @@
                       </div>
                       <div style="font-size:0.86rem; font-weight:800; color:#1e3a8a;">🎯 ${s.opponents_draw || '對戰待確認'}</div>
                       <div style="font-size:0.76rem; color:#475569; margin-top:3px;">📍 ${s.venue || '場地待確認'}</div>
+                      <button class="btn-detail-outline" style="padding:4px 7px;font-size:.72rem;margin-top:5px" onclick="openMatchResultModal(${s.id})">🏆 成績／晉級</button>
                     </div>
                   `).join('')}
                 </section>
@@ -3351,6 +3461,7 @@
                     <th>晉級賽制</th>
                     <th>籤表狀態</th>
                     <th>來源檔案</th>
+                    <th>成績管理</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -3391,6 +3502,7 @@
                 <td style="font-size:0.8rem; color:#475569;">${s.advancement_rule || '-'}</td>
                 <td><span class="status-tag tag-active">${s.status}</span></td>
                 <td style="font-size:0.75rem; color:#64748b;">${s.source_file || '-'}</td>
+                <td><button class="btn-detail-outline" style="padding:4px 7px;font-size:.72rem;margin-top:5px" onclick="openMatchResultModal(${s.id})">🏆 成績／晉級</button></td>
               </tr>
             `;
           });
