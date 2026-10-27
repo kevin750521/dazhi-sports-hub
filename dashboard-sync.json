@@ -37,7 +37,7 @@
         "venue": "臺北市南港區玉成國小學生活動中心3樓",
         "reg_deadline": "115/09/21 17:00",
         "doc_url": "https://drive.google.com/file/d/11WOPUkuJDX2p2we14j-tZgbHOJFJxFul/view",
-        "status": "🎯 教育盃擊劍：國男鈍劍劉○炘10/25 08:30出賽（成績待確認）；高女鈍劍楊○蓁10/25 13:30出賽、第三名",
+        "status": "🏅 教育盃擊劍雙季軍：國男鈍劍劉○炘10/25 08:30第三名；高女鈍劍楊○蓁10/25 13:30第三名（官方逐輪成績待核對）",
         "registration_status": "已報名"
       }
     },
@@ -145,11 +145,11 @@
         "match_date": "115/10/25",
         "match_time": "08:30",
         "venue": "臺北市南港區玉成國小學生活動中心3樓",
-        "opponents_draw": "個人賽預賽採分組循環；實際小組籤位依承辦校公告",
-        "advancement_rule": "預賽分組循環，每場5點3分鐘；複決賽單淘汰15點",
-        "source_file": "使用者確認2026/10/25 08:30（官方詳細成績待核對）",
+        "opponents_draw": "劉○炘（國中男子鈍劍個人賽）榮獲第三名",
+        "advancement_rule": "最終名次：第三名；淘汰賽逐輪結果待官方成績補充",
+        "source_file": "使用者確認2026/10/25 08:30及第三名（官方詳細成績待核對）",
         "doc_url": "https://drive.google.com/file/d/11WOPUkuJDX2p2we14j-tZgbHOJFJxFul/view",
-        "status": "出賽時間已確認（10/25 08:30）；成績待確認"
+        "status": "已完賽｜成績：第三名｜晉級：不適用"
       },
       "create": {
         "tournament_name": "臺北市115學年度教育盃中等學校擊劍錦標賽",
@@ -158,10 +158,10 @@
         "match_date": "115/10/25",
         "match_time": "08:30",
         "venue": "臺北市南港區玉成國小學生活動中心3樓",
-        "opponents_draw": "個人賽預賽採分組循環；實際小組籤位依承辦校公告",
-        "advancement_rule": "預賽分組循環，每場5點3分鐘；複決賽單淘汰15點",
-        "source_file": "使用者確認2026/10/25 08:30（官方詳細成績待核對）",
-        "status": "出賽時間已確認（10/25 08:30）；成績待確認"
+        "opponents_draw": "劉○炘（國中男子鈍劍個人賽）榮獲第三名",
+        "advancement_rule": "最終名次：第三名；淘汰賽逐輪結果待官方成績補充",
+        "source_file": "使用者確認2026/10/25 08:30及第三名（官方詳細成績待核對）",
+        "status": "已完賽｜成績：第三名｜晉級：不適用"
       }
     },
     {
