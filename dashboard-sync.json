@@ -107,6 +107,30 @@
         "status": "✅ 最新賽程已整合：大直高中高男乙I組2場、教女A組2場，共4場明確賽程；決賽資格賽程待預賽結果後再補",
         "registration_status": "已報名"
       }
+    },
+    {
+      "match": {
+        "name": "2026年第十四屆中信盃黑豹旗全國高中棒球大賽"
+      },
+      "values": {
+        "competition_dates": "115/10/28 首戰 G4；勝隊次輪預定115/10/30 09:00",
+        "venue": "首戰：立德棒球場",
+        "doc_url": "https://drive.google.com/file/d/1r8EaQsjZ9k5atOmCZAArWLjQRL7bdsUN/view",
+        "status": "黑豹旗 G4 首戰115/10/28 11:00大直高中對松山工農；晉級與下一輪出賽待確認"
+      },
+      "create": {
+        "name": "2026年第十四屆中信盃黑豹旗全國高中棒球大賽",
+        "sport": "棒球",
+        "divisions": "高中棒球隊",
+        "competition_dates": "115/10/28 首戰 G4；勝隊次輪預定115/10/30 09:00",
+        "venue": "立德棒球場",
+        "reg_start": "",
+        "reg_deadline": "",
+        "reg_method": "已完成報名；依大會公告賽程出賽",
+        "doc_url": "https://drive.google.com/file/d/1r8EaQsjZ9k5atOmCZAArWLjQRL7bdsUN/view",
+        "status": "G4 首戰已排定；尚待比賽成績與晉級確認",
+        "registration_status": "已報名"
+      }
     }
   ],
   "schedules": [
@@ -540,6 +564,33 @@
         "source_file": "教育盃排球賽總賽程表.pdf",
         "doc_url": "https://drive.google.com/file/d/1OR97vdJ0Wcr148m_eGpetPL-87LpO4Wr/view",
         "status": "賽程已公告"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "2026年第十四屆中信盃黑豹旗全國高中棒球大賽",
+        "division": "高中棒球隊",
+        "opponents_draw": "大直高中 vs 松山工農"
+      },
+      "values": {
+        "match_date": "115/10/28",
+        "match_time": "11:00",
+        "venue": "立德棒球場",
+        "advancement_rule": "G4 勝隊晉級 G14（115/10/30 09:00，立德棒球場；對手為 G5 勝隊）；是否晉級待首戰結果確認",
+        "source_file": "2026年中信盃第14屆黑豹旗賽程表1014.pdf",
+        "status": "賽程已公告（G4；首戰比數待確認）"
+      },
+      "create": {
+        "sport": "⚾ 棒球",
+        "division": "高中棒球隊",
+        "tournament_name": "2026年第十四屆中信盃黑豹旗全國高中棒球大賽",
+        "match_date": "115/10/28",
+        "match_time": "11:00",
+        "venue": "立德棒球場",
+        "opponents_draw": "大直高中 vs 松山工農",
+        "advancement_rule": "G4 勝隊晉級 G14（115/10/30 09:00，立德棒球場；對手為 G5 勝隊）；是否晉級待首戰結果確認",
+        "source_file": "2026年中信盃第14屆黑豹旗賽程表1014.pdf",
+        "status": "賽程已公告（G4；首戰比數待確認）"
       }
     }
   ]
