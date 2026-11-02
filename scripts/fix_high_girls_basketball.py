@@ -114,6 +114,10 @@ def patch_high_girls_schedule():
             "source_file": SOURCE_FILE,
             "status": "賽程已公告（10/14更新）",
         }
+        # Preserve recorded scores and progression from the newer official result sheets.
+        if "已完賽" in str(keep.get("status", "")):
+            payload.pop("status", None)
+            payload.pop("source_file", None)
         request("PATCH", f"schedules?id=eq.{keep_id}", payload, prefer="return=minimal")
         print(f"Patched schedule id={keep.get('id')} -> {game['date']} {game['time']}")
 
