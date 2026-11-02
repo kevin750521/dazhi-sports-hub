@@ -249,6 +249,27 @@ def cleanup_known_basketball_division_error():
         print(f"basketball correction: deleted duplicate id={row_id} division={row.get('division')}")
 
 
+
+def correct_high_school_soft_baseball_division():
+    """Preserve original rows, correct the displayed division without creating duplicates."""
+    for row in fetch_all("schedules"):
+        name = str(row.get("tournament_name") or "")
+        sport = str(row.get("sport") or "")
+        division = str(row.get("division") or "")
+        if "棒球" in (name + sport) and "全國" in name and "軟式" in division and "國中" in division:
+            rid = urllib.parse.quote(str(row["id"]), safe="")
+            request("PATCH", f"schedules?id=eq.{rid}", {"division": "高中軟式組"}, {"Prefer": "return=minimal"})
+            print(f"Corrected high school soft baseball schedule id={row['id']}")
+    for row in fetch_all("tournaments"):
+        name = str(row.get("name") or "")
+        sport = str(row.get("sport") or "")
+        division = str(row.get("divisions") or "")
+        if "棒球" in (name + sport) and "軟式" in (name + division) and "國中軟式組" in division:
+            rid = urllib.parse.quote(str(row["id"]), safe="")
+            updated = division.replace("國中軟式組、高中軟式組", "高中軟式組").replace("國中軟式組", "高中軟式組")
+            request("PATCH", f"tournaments?id=eq.{rid}", {"divisions": updated}, {"Prefer": "return=minimal"})
+            print(f"Corrected high school soft baseball tournament id={row['id']}")
+
 with open(DATA_FILE, "r", encoding="utf-8") as f:
     data = json.load(f)
 
@@ -256,4 +277,5 @@ sync_table("tournaments", data.get("tournaments", []))
 sync_table("schedules", data.get("schedules", []))
 cleanup_known_basketball_division_error()
 cleanup_superseded_schedule_ranges()
+correct_high_school_soft_baseball_division()
 print("Dashboard sync completed.")
