@@ -299,8 +299,8 @@
         "match_date": "115/10/26",
         "match_time": "13:10",
         "venue": "臺北市泰北國際雙語學校",
-        "source_file": "泰北高中（國男乙、高男乙）1026 1523.pdf",
-        "status": "賽程已公告（10/26調整）",
+        "source_file": "泰北高中（國男乙、高男乙）1029 0840.pdf",
+        "status": "已完賽｜成績：24:60｜晉級：待確認",
         "advancement_rule": "第一輪分組預賽；10/29 19:00第二輪抽籤（以大會晉級名單為準）"
       },
       "create": {
@@ -312,8 +312,8 @@
         "venue": "臺北市泰北國際雙語學校",
         "opponents_draw": "達人中學 vs 大直高中",
         "advancement_rule": "第一輪分組預賽；10/29 19:00第二輪抽籤（以大會晉級名單為準）",
-        "source_file": "泰北高中（國男乙、高男乙）1026 1523.pdf",
-        "status": "賽程已公告（10/26調整）"
+        "source_file": "泰北高中（國男乙、高男乙）1029 0840.pdf",
+        "status": "已完賽｜成績：24:60｜晉級：待確認"
       }
     },
     {
@@ -346,11 +346,16 @@
     {
       "match": {
         "tournament_name": "115學年度教育盃籃球賽",
+        "division": "國女乙B組",
+        "opponents_draw": "再興中學 vs 大直高中"
+      },
+      "values": {
+        "division": "國女乙B組",
         "match_date": "115/10/27",
         "match_time": "12:30",
-        "division": "國女乙B組"
+        "status": "已完賽｜成績：39:52｜晉級：待確認",
+        "source_file": "興雅國中（國女乙、高女乙）1031 1912.pdf"
       },
-      "values": {},
       "create": {
         "sport": "🏀 籃球",
         "division": "國女乙B組",
@@ -360,18 +365,23 @@
         "venue": "臺北市立興雅國中",
         "opponents_draw": "再興中學 vs 大直高中",
         "advancement_rule": "女子組第一輪預賽",
-        "source_file": "使用者提供－興雅國中女子預賽賽程截圖",
-        "status": "賽程已公告"
+        "source_file": "興雅國中（國女乙、高女乙）1031 1912.pdf",
+        "status": "已完賽｜成績：39:52｜晉級：待確認"
       }
     },
     {
       "match": {
         "tournament_name": "115學年度教育盃籃球賽",
+        "division": "高女乙B組",
+        "opponents_draw": "育成高中 vs 大直高中"
+      },
+      "values": {
+        "division": "高女乙B組",
         "match_date": "115/10/27",
         "match_time": "14:50",
-        "division": "高女乙B組"
+        "status": "已完賽｜成績：37:47｜晉級：待確認",
+        "source_file": "興雅國中（國女乙、高女乙）1031 1912.pdf"
       },
-      "values": {},
       "create": {
         "sport": "🏀 籃球",
         "division": "高女乙B組",
@@ -381,18 +391,22 @@
         "venue": "臺北市立興雅國中",
         "opponents_draw": "育成高中 vs 大直高中",
         "advancement_rule": "女子組第一輪預賽",
-        "source_file": "使用者提供－興雅國中女子預賽賽程截圖",
-        "status": "賽程已公告"
+        "source_file": "興雅國中（國女乙、高女乙）1031 1912.pdf",
+        "status": "已完賽｜成績：37:47｜晉級：待確認"
       }
     },
     {
       "match": {
         "tournament_name": "115學年度教育盃籃球賽",
-        "match_date": "115/10/28",
-        "match_time": "09:00"
+        "division": "國女乙B組",
+        "opponents_draw": "大直高中 vs 景美國中"
       },
       "values": {
-        "division": "國女乙B組"
+        "division": "國女乙B組",
+        "match_date": "115/10/28",
+        "match_time": "09:00",
+        "status": "已完賽｜成績：8:46｜晉級：待確認",
+        "source_file": "興雅國中（國女乙、高女乙）1031 1912.pdf"
       },
       "create": {
         "sport": "🏀 籃球",
@@ -403,39 +417,49 @@
         "venue": "臺北市立興雅國中",
         "opponents_draw": "大直高中 vs 景美國中",
         "advancement_rule": "女子組第一輪預賽",
-        "source_file": "使用者提供－興雅國中女子預賽賽程截圖",
-        "status": "賽程已公告"
+        "source_file": "興雅國中（國女乙、高女乙）1031 1912.pdf",
+        "status": "已完賽｜成績：8:46｜晉級：待確認"
       }
     },
     {
       "match": {
         "tournament_name": "115學年度教育盃籃球賽",
-        "match_date": "115/10/28",
-        "match_time": "16:00",
-        "division": "高女乙B組"
+        "division": "高女乙B組",
+        "opponents_draw": "大直高中 vs 華江高中"
       },
-      "values": {},
+      "values": {
+        "division": "高女乙B組",
+        "match_date": "115/10/30",
+        "match_time": "11:20",
+        "status": "已完賽｜成績：67:23｜晉級：待確認",
+        "source_file": "興雅國中（國女乙、高女乙）1031 1912.pdf"
+      },
       "create": {
         "sport": "🏀 籃球",
         "division": "高女乙B組",
         "tournament_name": "115學年度教育盃籃球賽",
-        "match_date": "115/10/28",
-        "match_time": "16:00",
+        "match_date": "115/10/30",
+        "match_time": "11:20",
         "venue": "臺北市立興雅國中",
         "opponents_draw": "大直高中 vs 華江高中",
         "advancement_rule": "女子組第一輪預賽",
-        "source_file": "使用者提供－興雅國中女子預賽賽程截圖",
-        "status": "賽程已公告"
+        "source_file": "興雅國中（國女乙、高女乙）1031 1912.pdf",
+        "status": "已完賽｜成績：67:23｜晉級：待確認"
       }
     },
     {
       "match": {
         "tournament_name": "115學年度教育盃籃球賽",
+        "division": "國女乙B組",
+        "opponents_draw": "中正國中 vs 大直高中"
+      },
+      "values": {
+        "division": "國女乙B組",
         "match_date": "115/10/29",
         "match_time": "12:30",
-        "division": "國女乙B組"
+        "status": "已完賽｜成績：26:32｜晉級：待確認",
+        "source_file": "興雅國中（國女乙、高女乙）1031 1912.pdf"
       },
-      "values": {},
       "create": {
         "sport": "🏀 籃球",
         "division": "國女乙B組",
@@ -445,29 +469,34 @@
         "venue": "臺北市立興雅國中",
         "opponents_draw": "中正國中 vs 大直高中",
         "advancement_rule": "女子組第一輪預賽",
-        "source_file": "使用者提供－興雅國中女子預賽賽程截圖",
-        "status": "賽程已公告"
+        "source_file": "興雅國中（國女乙、高女乙）1031 1912.pdf",
+        "status": "已完賽｜成績：26:32｜晉級：待確認"
       }
     },
     {
       "match": {
         "tournament_name": "115學年度教育盃籃球賽",
-        "match_date": "115/10/29",
-        "match_time": "16:00",
-        "division": "高女乙B組"
+        "division": "高女乙B組",
+        "opponents_draw": "大直高中 vs 泰北高中"
       },
-      "values": {},
+      "values": {
+        "division": "高女乙B組",
+        "match_date": "115/10/31",
+        "match_time": "11:20",
+        "status": "已完賽｜成績：55:21｜晉級：待確認",
+        "source_file": "興雅國中（國女乙、高女乙）1031 1912.pdf"
+      },
       "create": {
         "sport": "🏀 籃球",
         "division": "高女乙B組",
         "tournament_name": "115學年度教育盃籃球賽",
-        "match_date": "115/10/29",
-        "match_time": "16:00",
+        "match_date": "115/10/31",
+        "match_time": "11:20",
         "venue": "臺北市立興雅國中",
         "opponents_draw": "大直高中 vs 泰北高中",
         "advancement_rule": "女子組第一輪預賽",
-        "source_file": "使用者提供－興雅國中女子預賽賽程截圖",
-        "status": "賽程已公告"
+        "source_file": "興雅國中（國女乙、高女乙）1031 1912.pdf",
+        "status": "已完賽｜成績：55:21｜晉級：待確認"
       }
     },
     {
@@ -633,6 +662,192 @@
         "advancement_rule": "最終名次：第三名；淘汰賽逐輪結果待官方成績補充",
         "source_file": "使用者確認2026/10/25 13:30及第三名（官方詳細成績待核對）",
         "status": "已完賽｜成績：第三名｜晉級：不適用"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/30",
+        "match_time": "13:30"
+      },
+      "values": {
+        "sport": "🏀 籃球",
+        "division": "國男乙16強",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/30",
+        "match_time": "13:30",
+        "venue": "臺北市和平籃球館暖身館（A/B場地）・A場地",
+        "opponents_draw": "景興國中 vs 大直高中",
+        "advancement_rule": "16強複賽（國中男子乙組）",
+        "source_file": "和平暖身館（各組決賽）1101 1420.pdf",
+        "status": "已完賽｜成績：100:21｜晉級：否"
+      },
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "國男乙16強",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/30",
+        "match_time": "13:30",
+        "venue": "臺北市和平籃球館暖身館（A/B場地）・A場地",
+        "opponents_draw": "景興國中 vs 大直高中",
+        "advancement_rule": "16強複賽（國中男子乙組）",
+        "source_file": "和平暖身館（各組決賽）1101 1420.pdf",
+        "status": "已完賽｜成績：100:21｜晉級：否"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/30",
+        "match_time": "14:40"
+      },
+      "values": {
+        "sport": "🏀 籃球",
+        "division": "高男乙16強",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/30",
+        "match_time": "14:40",
+        "venue": "臺北市和平籃球館暖身館（A/B場地）・B場地",
+        "opponents_draw": "大直高中 vs 延平中學",
+        "advancement_rule": "16強複賽（高中男子乙組）",
+        "source_file": "和平暖身館（各組決賽）1101 1420.pdf",
+        "status": "已完賽｜成績：24:46｜晉級：否"
+      },
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "高男乙16強",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/30",
+        "match_time": "14:40",
+        "venue": "臺北市和平籃球館暖身館（A/B場地）・B場地",
+        "opponents_draw": "大直高中 vs 延平中學",
+        "advancement_rule": "16強複賽（高中男子乙組）",
+        "source_file": "和平暖身館（各組決賽）1101 1420.pdf",
+        "status": "已完賽｜成績：24:46｜晉級：否"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/31",
+        "match_time": "14:40"
+      },
+      "values": {
+        "sport": "🏀 籃球",
+        "division": "國女乙決賽",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/31",
+        "match_time": "14:40",
+        "venue": "臺北市和平籃球館暖身館（A/B場地）・A場地",
+        "opponents_draw": "天母國中 vs 大直高中",
+        "advancement_rule": "國中女子乙組1至4名決賽",
+        "source_file": "和平暖身館（各組決賽）1101 1420.pdf",
+        "status": "已完賽｜成績：47:28｜晉級：待確認"
+      },
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "國女乙決賽",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/10/31",
+        "match_time": "14:40",
+        "venue": "臺北市和平籃球館暖身館（A/B場地）・A場地",
+        "opponents_draw": "天母國中 vs 大直高中",
+        "advancement_rule": "國中女子乙組1至4名決賽",
+        "source_file": "和平暖身館（各組決賽）1101 1420.pdf",
+        "status": "已完賽｜成績：47:28｜晉級：待確認"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/11/01",
+        "match_time": "14:40"
+      },
+      "values": {
+        "sport": "🏀 籃球",
+        "division": "國女乙決賽",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/11/01",
+        "match_time": "14:40",
+        "venue": "臺北市和平籃球館暖身館（A/B場地）・B場地",
+        "opponents_draw": "大直高中 vs 介壽國中",
+        "advancement_rule": "國中女子乙組1至4名決賽；比分待公告",
+        "source_file": "和平暖身館（各組決賽）1101 1420.pdf",
+        "status": "賽程已公告（成績待確認）"
+      },
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "國女乙決賽",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/11/01",
+        "match_time": "14:40",
+        "venue": "臺北市和平籃球館暖身館（A/B場地）・B場地",
+        "opponents_draw": "大直高中 vs 介壽國中",
+        "advancement_rule": "國中女子乙組1至4名決賽；比分待公告",
+        "source_file": "和平暖身館（各組決賽）1101 1420.pdf",
+        "status": "賽程已公告（成績待確認）"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/11/01",
+        "match_time": "15:50"
+      },
+      "values": {
+        "sport": "🏀 籃球",
+        "division": "高女乙決賽",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/11/01",
+        "match_time": "15:50",
+        "venue": "臺北市和平籃球館暖身館（A/B場地）・B場地",
+        "opponents_draw": "臺北歐洲學校 vs 大直高中",
+        "advancement_rule": "高中女子乙組1至3名決賽；比分待公告",
+        "source_file": "和平暖身館（各組決賽）1101 1420.pdf",
+        "status": "賽程已公告（成績待確認）"
+      },
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "高女乙決賽",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/11/01",
+        "match_time": "15:50",
+        "venue": "臺北市和平籃球館暖身館（A/B場地）・B場地",
+        "opponents_draw": "臺北歐洲學校 vs 大直高中",
+        "advancement_rule": "高中女子乙組1至3名決賽；比分待公告",
+        "source_file": "和平暖身館（各組決賽）1101 1420.pdf",
+        "status": "賽程已公告（成績待確認）"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/11/06",
+        "match_time": "18:10"
+      },
+      "values": {
+        "sport": "🏀 籃球",
+        "division": "高女乙決賽",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/11/06",
+        "match_time": "18:10",
+        "venue": "臺北市和平籃球館暖身館（A/B場地）・B場地",
+        "opponents_draw": "大直高中 vs 中山女中",
+        "advancement_rule": "高中女子乙組1至3名決賽",
+        "source_file": "和平暖身館（各組決賽）1101 1420.pdf",
+        "status": "賽程已公告（成績待確認）"
+      },
+      "create": {
+        "sport": "🏀 籃球",
+        "division": "高女乙決賽",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "match_date": "115/11/06",
+        "match_time": "18:10",
+        "venue": "臺北市和平籃球館暖身館（A/B場地）・B場地",
+        "opponents_draw": "大直高中 vs 中山女中",
+        "advancement_rule": "高中女子乙組1至3名決賽",
+        "source_file": "和平暖身館（各組決賽）1101 1420.pdf",
+        "status": "賽程已公告（成績待確認）"
       }
     }
   ]
