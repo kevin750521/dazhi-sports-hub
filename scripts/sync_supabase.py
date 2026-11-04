@@ -270,6 +270,37 @@ def correct_high_school_soft_baseball_division():
             request("PATCH", f"tournaments?id=eq.{rid}", {"divisions": updated}, {"Prefer": "return=minimal"})
             print(f"Corrected high school soft baseball tournament id={row['id']}")
 
+
+def cleanup_obsolete_tennis_records():
+    """Remove archived Chungh Cheng Cup tennis and obsolete Education Cup range rows.
+
+    Education Cup registration and the seven confirmed single-day group schedules stay.
+    """
+    removed = {"tournaments": 0, "schedules": 0}
+    for row in fetch_all("tournaments"):
+        name = str(row.get("name") or "")
+        sport = str(row.get("sport") or "")
+        if "中正盃" in name and "網球" in (name + sport):
+            rid = urllib.parse.quote(str(row["id"]), safe="")
+            request("DELETE", f"tournaments?id=eq.{rid}", None, {"Prefer": "return=minimal"})
+            removed["tournaments"] += 1
+            print(f"REMOVED obsolete Chung Cheng Cup tennis tournament id={row['id']}")
+    for row in fetch_all("schedules"):
+        name = str(row.get("tournament_name") or "")
+        sport = str(row.get("sport") or "")
+        if "中正盃" in name and "網球" in (name + sport):
+            rid = urllib.parse.quote(str(row["id"]), safe="")
+            request("DELETE", f"schedules?id=eq.{rid}", None, {"Prefer": "return=minimal"})
+            removed["schedules"] += 1
+            print(f"REMOVED obsolete Chung Cheng Cup tennis schedule id={row['id']}")
+        elif "教育盃" in name and "網球" in (name + sport) and is_range_date(row.get("match_date")):
+            rid = urllib.parse.quote(str(row["id"]), safe="")
+            request("DELETE", f"schedules?id=eq.{rid}", None, {"Prefer": "return=minimal"})
+            removed["schedules"] += 1
+            print(f"REMOVED Education Cup tennis date-range summary id={row['id']}")
+    print(f"tennis cleanup completed: {removed}")
+
+
 with open(DATA_FILE, "r", encoding="utf-8") as f:
     data = json.load(f)
 
@@ -278,4 +309,5 @@ sync_table("schedules", data.get("schedules", []))
 cleanup_known_basketball_division_error()
 cleanup_superseded_schedule_ranges()
 correct_high_school_soft_baseball_division()
+cleanup_obsolete_tennis_records()
 print("Dashboard sync completed.")
