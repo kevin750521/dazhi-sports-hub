@@ -1754,7 +1754,7 @@
       </a>
       <a class="nav-link" id="navSchedules" onclick="switchNavTab('schedules')">
         <div class="nav-link-left"><span>🏀</span> 大直出賽賽程</div>
-        <span class="nav-count-badge" id="sideBadgeSchedules">15</span>
+        <span class="nav-count-badge" id="sideBadgeSchedules">—</span>
       </a>
       <a class="nav-link" onclick="openCrawlerModal()" style="cursor:pointer;" title="查看每日 04:00/16:00 主辦學校自動巡檢狀態">
         <div class="nav-link-left"><span>🤖</span> 賽程自動巡檢</div>
@@ -1860,7 +1860,7 @@
         🏆 賽事掌控 (<span id="mBadgeTournaments">11</span>)
       </button>
       <button class="m-subnav-btn" id="mNavSchedules" onclick="switchNavTab('schedules')">
-        🏀 出賽賽程 (<span id="mBadgeSchedules">15</span>)
+        🏀 出賽賽程 (<span id="mBadgeSchedules">—</span>)
       </button>
     </div>
 
@@ -2556,8 +2556,10 @@
     // Supabase 初始化與讀寫
     // ========================================================
     function initSupabase() {
-      const url = localStorage.getItem('dazhi_supabase_url') || DEFAULT_SUPABASE_URL;
-      const key = localStorage.getItem('dazhi_supabase_key') || DEFAULT_SUPABASE_KEY;
+      // 專案採單一正式 Supabase；舊瀏覽器設定可能指向已停用的 hub2。
+      // 不再使用 localStorage 覆蓋正式站台的資料庫連線。
+      const url = DEFAULT_SUPABASE_URL;
+      const key = DEFAULT_SUPABASE_KEY;
       const dot = document.getElementById('sideStatusDot');
       const txt = document.getElementById('sideStatusText');
 
@@ -2573,7 +2575,7 @@
         }
       }
       dot.className = 'sys-dot offline';
-      txt.textContent = '🟡 內建離線備援模式';
+      txt.textContent = '🔴 無法載入 Supabase 連線套件，顯示備援資料（非最新）';
     }
 
     // Supabase REST 每次最多回傳約 1000 筆，不等於資料庫最多只能存 1000 筆。
@@ -2612,7 +2614,7 @@
         return true;
       } catch (err) {
         console.warn('Supabase 同步失敗，正在顯示快取資料:', err);
-        if (status) status.textContent = '🔴 雲端同步失敗（目前顯示快取資料）';
+        if (status) status.textContent = '🔴 雲端同步失敗：' + (err.message || '未知錯誤') + '（目前顯示非最新資料）';
         return false;
       }
     }
@@ -3741,8 +3743,8 @@
     function openCreateModal() { document.getElementById('createModal').style.display = 'flex'; }
     function closeCreateModal() { document.getElementById('createModal').style.display = 'none'; stopListening(); }
     function openConfigModal() {
-      document.getElementById('cfgUrl').value = localStorage.getItem('dazhi_supabase_url') || DEFAULT_SUPABASE_URL;
-      document.getElementById('cfgKey').value = localStorage.getItem('dazhi_supabase_key') || DEFAULT_SUPABASE_KEY;
+      document.getElementById('cfgUrl').value = DEFAULT_SUPABASE_URL;
+      document.getElementById('cfgKey').value = DEFAULT_SUPABASE_KEY;
       document.getElementById('configModal').style.display = 'flex';
     }
     function closeConfigModal() { document.getElementById('configModal').style.display = 'none'; }
@@ -3750,11 +3752,15 @@
       const u = document.getElementById('cfgUrl').value.trim();
       const k = document.getElementById('cfgKey').value.trim();
       if (!u || !k) { alert('請填寫完整資訊'); return; }
-      localStorage.setItem('dazhi_supabase_url', u);
-      localStorage.setItem('dazhi_supabase_key', k);
+      if (u !== DEFAULT_SUPABASE_URL || k !== DEFAULT_SUPABASE_KEY) {
+        alert('正式站台已固定連接大直運動賽事資料庫，不能以瀏覽器設定切換到其他專案。');
+        return;
+      }
+      localStorage.removeItem('dazhi_supabase_url');
+      localStorage.removeItem('dazhi_supabase_key');
       closeConfigModal();
       initSupabase();
-      showToast('已更新 Supabase 設定！');
+      showToast('✅ 已恢復正式運動賽事資料庫連線');
     }
 
     function showTournamentDetails(id) {
