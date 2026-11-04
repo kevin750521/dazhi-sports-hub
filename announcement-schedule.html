@@ -16,12 +16,14 @@
     .sub{font-size:.82rem;color:#64748b}
     .toolbar{display:flex;gap:8px;flex-wrap:wrap}
     .toolbar input,.toolbar select{border:1px solid #cbd5e1;border-radius:7px;padding:8px 10px;font-size:.82rem;background:#fff}
+    .toolbar select{cursor:pointer;min-width:145px}
+    .toolbar select:focus,.toolbar input:focus{outline:2px solid #2563eb;outline-offset:1px}
+    .filter-state{font-size:.75rem;color:#475569;margin:0 0 7px}
+
     .tablebox{border:1px solid #dbe3ee;border-radius:12px;overflow-x:auto;overflow-y:visible;box-shadow:0 2px 8px rgba(15,23,42,.05);-webkit-overflow-scrolling:touch}
     table{width:100%;border-collapse:collapse;min-width:1180px}
     th,td{padding:11px 12px;border-bottom:1px solid #e2e8f0;text-align:left;vertical-align:middle;font-size:.82rem;line-height:1.45}
     th{background:#f8fafc;font-weight:900;white-space:nowrap;cursor:pointer;position:sticky;top:0;z-index:2}
-    .filterrow th{top:41px;padding:8px;background:#f8fafc}
-    .filterrow input{width:100%;min-width:74px;border:1px solid #cbd5e1;border-radius:6px;padding:6px 8px;font-size:.76rem}
     tr:hover td{background:#fbfdff}
     .sport{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-weight:800;white-space:nowrap;border:1px solid #dbeafe;background:#eff6ff;color:#1d4ed8}
     tr.completed td{background:#f8fafc;color:#64748b}
@@ -48,8 +50,6 @@
       .scroll-hint{display:block}
       table{min-width:1120px}
       th,td{padding:9px 8px;font-size:.76rem}
-      .filterrow th{padding:6px}
-      .filterrow input{padding:5px 6px;font-size:.72rem}
     }
     @media(max-width:700px){
       .wrap{padding:8px}
@@ -65,13 +65,21 @@
   <div class="head">
     <div>
       <h1><a class="title-link" href="https://dazhi-sports-hub.vercel.app/announcement-schedule" target="_blank" rel="noopener noreferrer">臺北市立大直高級中學｜運動賽事公告</a></h1>
-      <div class="sub">賽程資料自動同步；可依欄位篩選，點欄名可排序。</div>
+      <div class="sub">賽程資料自動同步；使用運動種類與時程狀態篩選，點欄名可排序。</div>
     </div>
     <div class="toolbar">
       <input id="q" placeholder="搜尋賽事、組別、場地…">
-      <select id="sport"><option value="">全部運動種類</option></select>
+      <select id="sport" aria-label="篩選運動種類"><option value="">全部運動種類</option></select>
+      <select id="stage" aria-label="篩選時程狀態">
+        <option value="">全部時程狀態</option>
+        <option value="upcoming">近期／未來賽程</option>
+        <option value="pending">賽程待公告</option>
+        <option value="finished">已完賽</option>
+        <option value="past">已過日期・成績未登錄</option>
+      </select>
     </div>
   </div>
+  <div id="filterState" class="filter-state" role="status" aria-live="polite">正在載入賽程資料…</div>
   <div class="scroll-hint">↔ 表格可左右滑動查看完整欄位</div>
   <div class="tablebox">
     <table id="tbl">
@@ -87,17 +95,6 @@
           <th data-k="status">籤表狀態</th>
           <th data-k="athletes">出賽選手</th>
         </tr>
-        <tr class="filterrow">
-          <th><input placeholder="篩選"></th>
-          <th><input placeholder="篩選"></th>
-          <th><input placeholder="篩選"></th>
-          <th><input placeholder="篩選"></th>
-          <th><input placeholder="篩選"></th>
-          <th><input placeholder="篩選"></th>
-          <th><input placeholder="篩選"></th>
-          <th><input placeholder="篩選"></th>
-          <th><input placeholder="篩選"></th>
-        </tr>
       </thead>
       <tbody></tbody>
     </table>
@@ -107,11 +104,11 @@
 <script>
 const SUPABASE_URL='https://hdxrublbpaptthmflnrn.supabase.co';
 const SUPABASE_KEY='sb_publishable_n3ONLlgwYQ0TAOcxkKoNhg_ZwL6M9wP';
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const sb=window.supabase?.createClient(SUPABASE_URL,SUPABASE_KEY) || null;
 let rows=[], sortKey='match_date', sortDir=1;
 const keys=['sport','tournament_name','division','match_date','venue','opponents_draw','advancement_rule','status','athletes'];
 const tbody=document.querySelector('tbody');
-const filters=[...document.querySelectorAll('.filterrow input')];
+
 function norm(v){return String(v??'').trim()}
 function dateKey(v){const s=norm(v).split(' ')[0];const m=s.match(/^(\d{2,4})\/(\d{1,2})\/(\d{1,2})$/);if(m){let y=+m[1];if(y<1911)y+=1911;return y*10000+(+m[2])*100+(+m[3]);}return 99999999}
 function formatMatchDate(v){
@@ -128,7 +125,8 @@ function formatMatchDate(v){
   return `${displayYear}/${m[2]}/${m[3]}（${weekday}）${m[4]||''}`;
 }
 function esc(s){return norm(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))}
-function sportLabel(s){const x=norm(s).replace(/^[^\w\u4e00-\u9fff]+/,'').trim();const emo=x.includes('籃球')?'🏀':x.includes('排球')?'🏐':x.includes('擊劍')?'🤺':x.includes('空手道')?'🥋':x.includes('網球')?'🎾':x.includes('棒球')?'⚾':x.includes('足球')?'⚽':'🏅';return `${emo} ${x||'其他'}`}
+function sportName(s){return norm(s).replace(/^[^\u4e00-\u9fff]+/,'').trim()}
+function sportLabel(s){const x=sportName(s);const emo=x.includes('籃球')?'🏀':x.includes('排球')?'🏐':x.includes('羽球')?'🏸':x.includes('桌球')?'🏓':x.includes('擊劍')?'🤺':x.includes('空手道')?'🥋':x.includes('網球')?'🎾':x.includes('棒球')?'⚾':x.includes('足球')?'⚽':'🏅';return `${emo} ${x||'其他'}`}
 
 const publicRoster={
  hard:{
@@ -175,6 +173,12 @@ function rosterGroups(r){
  if(name.includes('教育盃')&&name.includes('網球')&&tennisDayGroups[date]){
    return tennisDayGroups[date].map(([label,kind,key])=>({label,text:publicRoster[kind][key]}));
  }
+ if(name.includes('教育盃')&&name.includes('羽球')){
+   return [
+     {label:'高中男子乙組團體（10人）',text:'李○鴻、鄭○剛、黃○哲、江○翰、吳○光、蔡○道、胡○瑄、周○丞、姚○文、方○希'},
+     {label:'高中教師男子團體（7人）',text:'鍾○益、林○祥、劉○陞、陳○宇、鄭○文、鄭○鴻、陳○仁'}
+   ];
+ }
  if(name.includes('教育盃')&&name.includes('桌球')){
    return [['國男乙組',publicRoster.ping.jB],['國女乙組',publicRoster.ping.jG],['高男乙組',publicRoster.ping.hB],['高女乙組',publicRoster.ping.hG]].map(([label,text])=>({label,text}));
  }
@@ -193,6 +197,14 @@ function rosterCell(r){
 }
 
 function isCompleted(r){return /已完賽|已結束|比賽結束/.test(norm(r.status))}
+function isRangeRow(r){return /[～~至]|\d\s*[-–—]\s*\d/.test(norm(r.match_date))}
+function isPending(r){return /待公告|待確認|待抽籤|區間摘要/.test(norm(r.status))||isRangeRow(r)}
+function stageOf(r){
+ if(isCompleted(r))return 'finished';
+ if(isPending(r))return 'pending';
+ const d=dateKey(r.match_date), now=new Date(),today=now.getFullYear()*10000+(now.getMonth()+1)*100+now.getDate();
+ return d>=today ? 'upcoming' : 'past';
+}
 function rowPriority(r){
   if(isCompleted(r))return 3;
   const date=dateKey(r.match_date);
@@ -203,11 +215,13 @@ function rowPriority(r){
 }
 function sortDateTime(r){const d=norm(r.match_date);const t=norm(r.match_time);return d.includes(':')?d.slice(d.search(/\d\d:\d\d/)):t}
 function filtered(){
-  const q=norm(document.getElementById('q').value).toLowerCase(),sp=document.getElementById('sport').value;
+  const q=norm(document.getElementById('q').value).toLowerCase();
+  const sp=document.getElementById('sport').value,stage=document.getElementById('stage').value;
   return rows.filter(r=>{
-    if(sp&&norm(r.sport)!==sp)return false;
+    if(sp&&sportName(r.sport)!==sp)return false;
+    if(stage&&stageOf(r)!==stage)return false;
     if(q&&!keys.some(k=>norm(k==='athletes'?rosterText(r):r[k]).toLowerCase().includes(q)))return false;
-    return filters.every((f,i)=>!norm(f.value)||norm(keys[i]==='athletes'?rosterText(r):r[keys[i]]).toLowerCase().includes(norm(f.value).toLowerCase()))
+    return true;
   }).sort((a,b)=>{
     const groupA=rowPriority(a),groupB=rowPriority(b);
     if(groupA!==groupB)return groupA-groupB;
@@ -224,19 +238,73 @@ function filtered(){
 }
 function render(){
   const data=filtered();
+  document.getElementById('filterState').textContent='顯示 '+data.length+' 筆／共 '+rows.length+' 筆賽程（已完賽排在最後）';
   tbody.innerHTML=data.length?data.map(r=>`<tr class="${isCompleted(r)?'completed':''}"><td><span class="sport">${esc(sportLabel(r.sport))}</span></td><td><strong>${esc(r.tournament_name)}</strong></td><td>${esc(r.division)}</td><td><strong>${esc(formatMatchDate(r.match_date))}</strong></td><td>${esc(r.venue)}</td><td class="match">${esc(r.opponents_draw)}</td><td>${esc(r.advancement_rule||'-')}</td><td><span class="status">${esc(r.status||'-')}</span></td><td class="roster-cell">${rosterCell(r)}</td></tr>`).join(''):`<tr><td colspan="9" class="empty">目前沒有符合條件的資料</td></tr>`
 }
-async function load(){
-  const {data,error}=await sb.from('schedules').select('*');
-  if(error){tbody.innerHTML=`<tr><td colspan="9" class="empty">資料載入失敗：${esc(error.message)}</td></tr>`;return}
-  rows=data||[];
-  const sports=[...new Set(rows.map(r=>norm(r.sport)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));
-  document.getElementById('sport').innerHTML='<option value="">全部運動種類</option>'+sports.map(s=>`<option>${esc(s)}</option>`).join('');
-  render()
+// 報名表 115169781375：正式確認的羽球大會區間；無個別對戰時間。
+const confirmedBadminton={
+ id:'badminton-registration-115169781375',sport:'🏸 羽球',
+ tournament_name:'臺北市115學年度教育盃中等學校羽球錦標賽',
+ division:'高中男子乙組團體（10人）、高中教師男子團體（7人）',
+ match_date:'115/12/21～12/25',match_time:'',venue:'臺北體育館7樓羽球場',
+ opponents_draw:'已報名2隊；對手與場次依正式抽籤公告',
+ advancement_rule:'比賽日期為大會區間，正式逐場賽程待公告',
+ status:'已報名｜賽程待公告（2隊17人）'
+};
+function ensureBadminton(list){
+ if(!list.some(r=>norm(r.tournament_name).includes('教育盃') && norm(r.tournament_name).includes('羽球'))){
+   return [...list,confirmedBadminton];
+ }
+ return list;
 }
+function setRows(data){
+ rows=ensureBadminton(Array.isArray(data)?data:[]);
+ const sports=[...new Set(rows.map(r=>sportName(r.sport)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));
+ const current=document.getElementById('sport').value;
+ document.getElementById('sport').innerHTML='<option value="">全部運動種類</option>'+sports.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+ if(sports.includes(current))document.getElementById('sport').value=current;
+ render();
+}
+async function getDirectSchedules(){
+ if(sb){
+   let result=[],chunk=1000;
+   for(let from=0;from<100000;from+=chunk){
+     const {data,error}=await sb.from('schedules').select('*').order('id',{ascending:true}).range(from,from+chunk-1);
+     if(error)throw error;
+     result.push(...(data||[]));
+     if(!data||data.length<chunk)break;
+   }
+   return result;
+ }
+ const response=await fetch(SUPABASE_URL+'/rest/v1/schedules?select=*&order=id.asc',{
+   headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY},
+   cache:'no-store'
+ });
+ if(!response.ok)throw new Error('Supabase HTTP '+response.status);
+ return response.json();
+}
+async function load(){
+  try{
+    // 與主儀錶板共用同網域讀取；避免跨網域 SDK 與瀏覽器快取造成資料遺漏。
+    const response=await fetch('/api/dashboard-data?ts='+Date.now(),{cache:'no-store'});
+    if(!response.ok)throw new Error('站內資料服務 HTTP '+response.status);
+    const result=await response.json();
+    if(!Array.isArray(result.schedules))throw new Error('賽程回傳格式錯誤');
+    setRows(result.schedules);
+  }catch(err){
+    console.warn('公告頁站內同步失敗，嘗試 Supabase 直接讀取',err);
+    try{setRows(await getDirectSchedules())}
+    catch(fallbackError){
+      console.error('公告頁同步失敗，顯示已確認之羽球報名摘要',fallbackError);
+      setRows([]);
+      document.getElementById('filterState').textContent='雲端賽程載入失敗，僅顯示已確認報名資料（非完整賽程）';
+    }
+  }
+}
+
 document.getElementById('q').addEventListener('input',render);
 document.getElementById('sport').addEventListener('change',render);
-filters.forEach(f=>f.addEventListener('input',render));
+document.getElementById('stage').addEventListener('change',render);
 document.querySelectorAll('th[data-k]').forEach(th=>th.addEventListener('click',()=>{
   const k=th.dataset.k;
   if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1}
