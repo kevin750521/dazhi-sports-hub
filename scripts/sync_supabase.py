@@ -301,6 +301,29 @@ def cleanup_obsolete_tennis_records():
     print(f"tennis cleanup completed: {removed}")
 
 
+
+def cleanup_old_badminton_range():
+    """Remove obsolete Education Cup badminton range, keeping current Dec 21-25 schedule."""
+    rows = fetch_all("schedules")
+    current = [
+        row for row in rows
+        if "教育盃" in str(row.get("tournament_name", ""))
+        and "羽球" in (str(row.get("sport", "")) + str(row.get("tournament_name", "")))
+        and "115/12/21" in str(row.get("match_date", ""))
+    ]
+    if not current:
+        print("badminton old-range cleanup skipped: current range not yet synchronized")
+        return
+    for row in rows:
+        name = str(row.get("tournament_name", ""))
+        sport = str(row.get("sport", ""))
+        date = str(row.get("match_date", ""))
+        if "教育盃" in name and "羽球" in (sport + name) and is_range_date(date) and "115/12/21" not in date:
+            rid = urllib.parse.quote(str(row["id"]), safe="")
+            request("DELETE", f"schedules?id=eq.{rid}", None, {"Prefer": "return=minimal"})
+            print(f"Deleted obsolete badminton range: {row['id']} {date}")
+
+
 with open(DATA_FILE, "r", encoding="utf-8") as f:
     data = json.load(f)
 
@@ -310,4 +333,5 @@ cleanup_known_basketball_division_error()
 cleanup_superseded_schedule_ranges()
 correct_high_school_soft_baseball_division()
 cleanup_obsolete_tennis_records()
+cleanup_old_badminton_range()
 print("Dashboard sync completed.")
