@@ -324,6 +324,29 @@ def cleanup_old_badminton_range():
             print(f"Deleted obsolete badminton range: {row['id']} {date}")
 
 
+
+def deduplicate_badminton_range_summary():
+    """Keep one current badminton range summary; do not touch exact-date fixtures/results."""
+    rows = [
+        row for row in fetch_all("schedules")
+        if "教育盃" in str(row.get("tournament_name", ""))
+        and "羽球" in (str(row.get("sport", "")) + str(row.get("tournament_name", "")))
+        and is_range_date(row.get("match_date", ""))
+        and "115/12/21" in str(row.get("match_date", ""))
+    ]
+    if len(rows) <= 1:
+        return
+    rows.sort(key=lambda r: (
+        "高中男子乙組團體" in str(r.get("division", "")),
+        "已報名" in str(r.get("status", "")),
+        str(r.get("id", ""))
+    ), reverse=True)
+    for row in rows[1:]:
+        rid = urllib.parse.quote(str(row["id"]), safe="")
+        request("DELETE", f"schedules?id=eq.{rid}", None, {"Prefer": "return=minimal"})
+        print(f"Deleted duplicate badminton range summary id={row['id']}")
+
+
 with open(DATA_FILE, "r", encoding="utf-8") as f:
     data = json.load(f)
 
@@ -334,4 +357,5 @@ cleanup_superseded_schedule_ranges()
 correct_high_school_soft_baseball_division()
 cleanup_obsolete_tennis_records()
 cleanup_old_badminton_range()
+deduplicate_badminton_range_summary()
 print("Dashboard sync completed.")
