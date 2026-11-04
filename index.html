@@ -2575,7 +2575,9 @@
         }
       }
       dot.className = 'sys-dot offline';
-      txt.textContent = '🔴 無法載入 Supabase 連線套件，顯示備援資料（非最新）';
+      txt.textContent = '🟡 資料庫 SDK 未載入，改用直接查詢同步中…';
+      // CDN 載入失敗也能使用瀏覽器內建 fetch 讀取最新賽程。
+      fetchData();
     }
 
     // Supabase REST 每次最多回傳約 1000 筆，不等於資料庫最多只能存 1000 筆。
@@ -2584,9 +2586,23 @@
       const pageSize = 1000;
       let all = [];
       for (let from = 0; from < 100000; from += pageSize) {
-        const { data, error } = await supabaseClient.from(table)
-          .select('*').order('id', { ascending: true }).range(from, from + pageSize - 1);
-        if (error) throw new Error(table + '：' + error.message);
+        let data;
+        if (supabaseClient) {
+          const result = await supabaseClient.from(table)
+            .select('*').order('id', { ascending: true }).range(from, from + pageSize - 1);
+          if (result.error) throw new Error(table + '：' + result.error.message);
+          data = result.data;
+        } else {
+          // 不依賴外部 Supabase JS CDN 的唯讀備援，同樣使用正式資料庫與公開 key。
+          const endpoint = DEFAULT_SUPABASE_URL + '/rest/v1/' + table +
+            '?select=*&order=id.asc&offset=' + from + '&limit=' + pageSize;
+          const resp = await fetch(endpoint, {
+            headers: {'apikey': DEFAULT_SUPABASE_KEY, 'Authorization': 'Bearer ' + DEFAULT_SUPABASE_KEY},
+            cache: 'no-store'
+          });
+          if (!resp.ok) throw new Error(table + '：HTTP ' + resp.status);
+          data = await resp.json();
+        }
         all.push(...(data || []));
         if (!data || data.length < pageSize) break;
       }
@@ -2594,7 +2610,6 @@
     }
 
     async function fetchData() {
-      if (!supabaseClient) return false;
       const status = document.getElementById('sideStatusText');
       if (status) status.textContent = '🟡 雲端資料同步中…';
       try {
@@ -2620,10 +2635,6 @@
     }
 
     async function manualRefreshData() {
-      if (!supabaseClient) {
-        showToast('⚠️ 離線模式：目前僅顯示快取，請檢查 Supabase 連線設定');
-        return;
-      }
       const ok = await fetchData();
       showToast(ok ? '✅ 已同步最新賽事 ' + tournaments.length + ' 筆、賽程 ' + schedules.length + ' 筆' : '⚠️ 雲端同步失敗，畫面仍是快取資料');
     }
@@ -2681,6 +2692,8 @@
       document.getElementById('sideBadgeUnreg').textContent = unreg;
       document.getElementById('sideBadgeReg').textContent = reg;
       document.getElementById('sideBadgeDeclined').textContent = dec;
+      const sideSched = document.getElementById('sideBadgeSchedules');
+      if (sideSched) sideSched.textContent = schedules.length;
 
       // 手機專屬徽章計數同步
       const mBadgeTour = document.getElementById('mBadgeTournaments');
