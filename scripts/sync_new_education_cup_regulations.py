@@ -145,15 +145,15 @@ else:
 badminton = {
     "name": "臺北市115學年度教育盃中等學校羽球錦標賽",
     "sport": "羽球",
-    "divisions": "高中男子組、高中女子組、國中男子組、國中女子組（大直實際報名名單待確認）",
-    "competition_dates": "115/12/21～12/25（大會賽事區間；大直個別場次待抽籤公告）",
-    "venue": "臺北體育館7樓",
-    "reg_start": "依正式競賽規程",
-    "reg_deadline": "115/11/03 16:00",
-    "reg_method": "依正式規程採線上報名並繳交核章報名表；大直完成報名與否待查核，正式逐場賽程尚未公告",
-    "doc_url": "https://drive.google.com/file/d/1FWvl4sj3Q7Wq4bfy4CJTf_X1Su-U1GHl/view",
-    "registration_status": "待確認",
-    "status": "📅 賽程已列管：115/12/21～12/25；分組、個別對手和比賽時間待正式公告，報名資料待確認"
+    "divisions": "大直已確認報名2隊：高中男子乙組團體（10名學生），高中教師男子團體（7名教職員）；合計17名參賽人員。未見其他組別報名，勿列為大直出賽組別。",
+    "competition_dates": "115/12/21～12/25（大會賽事區間；兩隊個別出賽日期及對手待11/17抽籤後公告）",
+    "venue": "臺北體育館7樓羽球場（臺北市松山區南京東路4段10號）",
+    "reg_start": "即日起",
+    "reg_deadline": "115/11/03 17:00",
+    "reg_method": "已取得大直羽球報名名單（報名序號115169781375、報名日期115/10/22）；高中男子乙組團體10人、高中教師男子團體7人。報名表：https://drive.google.com/file/d/1E7hWZRx2gqBcgAyquuSRvXTdhZZ5HQeG/view。正式規程要求核章紙本送達松山高中，是否送達尚待查證；115/11/05 16:00前公布接受名單、115/11/17 10:00松山高中抽籤。",
+    "doc_url": "https://drive.google.com/file/d/10tNQo0Ggs-YTjz2DJ5Og46UhYEkpjqxB/view",
+    "registration_status": "已報名",
+    "status": "✅ 大直高中羽球團體報名名單已核對：高中男子乙組10人＋高中教師男子組7人，共2隊17人；115/10/22線上報名完成。比賽日期115/12/21～12/25；個別籤表、場次及核章紙本送達情形待確認。"
 }
 upsert_by_sport(rows, "羽球", badminton)
 
