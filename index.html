@@ -2613,10 +2613,26 @@
       const status = document.getElementById('sideStatusText');
       if (status) status.textContent = '🟡 雲端資料同步中…';
       try {
-        const [tData, sData] = await Promise.all([
-          loadAllDashboardRows('tournaments'),
-          loadAllDashboardRows('schedules')
-        ]);
+        let tData, sData;
+        // 優先讀同網域的 Vercel 唯讀端點，避免手機網路、CORS、
+        // Supabase JS CDN 阻擋造成資料表長期停留在內建 15 筆。
+        try {
+          const response = await fetch('/api/dashboard-data?t=' + Date.now(), {
+            cache: 'no-store', headers: {'Accept':'application/json'}
+          });
+          if (!response.ok) throw new Error('站內資料服務 HTTP ' + response.status);
+          const payload = await response.json();
+          if (!Array.isArray(payload.tournaments) || !Array.isArray(payload.schedules))
+            throw new Error('站內資料格式錯誤');
+          tData = payload.tournaments;
+          sData = payload.schedules;
+        } catch (proxyError) {
+          console.warn('站內資料服務暫不可用，改為直接讀取 Supabase:', proxyError);
+          [tData, sData] = await Promise.all([
+            loadAllDashboardRows('tournaments'),
+            loadAllDashboardRows('schedules')
+          ]);
+        }
         // 即使查詢回傳 0 筆，也不得悄悄沿用舊快取。
         tournaments = tData;
         schedules = sData;
