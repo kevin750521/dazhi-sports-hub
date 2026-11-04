@@ -2545,8 +2545,6 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      deduplicateTournaments();
-      syncFencingAndKarateStatus();
       initSupabase();
       initSpeechRecognition();
       populateFilters();
@@ -2567,7 +2565,7 @@
         try {
           supabaseClient = window.supabase.createClient(url, key);
           dot.className = 'sys-dot';
-          txt.textContent = '🟢 Supabase 即時連線';
+          txt.textContent = '🟡 正在檢查 Supabase 資料…';
           fetchData();
           return;
         } catch (e) {
@@ -2578,37 +2576,54 @@
       txt.textContent = '🟡 內建離線備援模式';
     }
 
+    // Supabase REST 每次最多回傳約 1000 筆，不等於資料庫最多只能存 1000 筆。
+    // 分頁取回全部資料，且不以空結果或失敗查詢冒充同步成功。
+    async function loadAllDashboardRows(table) {
+      const pageSize = 1000;
+      let all = [];
+      for (let from = 0; from < 100000; from += pageSize) {
+        const { data, error } = await supabaseClient.from(table)
+          .select('*').order('id', { ascending: true }).range(from, from + pageSize - 1);
+        if (error) throw new Error(table + '：' + error.message);
+        all.push(...(data || []));
+        if (!data || data.length < pageSize) break;
+      }
+      return all;
+    }
+
     async function fetchData() {
-      if (!supabaseClient) return;
+      if (!supabaseClient) return false;
+      const status = document.getElementById('sideStatusText');
+      if (status) status.textContent = '🟡 雲端資料同步中…';
       try {
-        const { data: tData, error: tErr } = await supabaseClient.from('tournaments').select('*').order('id', { ascending: true });
-        if (!tErr && tData && tData.length > 0) {
-          tournaments = tData;
-          syncFencingAndKarateStatus(); // 關鍵：覆蓋後立即合流孔同學與劉同學的最新狀態
-        }
-
-        const { data: sData, error: sErr } = await supabaseClient.from('schedules').select('*').order('id', { ascending: true });
-        if (!sErr && sData && sData.length > 0) {
-          schedules = sData;
-          syncFencingAndKarateStatus(); // 關鍵：確保包含空手道與擊劍出賽排程
-        }
-
+        const [tData, sData] = await Promise.all([
+          loadAllDashboardRows('tournaments'),
+          loadAllDashboardRows('schedules')
+        ]);
+        // 即使查詢回傳 0 筆，也不得悄悄沿用舊快取。
+        tournaments = tData;
+        schedules = sData;
+        localStorage.setItem('dazhi_tournaments', JSON.stringify(tournaments));
         updateMetrics();
         populateFilters();
         renderActiveView();
+        const now = new Date().toLocaleTimeString('zh-TW', {hour:'2-digit', minute:'2-digit'});
+        if (status) status.textContent = '🟢 雲端已同步 ' + now + '｜賽事 ' + tournaments.length + ' 筆、賽程 ' + schedules.length + ' 筆';
+        return true;
       } catch (err) {
-        console.warn('Supabase 連線失敗，沿用本地快取:', err);
+        console.warn('Supabase 同步失敗，正在顯示快取資料:', err);
+        if (status) status.textContent = '🔴 雲端同步失敗（目前顯示快取資料）';
+        return false;
       }
     }
 
-    function manualRefreshData() {
-      if (supabaseClient) {
-        fetchData();
-        showToast('已從 Supabase 即時同步最新賽事與賽程！');
-      } else {
-        showToast('目前為內建資料模式。已刷新畫面！');
-        renderActiveView();
+    async function manualRefreshData() {
+      if (!supabaseClient) {
+        showToast('⚠️ 離線模式：目前僅顯示快取，請檢查 Supabase 連線設定');
+        return;
       }
+      const ok = await fetchData();
+      showToast(ok ? '✅ 已同步最新賽事 ' + tournaments.length + ' 筆、賽程 ' + schedules.length + ' 筆' : '⚠️ 雲端同步失敗，畫面仍是快取資料');
     }
 
     // ========================================================
@@ -3046,11 +3061,7 @@
           const matchSport = sport === '全部' || t.sport.includes(sport);
           const regStatus = t.registration_status || '未報名';
           const matchRegPill = currentRegFilter === '全部' || regStatus === currentRegFilter;
-          // 報名掌控的預設「全部」視圖只保留仍需處理的項目：
-          // 已報名與不報名都先隱藏；若使用者主動點選對應狀態仍可查看。
-          if (currentRegFilter === '全部' && regStatus === '已報名') return false;
-          // 報名掌控的預設「全部」視圖只保留仍需處理的項目：
-          // 已報名與不報名都先隱藏；若使用者主動點選對應狀態仍可查看。
+          // 預設只看待辦；已報名賽事仍在「✅ 已確認出賽」中查詢。
           if (currentRegFilter === '全部' && regStatus === '已報名') return false;
           if (hideDeclined && currentRegFilter === '全部' && regStatus === '不報名') return false;
           return matchSearch && matchSport && matchRegPill;
