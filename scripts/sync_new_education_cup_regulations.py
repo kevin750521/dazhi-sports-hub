@@ -139,4 +139,22 @@ else:
         rows.append(inserted[0])
     print("INSERTED volleyball league")
 
+
+# 羽球已建立於賽程表，但主賽事表過去漏建，造成 KPI 計數未增加。
+# 大直報名是否完成仍待確認；不將賽事區間當作個人實際出賽日。
+badminton = {
+    "name": "臺北市115學年度教育盃中等學校羽球錦標賽",
+    "sport": "羽球",
+    "divisions": "高中男子組、高中女子組、國中男子組、國中女子組（大直實際報名名單待確認）",
+    "competition_dates": "115/12/21～12/25（大會賽事區間；大直個別場次待抽籤公告）",
+    "venue": "臺北體育館7樓",
+    "reg_start": "依正式競賽規程",
+    "reg_deadline": "115/11/03 16:00",
+    "reg_method": "依正式規程採線上報名並繳交核章報名表；大直完成報名與否待查核，正式逐場賽程尚未公告",
+    "doc_url": "https://drive.google.com/file/d/1FWvl4sj3Q7Wq4bfy4CJTf_X1Su-U1GHl/view",
+    "registration_status": "待確認",
+    "status": "📅 賽程已列管：115/12/21～12/25；分組、個別對手和比賽時間待正式公告，報名資料待確認"
+}
+upsert_by_sport(rows, "羽球", badminton)
+
 print("Education Cup regulations sync completed.")
