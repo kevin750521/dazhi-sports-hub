@@ -79,14 +79,15 @@ upsert_by_sport(rows, "網球", tennis)
 table_tennis = {
     "name": "臺北市115學年度教育盃中等學校桌球錦標賽",
     "sport": "桌球",
-    "divisions": "教師男/女團體；學生甲/乙組團體、單打、雙打；高中甲組/國中甲組混合雙打",
-    "competition_dates": "115/12/12～12/17",
+    "divisions": "大直已報名4組：國男乙（團體1隊、單打3、雙打3）、國女乙（單打3、雙打2）、高男乙（單打3、雙打1）、高女乙（單打1、雙打1）；共19位不重複選手、18報名項次（團體1、單打10、雙打7）",
+    "competition_dates": "115/12/12～12/17（各組實際出賽日期、對手和時間等待115/11/19抽籤公告）",
     "venue": "臺北市立麗山國民中學活動中心3樓（臺北市內湖區內湖路1段629巷42號）",
     "reg_start": "即日起",
     "reg_deadline": "115/11/06",
-    "reg_method": "麗山國中教育盃桌球錦標賽報名系統線上報名＋核章紙本掛號郵寄或送達麗山國中體育組",
+    "reg_method": "115/11/04取得4組線上系統產生的正式報名表。已報名：國男乙05156（團體／單打／雙打）、國女乙05144（單打／雙打）、高男乙05154（單打／雙打）、高女乙05143（單打／雙打）。報名表須校內核章並掛號郵寄麗山國中體育組；是否已寄送尚待確認。報名表：https://drive.google.com/file/d/1PicxSGlyLEiAHXsOL0rHry83_ftr576j/view（國男）；https://drive.google.com/file/d/1qYxq9XFBgYUvgXU6GBGgCxM2S_Sdp398/view（國女）；https://drive.google.com/file/d/1z5MPWfHxPq8R6STDso3sNo5Ng2XW8ehq/view（高男）；https://drive.google.com/file/d/174Da0JMBcIy6sMm36AgE38bI93i7-E_B/view（高女）",
     "doc_url": "https://drive.google.com/file/d/1tpdOCCjrt25KNb5JOjGmKqQeEbiY2DKr/view",
-    "status": "競賽規程已取得；115/11/19 15:00領隊會議後公開抽籤；大直高中實際報名項目與籤表待後續確認"
+    "registration_status": "已報名",
+    "status": "✅ 已有4組線上報名表、19名選手、18報名項次；尚須確認校內核章紙本是否於115/11/06前寄送／送達。115/11/19 15:00麗山國中領隊會議及抽籤；大直各場對手／時間待公告。"
 }
 upsert_by_sport(rows, "桌球", table_tennis)
 
@@ -106,5 +107,36 @@ skating = {
     "status": "最新115/10/15正式規程；競速與自由式輪滑115/10/30 16:00截止，花式116/03/29 16:00截止；大直是否報名、選手名單及各場時間均待確認"
 }
 upsert_by_sport(rows, "滑輪溜冰", skating)
+
+
+# 115學年度中等學校排球聯賽競賽規程（運動部115/10/29備查）
+# 此為「中等學校排球聯賽」，與「教育盃排球錦標賽」是兩項不同賽事。
+volleyball_league = {
+    "name": "115學年度中等學校排球聯賽",
+    "sport": "排球",
+    "divisions": "高中男生／高中女生／國中男生／國中女生各分甲級、乙級；大直實際報名組別尚待確認",
+    "competition_dates": "各階段賽程、場次及日期尚待主辦單位公告（依正式規程未指定固定逐場日期）",
+    "venue": "甲級由主辦實地勘查排定；乙級縣市預賽由競賽管理協調場地、複決賽另行公告",
+    "reg_start": "即日起",
+    "reg_deadline": "115/11/08（甲級）；115/11/15（乙級）",
+    "reg_method": "中華民國高級中等學校體育總會線上報名；確認後列印報名表，學校核章及關防、連同職隊員個資授權書掛號郵寄體總（臺北市中山區朱崙街20號13樓）。甲級每隊最多14人、乙級最多18人；乙級每場可提出12人出賽。應完成執行教練證照與隨隊教師證明文件上傳。紙本及報名完成狀態待確認。",
+    "doc_url": "https://drive.google.com/file/d/1bLyM-SO6vO8o5hgyEnPSJTESSg2owC_d/view",
+    "registration_status": "待確認",
+    "status": "📄 115學年度中等學校排球聯賽正式規程已取得：甲級115/11/08截止、乙級115/11/15截止。大直是否參賽及參賽級別尚待確認；各階段正式賽程／對戰／時間均待公告。"
+}
+league_found = next(
+    (row for row in rows if "115" in str(row.get("name", ""))
+     and "排球" in str(row.get("name", ""))
+     and "聯賽" in str(row.get("name", ""))), None
+)
+if league_found:
+    rid = urllib.parse.quote(str(league_found["id"]), safe="")
+    request("PATCH", f"tournaments?id=eq.{rid}", volleyball_league, "return=minimal")
+    print(f"UPDATED volleyball league: id={league_found['id']}")
+else:
+    inserted = request("POST", "tournaments", [volleyball_league], "return=representation")
+    if inserted:
+        rows.append(inserted[0])
+    print("INSERTED volleyball league")
 
 print("Education Cup regulations sync completed.")
