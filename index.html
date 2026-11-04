@@ -2634,6 +2634,34 @@
           ]);
         }
         // 即使查詢回傳 0 筆，也不得悄悄沿用舊快取。
+        // 已核對報名表之教育盃羽球（報名編號 115169781375）。
+        // 若公開查詢因 RLS 或資料同步視角少了這筆，畫面仍顯示已驗證資料。
+        // 如 Supabase 已有該筆則完全使用雲端版本，避免重複計數。
+        const badmintonName = '臺北市115學年度教育盃中等學校羽球錦標賽';
+        if (!tData.some(t => String(t.name || '').includes('教育盃') && String(t.name || '').includes('羽球'))) {
+          tData.push({
+            id: 'registration-115169781375', name: badmintonName, sport: '羽球',
+            divisions: '高中男子乙組團體（10人）、高中教師男子團體（7人）',
+            competition_dates: '115/12/21～12/25', venue: '臺北體育館7樓羽球場',
+            reg_deadline: '115/11/03 17:00', reg_method: '已核對115169781375報名名單；核章紙本送達待確認',
+            doc_url: 'https://drive.google.com/file/d/1E7hWZRx2gqBcgAyquuSRvXTdhZZ5HQeG/view',
+            status: '✅ 115/10/22已報名，2隊17人；正式賽程待公告',
+            registration_status: '已報名'
+          });
+          console.warn('教育盃羽球未出現在公開賽事主檔，使用正式報名表資料補足顯示');
+        }
+        if (!sData.some(t => String(t.tournament_name || '').includes('教育盃') && String(t.tournament_name || '').includes('羽球'))) {
+          sData.push({
+            id: 'badminton-range-115', sport: '🏸 羽球', tournament_name: badmintonName,
+            division: '高中男子乙組團體（10人）、高中教師男子團體（7人）',
+            match_date: '115/12/21～12/25', match_time: '', venue: '臺北體育館7樓羽球場',
+            opponents_draw: '正式對戰與逐場時間待公告',
+            advancement_rule: '大會日期區間，個別場次待公告',
+            status: '已報名｜賽程待公告（2隊17人）',
+            source_file: '115169781375報名名單.pdf'
+          });
+          console.warn('教育盃羽球未出現在公開賽程資料，使用正式報名表與規程補足區間摘要');
+        }
         tournaments = tData;
         schedules = sData;
         localStorage.setItem('dazhi_tournaments', JSON.stringify(tournaments));
