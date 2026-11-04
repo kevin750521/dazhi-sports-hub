@@ -55,9 +55,12 @@ module.exports = (req, res) => {
     const all = Array.isArray(window.schedules) ? window.schedules : (typeof schedules !== 'undefined' ? schedules : []);
     const precise = all
       .map(s => ({ s, p: rocDateParts(s.match_date) }))
-      .filter(x => x.p && String(x.s.match_time || '').trim() && !/待公告|待抽籤|待排定|待確認/.test(String(x.s.match_time || '')));
+      .filter(x => x.p && (
+        (String(x.s.match_time || '').trim() && !/待公告|待抽籤|待排定|待確認/.test(String(x.s.match_time || '')))
+        || (String(x.s.sport || '').includes('網球') && String(x.s.source_file || '').includes('BJB115.xlsx'))
+      ));
 
-    const today = new Date(2026, 9, 15);
+    const today = new Date();
     today.setHours(0,0,0,0);
     const horizon = addDays(today, 31);
     const visible = precise.filter(x => x.p.date >= today && x.p.date <= horizon);
@@ -77,7 +80,7 @@ module.exports = (req, res) => {
     const weekdays = ['週日','週一','週二','週三','週四','週五','週六'];
     let html = '<div class="calendar-view-panel">';
     html += '<div style="text-align:center; font-weight:900; font-size:1.15rem; margin-bottom:12px; color:var(--navy-dark);">📅 大直代表隊近期已確認出賽賽程行事曆</div>';
-    html += '<div style="text-align:center; font-size:.76rem; color:#64748b; margin:-4px 0 12px;">直接讀取目前賽程資料；同一天有多場比賽會全部列出</div>';
+    html += '<div style="text-align:center; font-size:.76rem; color:#64748b; margin:-4px 0 12px;">直接讀取目前賽程資料；網球大會場序僅列日期與組別，不代表本校確定出賽或已排定開賽時間</div>';
     html += '<div class="calendar-matrix">';
     weekdays.forEach(w => html += '<div class="cal-day-col" style="background:#0f2942; color:white; min-height:auto; text-align:center; font-weight:800; padding:8px;">' + w + '</div>');
 
@@ -92,7 +95,7 @@ module.exports = (req, res) => {
         const opp = String(s.opponents_draw || '').trim();
         const title = [time, division, opp, s.venue].filter(Boolean).join('｜');
         html += '<div class="cal-match-pill" style="border-left-color:' + style.color + '; color:' + style.text + '; background:' + style.bg + '; white-space:normal; line-height:1.28; margin-top:5px;" title="' + escHtml(title) + '">' +
-          '<strong>' + escHtml(time) + '</strong> ' + style.icon + ' ' + escHtml(division || s.sport || '賽程') +
+          (time ? '<strong>' + escHtml(time) + '</strong> ' : '') + style.icon + ' ' + escHtml(division || s.sport || '賽程') +
           (opp ? '<div style="font-size:.68rem; margin-top:2px;">' + escHtml(opp) + '</div>' : '') +
           '</div>';
       });
