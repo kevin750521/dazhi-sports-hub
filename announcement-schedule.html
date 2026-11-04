@@ -27,6 +27,12 @@
     tr.completed td{background:#f8fafc;color:#64748b}
     tr.completed .status{background:#e2e8f0;border-color:#cbd5e1;color:#475569}
     .status{display:inline-block;padding:3px 8px;border-radius:999px;background:#ecfdf5;border:1px solid #a7f3d0;color:#047857;font-size:.74rem;font-weight:800;white-space:nowrap}
+    .roster-cell{min-width:190px;max-width:310px}
+    .roster-details summary{cursor:pointer;color:#1d4ed8;font-weight:800}
+    .roster-scroll{max-height:270px;overflow:auto;padding:8px;border-radius:7px;background:#f8fafc;margin-top:6px}
+    .roster-group{padding:4px 0;border-bottom:1px solid #e2e8f0;font-size:.75rem}
+    .roster-group strong{color:#1e293b}
+    .roster-note{font-size:.7rem;color:#64748b;margin-top:8px}
     .match{font-weight:800}
     .muted{color:#64748b}
     .empty{padding:40px;text-align:center;color:#94a3b8;font-weight:700}
@@ -79,7 +85,7 @@
           <th data-k="opponents_draw">對戰隊伍 / 分組籤位</th>
           <th data-k="advancement_rule">晉級賽制</th>
           <th data-k="status">籤表狀態</th>
-          <th data-k="source_file">來源檔案</th>
+          <th data-k="athletes">出賽選手</th>
         </tr>
         <tr class="filterrow">
           <th><input placeholder="篩選"></th>
@@ -103,7 +109,7 @@ const SUPABASE_URL='https://hdxrublbpaptthmflnrn.supabase.co';
 const SUPABASE_KEY='sb_publishable_n3ONLlgwYQ0TAOcxkKoNhg_ZwL6M9wP';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let rows=[], sortKey='match_date', sortDir=1;
-const keys=['sport','tournament_name','division','match_date','venue','opponents_draw','advancement_rule','status','source_file'];
+const keys=['sport','tournament_name','division','match_date','venue','opponents_draw','advancement_rule','status','athletes'];
 const tbody=document.querySelector('tbody');
 const filters=[...document.querySelectorAll('.filterrow input')];
 function norm(v){return String(v??'').trim()}
@@ -123,6 +129,69 @@ function formatMatchDate(v){
 }
 function esc(s){return norm(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))}
 function sportLabel(s){const x=norm(s).replace(/^[^\w\u4e00-\u9fff]+/,'').trim();const emo=x.includes('籃球')?'🏀':x.includes('排球')?'🏐':x.includes('擊劍')?'🤺':x.includes('空手道')?'🥋':x.includes('網球')?'🎾':x.includes('棒球')?'⚾':x.includes('足球')?'⚽':'🏅';return `${emo} ${x||'其他'}`}
+
+const publicRoster={
+ hard:{
+  jBTeam:'張○荃、倪○岳、張○瑞、陳○哲、陳○宇、嚴○軒、邱○森',
+  jGTeam:'李○瑾、魏○芯、簡○函、吳○晏、劉○青、陳○蕎',
+  hBTeam:'藍○翔、陳○宇、林○希、曾○謙、呂○霆、謝○軒、徐○原',
+  hGTeam:'徐○詠、黃○嘉、簡○嫻、張○',
+  jBSingle:'嚴○軒、吳○辰、陳○閎',jGSingle:'李○瑾、吳○晏',
+  hBSingle:'曾○謙、謝○軒、王○元',hGSingle:'張○',
+  jBDouble:'張○荃／倪○岳、張○瑞／陳○哲、陳○宇／陳○璟',
+  jGDouble:'劉○青／陳○蕎、簡○函／魏○芯',
+  hBDouble:'藍○翔／陳○宇、呂○霆／徐○原、林○慶／魏○澤',
+  hMixed:'林○希／徐○詠、吳○維／黃○嘉、陳○均／簡○嫻'
+ },
+ soft:{
+  jBTeam:'張○荃、倪○岳、張○瑞、陳○哲、陳○宇、嚴○軒、邱○森、陳○璟',
+  jGTeam:'李○瑾、魏○芯、簡○函、吳○晏、劉○青、陳○蕎',
+  hBTeam:'藍○翔、陳○宇、林○希、曾○謙、吳○維、陳○均、林○慶、徐○原',
+  hGTeam:'徐○詠、黃○嘉、簡○嫻、張○',
+  jBSingle:'嚴○軒、陳○閎、吳○辰',hBSingle:'曾○謙、楊○翔、林○希',hGSingle:'張○',
+  jBDouble:'張○瑞／陳○哲、陳○宇／陳○璟、張○荃／倪○岳',
+  jGDouble:'李○瑾／吳○晏、魏○芯／簡○函、劉○青／陳○蕎',
+  hBDouble:'陳○均／吳○維、王○元／徐○原、呂○霆／謝○軒',
+  hMixed:'徐○詠／藍○翔、黃○嘉／陳○宇、簡○嫻／魏○澤'
+ },
+ ping:{
+  jB:'陳○霖、王○辰、林○宇、林○樂、梁○新、許○盛、劉○昇、杜○勳、陳○璟、黃○洋',
+  jG:'錢○言、顏○希、張○綺、陳○霖',
+  hB:'楊○程、張○閑、洪○茂',
+  hG:'鍾○穎、吳○融'
+ }
+};
+const tennisDayGroups={
+ '115/11/09':[['國男甲團體','hard','jBTeam'],['國女甲團體','hard','jGTeam'],['高男甲團體','hard','hBTeam'],['高女甲團體','hard','hGTeam']],
+ '115/11/10':[['國男甲團體','hard','jBTeam'],['國女甲團體','hard','jGTeam'],['國男甲單打','hard','jBSingle'],['高男甲單打','hard','hBSingle'],['高女甲單打','hard','hGSingle']],
+ '115/11/11':[['國男甲單打','hard','jBSingle'],['國女甲單打','hard','jGSingle'],['高男甲單打','hard','hBSingle'],['國男甲雙打','hard','jBDouble'],['國女甲雙打','hard','jGDouble'],['高男甲雙打','hard','hBDouble']],
+ '115/11/12':[['國男甲雙打','hard','jBDouble'],['國女甲雙打','hard','jGDouble'],['高男甲雙打','hard','hBDouble']],
+ '115/11/13':[['高中甲混雙','hard','hMixed']],
+ '115/11/16':[['國男團體','soft','jBTeam'],['國女團體','soft','jGTeam'],['高男團體','soft','hBTeam'],['高女團體','soft','hGTeam'],['國男單打','soft','jBSingle'],['高男單打','soft','hBSingle'],['高女單打','soft','hGSingle']],
+ '115/11/17':[['國男雙打','soft','jBDouble'],['國女雙打','soft','jGDouble'],['高男雙打','soft','hBDouble'],['高中混雙','soft','hMixed']]
+};
+function rosterGroups(r){
+ const name=norm(r.tournament_name),date=norm(r.match_date).split(' ')[0];
+ if(name.includes('教育盃')&&name.includes('網球')&&tennisDayGroups[date]){
+   return tennisDayGroups[date].map(([label,kind,key])=>({label,text:publicRoster[kind][key]}));
+ }
+ if(name.includes('教育盃')&&name.includes('桌球')){
+   return [['國男乙組',publicRoster.ping.jB],['國女乙組',publicRoster.ping.jG],['高男乙組',publicRoster.ping.hB],['高女乙組',publicRoster.ping.hG]].map(([label,text])=>({label,text}));
+ }
+ if(name.includes('教育盃')&&name.includes('擊劍')){
+   const match=norm(r.opponents_draw).match(/[\u4e00-\u9fff]○[\u4e00-\u9fff]/);
+   if(match)return [{label:'參賽選手',text:match[0]}];
+ }
+ return [];
+}
+function rosterText(r){return rosterGroups(r).map(x=>x.label+' '+x.text).join(' ')}
+function rosterCell(r){
+ const groups=rosterGroups(r);
+ if(!groups.length)return '<span class="muted">名單待確認</span>';
+ const units=groups.map(x=>'<div class="roster-group"><strong>'+esc(x.label)+'</strong><div>'+esc(x.text)+'</div></div>').join('');
+ return '<details class="roster-details"><summary>檢視報名選手（'+groups.length+'組）</summary><div class="roster-scroll">'+units+'<div class="roster-note">依報名表彙整，非當日確定上場名單。</div></div></details>';
+}
+
 function isCompleted(r){return /已完賽|已結束|比賽結束/.test(norm(r.status))}
 function rowPriority(r){
   if(isCompleted(r))return 3;
@@ -137,12 +206,12 @@ function filtered(){
   const q=norm(document.getElementById('q').value).toLowerCase(),sp=document.getElementById('sport').value;
   return rows.filter(r=>{
     if(sp&&norm(r.sport)!==sp)return false;
-    if(q&&!keys.some(k=>norm(r[k]).toLowerCase().includes(q)))return false;
-    return filters.every((f,i)=>!norm(f.value)||norm(r[keys[i]]).toLowerCase().includes(norm(f.value).toLowerCase()))
+    if(q&&!keys.some(k=>norm(k==='athletes'?rosterText(r):r[k]).toLowerCase().includes(q)))return false;
+    return filters.every((f,i)=>!norm(f.value)||norm(keys[i]==='athletes'?rosterText(r):r[keys[i]]).toLowerCase().includes(norm(f.value).toLowerCase()))
   }).sort((a,b)=>{
     const groupA=rowPriority(a),groupB=rowPriority(b);
     if(groupA!==groupB)return groupA-groupB;
-    let av=a[sortKey],bv=b[sortKey];
+    let av=sortKey==='athletes'?rosterText(a):a[sortKey],bv=sortKey==='athletes'?rosterText(b):b[sortKey];
     if(sortKey==='match_date'){
       const da=dateKey(av),db=dateKey(bv);
       // 未來比賽依日期近到遠；歷史未標記場次依最近到最遠；已完賽永遠放最後。
@@ -155,7 +224,7 @@ function filtered(){
 }
 function render(){
   const data=filtered();
-  tbody.innerHTML=data.length?data.map(r=>`<tr class="${isCompleted(r)?'completed':''}"><td><span class="sport">${esc(sportLabel(r.sport))}</span></td><td><strong>${esc(r.tournament_name)}</strong></td><td>${esc(r.division)}</td><td><strong>${esc(formatMatchDate(r.match_date))}</strong></td><td>${esc(r.venue)}</td><td class="match">${esc(r.opponents_draw)}</td><td>${esc(r.advancement_rule||'-')}</td><td><span class="status">${esc(r.status||'-')}</span></td><td class="muted">${esc(r.source_file||'-')}</td></tr>`).join(''):`<tr><td colspan="9" class="empty">目前沒有符合條件的資料</td></tr>`
+  tbody.innerHTML=data.length?data.map(r=>`<tr class="${isCompleted(r)?'completed':''}"><td><span class="sport">${esc(sportLabel(r.sport))}</span></td><td><strong>${esc(r.tournament_name)}</strong></td><td>${esc(r.division)}</td><td><strong>${esc(formatMatchDate(r.match_date))}</strong></td><td>${esc(r.venue)}</td><td class="match">${esc(r.opponents_draw)}</td><td>${esc(r.advancement_rule||'-')}</td><td><span class="status">${esc(r.status||'-')}</span></td><td class="roster-cell">${rosterCell(r)}</td></tr>`).join(''):`<tr><td colspan="9" class="empty">目前沒有符合條件的資料</td></tr>`
 }
 async function load(){
   const {data,error}=await sb.from('schedules').select('*');
