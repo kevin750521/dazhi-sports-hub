@@ -157,4 +157,21 @@ badminton = {
 }
 upsert_by_sport(rows, "羽球", badminton)
 
+# 115學年度教育盃中小學空手道：教育局115/11/04核定規程（與全國中正盃不同賽事）
+# 報名名單未提供，先列管報名待確認；不可沿用中正盃的孔同學資料。
+education_cup_karate = {
+    "name": "臺北市115學年度教育盃中小學空手道錦標賽",
+    "sport": "空手道",
+    "divisions": "正式規程設國中男子／女子、高中男子／女子形團體、形個人（甲乙丙）、對打個人（甲乙及體重級別）；大直高中實際報名組別和選手均待確認",
+    "competition_dates": "115/12/11（五）～12/13（日）；個別組別賽程及場次待115/11/27抽籤後公告",
+    "venue": "臺北市立內湖高級中學活動中心4樓（臺北市內湖區文德路218號）",
+    "reg_start": "即日起",
+    "reg_deadline": "115/11/24（二）線上報名；115/11/26（四）前寄送核章紙本",
+    "reg_method": "https://tpekon.neoqqf.com.tw/index.php 線上報名並上傳段／級證書；列印報名表核章，於115/11/26前送交內湖高中體育組（郵寄、教育局聯絡箱228或親送）。115/11/27（五）09:30內湖高中體育組抽籤。大直報名情形尚待確認。",
+    "doc_url": "https://drive.google.com/file/d/1Ckxipimf_2w3MJnxXLJdUwwiNjPkjL__/view",
+    "registration_status": "待確認",
+    "status": "📄 115/11/04教育局正式規程已取得；11/24線上報名截止、11/26核章紙本期限、11/27 09:30抽籤；12/11～12/13內湖高中比賽。大直是否報名及各組個別場次待確認。"
+}
+upsert_by_sport(rows, "空手道", education_cup_karate)
+
 print("Education Cup regulations sync completed.")
