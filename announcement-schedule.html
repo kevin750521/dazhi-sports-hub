@@ -16,8 +16,11 @@
     .sub{font-size:.82rem;color:#64748b}
     .toolbar{display:flex;gap:8px;flex-wrap:wrap}
     .toolbar input,.toolbar select{border:1px solid #cbd5e1;border-radius:7px;padding:8px 10px;font-size:.82rem;background:#fff}
-    .toolbar select{cursor:pointer;min-width:145px}
-    .toolbar select:focus,.toolbar input:focus{outline:2px solid #2563eb;outline-offset:1px}
+    .toolbar input:focus{outline:2px solid #2563eb;outline-offset:1px}
+    .filter-header{cursor:default;min-width:150px;white-space:normal}
+    .filter-header label{display:block;margin-bottom:5px;font-size:.78rem;font-weight:900}
+    .filter-header select{width:100%;max-width:230px;border:1px solid #cbd5e1;border-radius:7px;padding:6px 8px;background:#fff;color:#0f172a;cursor:pointer;font-size:.76rem;font-weight:600}
+    .filter-header select:focus{outline:2px solid #2563eb;outline-offset:1px}
     .filter-state{font-size:.75rem;color:#475569;margin:0 0 7px}
 
     .tablebox{border:1px solid #dbe3ee;border-radius:12px;overflow-x:auto;overflow-y:visible;box-shadow:0 2px 8px rgba(15,23,42,.05);-webkit-overflow-scrolling:touch}
@@ -46,14 +49,14 @@
       h1{font-size:1.15rem}
       .sub{font-size:.76rem}
       .toolbar{width:100%}
-      .toolbar input,.toolbar select{flex:1;min-width:180px}
+      .toolbar input{flex:1;min-width:180px}
       .scroll-hint{display:block}
       table{min-width:1120px}
       th,td{padding:9px 8px;font-size:.76rem}
     }
     @media(max-width:700px){
       .wrap{padding:8px}
-      .toolbar input,.toolbar select{width:100%;min-width:0;flex:1 1 100%}
+      .toolbar input{width:100%;min-width:0;flex:1 1 100%}
       .tablebox{border-radius:8px}
       table{min-width:1080px}
       th,td{padding:8px 7px;font-size:.73rem}
@@ -69,14 +72,7 @@
     </div>
     <div class="toolbar">
       <input id="q" placeholder="搜尋賽事、組別、場地…">
-      <select id="sport" aria-label="篩選運動種類"><option value="">全部運動種類</option></select>
-      <select id="stage" aria-label="篩選時程狀態">
-        <option value="">全部時程狀態</option>
-        <option value="upcoming">近期／未來賽程</option>
-        <option value="pending">賽程待公告</option>
-        <option value="finished">已完賽</option>
-        <option value="past">已過日期・成績未登錄</option>
-      </select>
+
     </div>
   </div>
   <div id="filterState" class="filter-state" role="status" aria-live="polite">正在載入賽程資料…</div>
@@ -85,14 +81,24 @@
     <table id="tbl">
       <thead>
         <tr>
-          <th data-k="sport">運動種類</th>
+          <th class="filter-header"><label for="sport">運動種類</label>
+            <select id="sport" aria-label="篩選運動種類"><option value="">全部運動種類</option></select>
+          </th>
           <th data-k="tournament_name">賽事名稱</th>
           <th data-k="division">大直出賽組別</th>
           <th data-k="match_date">比賽日期 ▲</th>
           <th data-k="venue">比賽場館 / 地點</th>
           <th data-k="opponents_draw">對戰隊伍 / 分組籤位</th>
           <th data-k="advancement_rule">晉級賽制</th>
-          <th data-k="status">籤表狀態</th>
+          <th class="filter-header"><label for="stage">籤表狀態</label>
+            <select id="stage" aria-label="篩選時程狀態">
+              <option value="">全部時程狀態</option>
+              <option value="upcoming">近期／未來賽程</option>
+              <option value="pending">賽程待公告</option>
+              <option value="finished">已完賽</option>
+              <option value="past">已過日期・成績未登錄</option>
+            </select>
+          </th>
           <th data-k="athletes">出賽選手</th>
         </tr>
       </thead>
