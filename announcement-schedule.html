@@ -8,7 +8,7 @@
   <style>
     *{box-sizing:border-box}
     body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft JhengHei",sans-serif;background:#fff;color:#0f172a}
-    .wrap{max-width:1600px;margin:0 auto;padding:16px}
+    .wrap{max-width:1600px;margin:0 auto;padding:10px}
     .head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px}
     h1{font-size:1.35rem;margin:0 0 4px;font-weight:900}
     .title-link{color:inherit;text-decoration:none}
@@ -17,22 +17,22 @@
     .toolbar{display:flex;gap:8px;flex-wrap:wrap}
     .toolbar input,.toolbar select{border:1px solid #cbd5e1;border-radius:7px;padding:8px 10px;font-size:.82rem;background:#fff}
     .toolbar input:focus{outline:2px solid #2563eb;outline-offset:1px}
-    .filter-header{cursor:default;min-width:150px;white-space:normal}
+    .filter-header{cursor:default;min-width:93px;white-space:normal}
     .filter-header label{display:block;margin-bottom:5px;font-size:.78rem;font-weight:900}
-    .filter-header select{width:100%;max-width:230px;border:1px solid #cbd5e1;border-radius:7px;padding:6px 8px;background:#fff;color:#0f172a;cursor:pointer;font-size:.76rem;font-weight:600}
+    .filter-header select{width:100%;max-width:132px;border:1px solid #cbd5e1;border-radius:7px;padding:5px 4px;background:#fff;color:#0f172a;cursor:pointer;font-size:.73rem;font-weight:600}
     .filter-header select:focus{outline:2px solid #2563eb;outline-offset:1px}
     .filter-state{font-size:.75rem;color:#475569;margin:0 0 7px}
 
     .tablebox{border:1px solid #dbe3ee;border-radius:12px;overflow-x:auto;overflow-y:visible;box-shadow:0 2px 8px rgba(15,23,42,.05);-webkit-overflow-scrolling:touch}
-    table{width:100%;border-collapse:collapse;min-width:1180px}
-    th,td{padding:11px 12px;border-bottom:1px solid #e2e8f0;text-align:left;vertical-align:middle;font-size:.82rem;line-height:1.45}
+    table{width:100%;border-collapse:collapse;min-width:1010px;table-layout:fixed}
+    th,td{padding:7px 6px;border-bottom:1px solid #e2e8f0;text-align:left;vertical-align:middle;font-size:.75rem;line-height:1.35;overflow-wrap:anywhere}
     th{background:#f8fafc;font-weight:900;white-space:nowrap;cursor:pointer;position:sticky;top:0;z-index:2}
     tr:hover td{background:#fbfdff}
     .sport{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-weight:800;white-space:nowrap;border:1px solid #dbeafe;background:#eff6ff;color:#1d4ed8}
     tr.completed td{background:#f8fafc;color:#64748b}
     tr.completed .status{background:#e2e8f0;border-color:#cbd5e1;color:#475569}
-    .status{display:inline-block;padding:3px 8px;border-radius:999px;background:#ecfdf5;border:1px solid #a7f3d0;color:#047857;font-size:.74rem;font-weight:800;white-space:nowrap}
-    .roster-cell{min-width:190px;max-width:310px}
+    .status{display:inline-block;padding:3px 6px;border-radius:7px;background:#ecfdf5;border:1px solid #a7f3d0;color:#047857;font-size:.7rem;font-weight:800;white-space:normal}
+    .roster-cell{min-width:100px;max-width:170px}
     .roster-details summary{cursor:pointer;color:#1d4ed8;font-weight:800}
     .roster-scroll{max-height:270px;overflow:auto;padding:8px;border-radius:7px;background:#f8fafc;margin-top:6px}
     .roster-group{padding:4px 0;border-bottom:1px solid #e2e8f0;font-size:.75rem}
@@ -42,7 +42,19 @@
     .muted{color:#64748b}
     .empty{padding:40px;text-align:center;color:#94a3b8;font-weight:700}
     .foot{font-size:.72rem;color:#94a3b8;margin-top:8px;text-align:right}
-    .scroll-hint{display:none;font-size:.72rem;color:#64748b;margin:0 0 6px;text-align:right}
+    .scroll-hint{display:block;font-size:.72rem;color:#64748b;margin:0 0 4px;text-align:right}
+    .slidebar{display:flex;align-items:center;gap:10px;padding:5px 9px;margin:0 0 6px;background:#f8fafc;border:1px solid #dbe3ee;border-radius:8px}
+    .slidebar label{flex:none;color:#475569;font-size:.73rem;font-weight:700}
+    .slidebar input[type=range]{flex:1;min-width:0;accent-color:#2563eb;cursor:grab;height:18px;touch-action:pan-y}
+    .slidebar input[type=range]:active{cursor:grabbing}
+    .slidebar[hidden]{display:none}
+    .cell-brief{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-clamp:2}
+    #tbl th:nth-child(1){width:100px} #tbl th:nth-child(2){width:135px}
+    #tbl th:nth-child(3){width:134px} #tbl th:nth-child(4){width:100px}
+    #tbl th:nth-child(5){width:110px} #tbl th:nth-child(6){width:130px}
+    #tbl th:nth-child(7){width:118px} #tbl th:nth-child(8){width:134px}
+    #tbl th:nth-child(9){width:110px}
+
     @media(max-width:1100px){
       .wrap{padding:10px}
       .head{gap:10px}
@@ -51,15 +63,15 @@
       .toolbar{width:100%}
       .toolbar input{flex:1;min-width:180px}
       .scroll-hint{display:block}
-      table{min-width:1120px}
-      th,td{padding:9px 8px;font-size:.76rem}
+      table{min-width:1010px}
+      th,td{padding:7px 6px;font-size:.74rem}
     }
     @media(max-width:700px){
       .wrap{padding:8px}
       .toolbar input{width:100%;min-width:0;flex:1 1 100%}
       .tablebox{border-radius:8px}
-      table{min-width:1080px}
-      th,td{padding:8px 7px;font-size:.73rem}
+      table{min-width:1010px}
+      th,td{padding:6px 5px;font-size:.72rem}
     }
   </style>
 </head>
@@ -76,13 +88,17 @@
     </div>
   </div>
   <div id="filterState" class="filter-state" role="status" aria-live="polite">正在載入賽程資料…</div>
-  <div class="scroll-hint">↔ 表格可左右滑動查看完整欄位</div>
-  <div class="tablebox">
+  <div class="slidebar" id="slidebar" aria-label="表格水平移動">
+    <label for="horizontalSlider">↔ 左右滑移</label>
+    <input id="horizontalSlider" type="range" min="0" max="100" step="1" value="0" aria-label="左右拖曳移動賽程表格">
+  </div>
+  <div class="scroll-hint">拖曳上方滑桿或在表格內左右滑動，可查看所有欄位</div>
+  <div class="tablebox" id="tableScroller">
     <table id="tbl">
       <thead>
         <tr>
           <th class="filter-header"><label for="sport">運動種類</label>
-            <select id="sport" aria-label="篩選運動種類"><option value="">全部運動種類</option></select>
+            <select id="sport" aria-label="篩選運動種類"><option value="">全部</option></select>
           </th>
           <th data-k="tournament_name">賽事名稱</th>
           <th data-k="division">大直出賽組別</th>
@@ -92,7 +108,7 @@
           <th data-k="advancement_rule">晉級賽制</th>
           <th class="filter-header"><label for="stage">籤表狀態</label>
             <select id="stage" aria-label="篩選時程狀態">
-              <option value="">全部時程狀態</option>
+              <option value="">全部</option>
               <option value="upcoming">近期／未來賽程</option>
               <option value="pending">賽程待公告</option>
               <option value="finished">已完賽</option>
@@ -114,6 +130,22 @@ const sb=window.supabase?.createClient(SUPABASE_URL,SUPABASE_KEY) || null;
 let rows=[], sortKey='match_date', sortDir=1;
 const keys=['sport','tournament_name','division','match_date','venue','opponents_draw','advancement_rule','status','athletes'];
 const tbody=document.querySelector('tbody');
+const tableScroller=document.getElementById('tableScroller');
+const horizontalSlider=document.getElementById('horizontalSlider');
+const slidebar=document.getElementById('slidebar');
+function updateHorizontalSlider(){
+ const max=Math.max(0,tableScroller.scrollWidth-tableScroller.clientWidth);
+ horizontalSlider.max=String(Math.max(1,Math.ceil(max)));
+ horizontalSlider.value=String(Math.min(max,tableScroller.scrollLeft));
+ slidebar.hidden=max<5;
+}
+horizontalSlider.addEventListener('input',()=>{tableScroller.scrollLeft=Number(horizontalSlider.value)});
+tableScroller.addEventListener('scroll',()=>{
+ const max=Math.max(0,tableScroller.scrollWidth-tableScroller.clientWidth);
+ horizontalSlider.value=String(Math.min(max,tableScroller.scrollLeft));
+},{passive:true});
+window.addEventListener('resize',updateHorizontalSlider);
+
 
 function norm(v){return String(v??'').trim()}
 function dateKey(v){const s=norm(v).split(' ')[0];const m=s.match(/^(\d{2,4})\/(\d{1,2})\/(\d{1,2})$/);if(m){let y=+m[1];if(y<1911)y+=1911;return y*10000+(+m[2])*100+(+m[3]);}return 99999999}
@@ -131,6 +163,18 @@ function formatMatchDate(v){
   return `${displayYear}/${m[2]}/${m[3]}（${weekday}）${m[4]||''}`;
 }
 function esc(s){return norm(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))}
+function briefTournament(v){
+ return norm(v).replace(/^臺北市(?:立)?115學年度/, '').replace(/^115學年度/, '')
+  .replace(/中等學校/g,'').replace(/錦標賽/g,'賽').replace(/全國高中/g,'高中');
+}
+function briefStatus(v){
+ const text=norm(v);
+ if(text.includes('已完賽'))return text.replace('｜成績：','｜').replace('｜晉級：','｜晉級');
+ if(text.includes('大會場序已公告'))return '場序已公告／待確認';
+ if(text.includes('賽程待公告'))return '賽程待公告';
+ if(text.includes('賽程已公告'))return '賽程已公告';
+ return text;
+}
 function sportName(s){return norm(s).replace(/^[^\u4e00-\u9fff]+/,'').trim()}
 function sportLabel(s){const x=sportName(s);const emo=x.includes('籃球')?'🏀':x.includes('排球')?'🏐':x.includes('羽球')?'🏸':x.includes('桌球')?'🏓':x.includes('擊劍')?'🤺':x.includes('空手道')?'🥋':x.includes('網球')?'🎾':x.includes('棒球')?'⚾':x.includes('足球')?'⚽':'🏅';return `${emo} ${x||'其他'}`}
 
@@ -245,7 +289,18 @@ function filtered(){
 function render(){
   const data=filtered();
   document.getElementById('filterState').textContent='顯示 '+data.length+' 筆／共 '+rows.length+' 筆賽程（已完賽排在最後）';
-  tbody.innerHTML=data.length?data.map(r=>`<tr class="${isCompleted(r)?'completed':''}"><td><span class="sport">${esc(sportLabel(r.sport))}</span></td><td><strong>${esc(r.tournament_name)}</strong></td><td>${esc(r.division)}</td><td><strong>${esc(formatMatchDate(r.match_date))}</strong></td><td>${esc(r.venue)}</td><td class="match">${esc(r.opponents_draw)}</td><td>${esc(r.advancement_rule||'-')}</td><td><span class="status">${esc(r.status||'-')}</span></td><td class="roster-cell">${rosterCell(r)}</td></tr>`).join(''):`<tr><td colspan="9" class="empty">目前沒有符合條件的資料</td></tr>`
+  tbody.innerHTML=data.length?data.map(r=>`<tr class="${isCompleted(r)?'completed':''}">
+    <td><span class="sport">${esc(sportLabel(r.sport))}</span></td>
+    <td title="${esc(r.tournament_name)}"><strong class="cell-brief">${esc(briefTournament(r.tournament_name))}</strong></td>
+    <td title="${esc(r.division)}"><span class="cell-brief">${esc(r.division)}</span></td>
+    <td><strong>${esc(formatMatchDate(r.match_date))}</strong></td>
+    <td title="${esc(r.venue)}"><span class="cell-brief">${esc(r.venue)}</span></td>
+    <td class="match" title="${esc(r.opponents_draw)}"><span class="cell-brief">${esc(r.opponents_draw)}</span></td>
+    <td title="${esc(r.advancement_rule||'-')}"><span class="cell-brief">${esc(r.advancement_rule||'-')}</span></td>
+    <td title="${esc(r.status||'-')}"><span class="status cell-brief">${esc(briefStatus(r.status||'-'))}</span></td>
+    <td class="roster-cell">${rosterCell(r)}</td>
+  </tr>`).join(''):`<tr><td colspan="9" class="empty">目前沒有符合條件的資料</td></tr>`;
+  requestAnimationFrame(updateHorizontalSlider)
 }
 // 報名表 115169781375：正式確認的羽球大會區間；無個別對戰時間。
 const confirmedBadminton={
@@ -267,7 +322,7 @@ function setRows(data){
  rows=ensureBadminton(Array.isArray(data)?data:[]);
  const sports=[...new Set(rows.map(r=>sportName(r.sport)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));
  const current=document.getElementById('sport').value;
- document.getElementById('sport').innerHTML='<option value="">全部運動種類</option>'+sports.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+ document.getElementById('sport').innerHTML='<option value="">全部</option>'+sports.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
  if(sports.includes(current))document.getElementById('sport').value=current;
  render();
 }
