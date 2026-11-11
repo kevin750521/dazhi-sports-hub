@@ -1252,6 +1252,99 @@
         "source_file": "29842142_1153112751_ATTCH1.pdf（115/11/04教育局核定）",
         "status": "報名待確認｜賽程待公告（區間摘要）"
       }
+    },
+    {
+      "match": {
+        "tournament_name": "臺北市115學年度教育盃中學網球錦標賽",
+        "division": "硬式網球｜高中男子甲組團體賽",
+        "match_date": "確切日期待核對"
+      },
+      "values": {
+        "sport": "🎾 網球",
+        "tournament_name": "臺北市115學年度教育盃中學網球錦標賽",
+        "division": "硬式網球｜高中男子甲組團體賽",
+        "match_date": "確切日期待核對",
+        "match_time": "",
+        "venue": "臺北市網球中心",
+        "opponents_draw": "大直高中高男團體｜第三名",
+        "advancement_rule": "最終名次：第三名；團體賽／個人賽個別比分及對戰歷程待官方成績單確認",
+        "source_file": "使用者2026/11/11提供的教育盃網球成績（日期及詳細比分尚待核對）",
+        "status": "已完賽｜成績：第三名｜晉級：不適用"
+      },
+      "create": {
+        "sport": "🎾 網球",
+        "tournament_name": "臺北市115學年度教育盃中學網球錦標賽",
+        "division": "硬式網球｜高中男子甲組團體賽",
+        "match_date": "確切日期待核對",
+        "match_time": "",
+        "venue": "臺北市網球中心",
+        "opponents_draw": "大直高中高男團體｜第三名",
+        "advancement_rule": "最終名次：第三名；團體賽／個人賽個別比分及對戰歷程待官方成績單確認",
+        "source_file": "使用者2026/11/11提供的教育盃網球成績（日期及詳細比分尚待核對）",
+        "status": "已完賽｜成績：第三名｜晉級：不適用"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "臺北市115學年度教育盃中學網球錦標賽",
+        "division": "硬式網球｜高中女子甲組團體賽",
+        "match_date": "確切日期待核對"
+      },
+      "values": {
+        "sport": "🎾 網球",
+        "tournament_name": "臺北市115學年度教育盃中學網球錦標賽",
+        "division": "硬式網球｜高中女子甲組團體賽",
+        "match_date": "確切日期待核對",
+        "match_time": "",
+        "venue": "臺北市網球中心",
+        "opponents_draw": "大直高中高女團體｜第三名",
+        "advancement_rule": "最終名次：第三名；團體賽／個人賽個別比分及對戰歷程待官方成績單確認",
+        "source_file": "使用者2026/11/11提供的教育盃網球成績（日期及詳細比分尚待核對）",
+        "status": "已完賽｜成績：第三名｜晉級：不適用"
+      },
+      "create": {
+        "sport": "🎾 網球",
+        "tournament_name": "臺北市115學年度教育盃中學網球錦標賽",
+        "division": "硬式網球｜高中女子甲組團體賽",
+        "match_date": "確切日期待核對",
+        "match_time": "",
+        "venue": "臺北市網球中心",
+        "opponents_draw": "大直高中高女團體｜第三名",
+        "advancement_rule": "最終名次：第三名；團體賽／個人賽個別比分及對戰歷程待官方成績單確認",
+        "source_file": "使用者2026/11/11提供的教育盃網球成績（日期及詳細比分尚待核對）",
+        "status": "已完賽｜成績：第三名｜晉級：不適用"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "臺北市115學年度教育盃中學網球錦標賽",
+        "division": "硬式網球｜高中男子甲組個人單打（曾○謙）",
+        "match_date": "確切日期待核對"
+      },
+      "values": {
+        "sport": "🎾 網球",
+        "tournament_name": "臺北市115學年度教育盃中學網球錦標賽",
+        "division": "硬式網球｜高中男子甲組個人單打（曾○謙）",
+        "match_date": "確切日期待核對",
+        "match_time": "",
+        "venue": "臺北市網球中心",
+        "opponents_draw": "曾○謙｜第四名",
+        "advancement_rule": "最終名次：第四名；團體賽／個人賽個別比分及對戰歷程待官方成績單確認",
+        "source_file": "使用者2026/11/11提供的教育盃網球成績（日期及詳細比分尚待核對）",
+        "status": "已完賽｜成績：第四名｜晉級：不適用"
+      },
+      "create": {
+        "sport": "🎾 網球",
+        "tournament_name": "臺北市115學年度教育盃中學網球錦標賽",
+        "division": "硬式網球｜高中男子甲組個人單打（曾○謙）",
+        "match_date": "確切日期待核對",
+        "match_time": "",
+        "venue": "臺北市網球中心",
+        "opponents_draw": "曾○謙｜第四名",
+        "advancement_rule": "最終名次：第四名；團體賽／個人賽個別比分及對戰歷程待官方成績單確認",
+        "source_file": "使用者2026/11/11提供的教育盃網球成績（日期及詳細比分尚待核對）",
+        "status": "已完賽｜成績：第四名｜晉級：不適用"
+      }
     }
   ]
 }
