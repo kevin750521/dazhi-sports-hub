@@ -169,8 +169,8 @@ education_cup_karate = {
     "reg_deadline": "115/11/24（二）線上報名；115/11/26（四）前寄送核章紙本",
     "reg_method": "https://tpekon.neoqqf.com.tw/index.php 線上報名並上傳段／級證書；列印報名表核章，於115/11/26前送交內湖高中體育組（郵寄、教育局聯絡箱228或親送）。115/11/27（五）09:30內湖高中體育組抽籤。大直報名情形尚待確認。",
     "doc_url": "https://drive.google.com/file/d/1Ckxipimf_2w3MJnxXLJdUwwiNjPkjL__/view",
-    "registration_status": "待確認",
-    "status": "📄 115/11/04教育局正式規程已取得；11/24線上報名截止、11/26核章紙本期限、11/27 09:30抽籤；12/11～12/13內湖高中比賽。大直是否報名及各組個別場次待確認。"
+    "registration_status": "未報名",
+    "status": "📄 115/11/04教育局正式規程已取得；11/24線上報名截止、11/26核章紙本期限、11/27 09:30抽籤；12/11～12/13內湖高中比賽。大直報名程序待辦，尚無已完成報名紀錄；個別場次待確認。"
 }
 upsert_by_sport(rows, "空手道", education_cup_karate)
 
