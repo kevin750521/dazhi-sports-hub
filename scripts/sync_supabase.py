@@ -347,6 +347,26 @@ def deduplicate_badminton_range_summary():
         print(f"Deleted duplicate badminton range summary id={row['id']}")
 
 
+def deduplicate_kong_chungcheng_result():
+    """Retain the updated original record; remove only duplicate Kong silver-result summary."""
+    rows = [
+        row for row in fetch_all("schedules")
+        if "中正盃" in str(row.get("tournament_name", ""))
+        and "空手道" in (str(row.get("sport", "")) + str(row.get("tournament_name", "")))
+        and "孔○誠" in (str(row.get("division", "")) + str(row.get("opponents_draw", "")))
+        and "115/11/06" in str(row.get("match_date", ""))
+        and "第二名" in str(row.get("status", "") + row.get("opponents_draw", ""))
+    ]
+    if len(rows) <= 1:
+        return
+    # Keep earliest original ID after it was updated to the silver medal.
+    rows.sort(key=lambda r: int(r["id"]) if str(r["id"]).isdigit() else str(r["id"]))
+    for row in rows[1:]:
+        rid = urllib.parse.quote(str(row["id"]), safe="")
+        request("DELETE", f"schedules?id=eq.{rid}", None, {"Prefer": "return=minimal"})
+        print(f"Removed duplicated Kong silver karate record id={row['id']}")
+
+
 with open(DATA_FILE, "r", encoding="utf-8") as f:
     data = json.load(f)
 
@@ -358,4 +378,5 @@ correct_high_school_soft_baseball_division()
 cleanup_obsolete_tennis_records()
 cleanup_old_badminton_range()
 deduplicate_badminton_range_summary()
+deduplicate_kong_chungcheng_result()
 print("Dashboard sync completed.")
