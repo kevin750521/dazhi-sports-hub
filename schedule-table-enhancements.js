@@ -54,31 +54,54 @@
   function addFilters(table) {
     const thead = table.tHead;
     if (!thead || thead.querySelector('.schedule-filter-row')) return;
-    const headerRow = thead.rows[0];
     const filterRow = document.createElement('tr');
     filterRow.className = 'schedule-filter-row';
+    const widthStyle = 'width:100%;min-width:65px;padding:5px 5px;border:1px solid #cbd5e1;border-radius:6px;font-size:.75rem;background:#fff;color:#334155;';
 
-    [...headerRow.cells].forEach((th, index) => {
+    [...thead.rows[0].cells].forEach((th, index) => {
       const cell = document.createElement('th');
-      const input = document.createElement('input');
-      input.type = 'search';
-      input.placeholder = '篩選';
-      input.setAttribute('aria-label', `篩選 ${normalize(th.textContent)}`);
-      input.style.cssText = 'width:100%;min-width:72px;padding:5px 7px;border:1px solid #cbd5e1;border-radius:6px;font-size:.75rem;background:#fff;color:#334155;';
-      input.addEventListener('input', () => applyFilters(table));
-      cell.appendChild(input);
+      let control;
+      if (index === 0 || index === 7) {
+        control = document.createElement('select');
+        const options = index === 0
+          ? ['全部', ...new Set([...table.tBodies[0].rows].map(r =>
+              normalize(r.cells[0]?.textContent)).filter(Boolean))]
+          : ['全部', '已完賽', '待公告／待確認', '其他'];
+        options.forEach((option, i) => {
+          const el = document.createElement('option');
+          el.value = i === 0 ? '' : option;
+          el.textContent = option;
+          control.appendChild(el);
+        });
+      } else {
+        control = document.createElement('input');
+        control.type = 'search';
+        control.placeholder = index === 1 ? '搜尋賽事' : '篩選';
+      }
+      control.dataset.column = String(index);
+      control.setAttribute('aria-label', '篩選 ' + normalize(th.textContent));
+      control.style.cssText = widthStyle;
+      control.addEventListener(index === 0 || index === 7 ? 'change' : 'input', () => applyFilters(table));
+      cell.appendChild(control);
       filterRow.appendChild(cell);
     });
     thead.appendChild(filterRow);
   }
 
   function applyFilters(table) {
-    const inputs = [...table.querySelectorAll('.schedule-filter-row input')];
+    const controls = [...table.querySelectorAll('.schedule-filter-row input, .schedule-filter-row select')];
     [...table.querySelectorAll('tbody tr')].forEach(row => {
-      const visible = inputs.every((input, idx) => {
-        const q = normalize(input.value).toLowerCase();
+      const visible = controls.every(control => {
+        const index = Number(control.dataset.column);
+        const q = normalize(control.value).toLowerCase();
         if (!q) return true;
-        return normalize(row.cells[idx]?.textContent).toLowerCase().includes(q);
+        const content = normalize(row.cells[index]?.textContent).toLowerCase();
+        if (index === 7) {
+          const finished = /已完賽|已結束|比賽結束/.test(content);
+          const pending = /待公告|待確認|待抽籤|待排定/.test(content);
+          return q === '已完賽' ? finished : q === '待公告／待確認' ? pending : !finished && !pending;
+        }
+        return content.includes(q);
       });
       row.style.display = visible ? '' : 'none';
     });
