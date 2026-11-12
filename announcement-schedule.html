@@ -212,6 +212,15 @@ const tennisDayGroups={
 };
 function rosterGroups(r){
  const name=norm(r.tournament_name),date=norm(r.match_date).split(' ')[0];
+ if(name.includes('教育盃')&&name.includes('網球')&&norm(r.division).includes('高男')&&norm(r.division).includes('雙打')&&norm(r.division).includes('陳○宇')){
+   return [{label:'高中男子甲組雙打',text:'陳○宇／藍○翔（成績待補）'}];
+ }
+ if(name.includes('教育盃')&&name.includes('網球')&&norm(r.division).includes('高男')&&norm(r.division).includes('雙打')&&norm(r.division).includes('呂○霆')){
+   return [{label:'高中男子甲組雙打',text:'呂○霆／徐○原（成績待補）'}];
+ }
+ if(name.includes('教育盃')&&name.includes('網球')&&norm(r.division).includes('王○元')){
+   return [{label:'高中男子甲組單打',text:'王○元（第五名）'}];
+ }
  if(name.includes('教育盃')&&name.includes('網球')&&tennisDayGroups[date]){
    return tennisDayGroups[date].map(([label,kind,key])=>({label,text:publicRoster[kind][key]}));
  }
