@@ -3109,6 +3109,10 @@
     }
 
     function renderActiveView() {
+      // 只有「大直出賽賽程／表格」把篩選直接放進表格標頭；其他頁面維持原有功能。
+      const externalFilters = document.querySelector('.filter-options-row');
+      if (externalFilters) externalFilters.style.display =
+        currentNav === 'schedules' && currentView === 'table' ? 'none' : '';
       const container = document.getElementById('contentContainer');
       const search = document.getElementById('searchInput').value.trim().toLowerCase();
       const sport = document.getElementById('sportFilter').value;
