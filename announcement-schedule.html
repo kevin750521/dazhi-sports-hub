@@ -218,6 +218,12 @@ function rosterGroups(r){
  if(name.includes('中正盃')&&name.includes('空手道')&&norm(r.division).includes('九年級第五量級')){
    return [{label:'國中男子個人對打｜九年級第五量級',text:'孔○誠（第二名）'}];
  }
+ if(name.includes('教育盃')&&name.includes('武術')){
+   return [
+     {label:'高中女子組｜傳統短兵器（限刀劍，含雙手把）',text:'黃○茵、鍾○帆'},
+     {label:'高中女子組｜傳統南拳第二類（閩粵長橋大馬類）',text:'黃○茵、鍾○帆'}
+   ];
+ }
  if(name.includes('教育盃')&&name.includes('羽球')){
    return [
      {label:'高中男子乙組團體（10人）',text:'李○鴻、鄭○剛、黃○哲、江○翰、吳○光、蔡○道、胡○瑄、周○丞、姚○文、方○希'},
