@@ -9,18 +9,21 @@
     *{box-sizing:border-box}
     body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft JhengHei",sans-serif;background:#fff;color:#0f172a}
     .wrap{max-width:1600px;margin:0 auto;padding:10px}
-    .head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px}
+    .head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:8px}
     h1{font-size:1.35rem;margin:0 0 4px;font-weight:900}
     .title-link{color:inherit;text-decoration:none}
     .title-link:hover{text-decoration:underline;text-underline-offset:4px}
     .sub{font-size:.82rem;color:#64748b}
-    .toolbar{display:flex;gap:8px;flex-wrap:wrap}
-    .toolbar input,.toolbar select{border:1px solid #cbd5e1;border-radius:7px;padding:8px 10px;font-size:.82rem;background:#fff}
-    .toolbar input:focus{outline:2px solid #2563eb;outline-offset:1px}
     .filter-header{cursor:default;min-width:93px;white-space:normal}
     .filter-header label{display:block;margin-bottom:5px;font-size:.78rem;font-weight:900}
     .filter-header select{width:100%;max-width:132px;border:1px solid #cbd5e1;border-radius:7px;padding:5px 4px;background:#fff;color:#0f172a;cursor:pointer;font-size:.73rem;font-weight:600}
     .filter-header select:focus{outline:2px solid #2563eb;outline-offset:1px}
+    .filter-header input[type=search]{display:block;width:100%;min-width:0;border:1px solid #cbd5e1;border-radius:7px;padding:5px 6px;font-size:.73rem;background:#fff;color:#0f172a}
+    .filter-header input[type=search]:focus{outline:2px solid #2563eb;outline-offset:1px}
+    #slidebar{cursor:default}
+    #horizontalSlider{display:block;width:100%;margin-top:5px;accent-color:#2563eb;cursor:grab;height:18px;touch-action:pan-y}
+    #horizontalSlider:active{cursor:grabbing}
+    #slidebar.slider-disabled #horizontalSlider{opacity:.4;pointer-events:none}
     .filter-state{font-size:.75rem;color:#475569;margin:0 0 7px}
 
     .tablebox{border:1px solid #dbe3ee;border-radius:12px;overflow-x:auto;overflow-y:visible;box-shadow:0 2px 8px rgba(15,23,42,.05);-webkit-overflow-scrolling:touch}
@@ -43,11 +46,6 @@
     .empty{padding:40px;text-align:center;color:#94a3b8;font-weight:700}
     .foot{font-size:.72rem;color:#94a3b8;margin-top:8px;text-align:right}
     .scroll-hint{display:block;font-size:.72rem;color:#64748b;margin:0 0 4px;text-align:right}
-    .slidebar{display:flex;align-items:center;gap:10px;padding:5px 9px;margin:0 0 6px;background:#f8fafc;border:1px solid #dbe3ee;border-radius:8px}
-    .slidebar label{flex:none;color:#475569;font-size:.73rem;font-weight:700}
-    .slidebar input[type=range]{flex:1;min-width:0;accent-color:#2563eb;cursor:grab;height:18px;touch-action:pan-y}
-    .slidebar input[type=range]:active{cursor:grabbing}
-    .slidebar[hidden]{display:none}
     .cell-brief{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-clamp:2}
     #tbl th:nth-child(1){width:100px} #tbl th:nth-child(2){width:135px}
     #tbl th:nth-child(3){width:134px} #tbl th:nth-child(4){width:100px}
@@ -60,15 +58,12 @@
       .head{gap:10px}
       h1{font-size:1.15rem}
       .sub{font-size:.76rem}
-      .toolbar{width:100%}
-      .toolbar input{flex:1;min-width:180px}
       .scroll-hint{display:block}
       table{min-width:1010px}
       th,td{padding:7px 6px;font-size:.74rem}
     }
     @media(max-width:700px){
       .wrap{padding:8px}
-      .toolbar input{width:100%;min-width:0;flex:1 1 100%}
       .tablebox{border-radius:8px}
       table{min-width:1010px}
       th,td{padding:6px 5px;font-size:.72rem}
@@ -82,17 +77,10 @@
       <h1><a class="title-link" href="https://dazhi-sports-hub.vercel.app/announcement-schedule" target="_blank" rel="noopener noreferrer">臺北市立大直高級中學｜運動賽事公告</a></h1>
       <div class="sub">賽程資料自動同步；使用運動種類與時程狀態篩選，點欄名可排序。</div>
     </div>
-    <div class="toolbar">
-      <input id="q" placeholder="搜尋賽事、組別、場地…">
 
-    </div>
   </div>
   <div id="filterState" class="filter-state" role="status" aria-live="polite">正在載入賽程資料…</div>
-  <div class="slidebar" id="slidebar" aria-label="表格水平移動">
-    <label for="horizontalSlider">↔ 左右滑移</label>
-    <input id="horizontalSlider" type="range" min="0" max="100" step="1" value="0" aria-label="左右拖曳移動賽程表格">
-  </div>
-  <div class="scroll-hint">拖曳上方滑桿或在表格內左右滑動，可查看所有欄位</div>
+
   <div class="tablebox" id="tableScroller">
     <table id="tbl">
       <thead>
@@ -100,10 +88,14 @@
           <th class="filter-header"><label for="sport">運動種類</label>
             <select id="sport" aria-label="篩選運動種類"><option value="">全部</option></select>
           </th>
-          <th data-k="tournament_name">賽事名稱</th>
+          <th class="filter-header"><label for="q">賽事名稱</label>
+            <input id="q" type="search" placeholder="搜尋" aria-label="搜尋賽事、組別、場地">
+          </th>
           <th data-k="division">大直出賽組別</th>
           <th data-k="match_date">比賽日期 ▲</th>
-          <th data-k="venue">比賽場館 / 地點</th>
+          <th class="filter-header" id="slidebar"><span>比賽場館 / 地點</span>
+            <input id="horizontalSlider" type="range" min="0" max="100" step="1" value="0" title="拖曳左右移動表格" aria-label="左右拖曳移動賽程表格">
+          </th>
           <th data-k="opponents_draw">對戰隊伍 / 分組籤位</th>
           <th data-k="advancement_rule">晉級賽制</th>
           <th class="filter-header"><label for="stage">籤表狀態</label>
@@ -137,7 +129,7 @@ function updateHorizontalSlider(){
  const max=Math.max(0,tableScroller.scrollWidth-tableScroller.clientWidth);
  horizontalSlider.max=String(Math.max(1,Math.ceil(max)));
  horizontalSlider.value=String(Math.min(max,tableScroller.scrollLeft));
- slidebar.hidden=max<5;
+ slidebar.classList.toggle("slider-disabled",max<5);
 }
 horizontalSlider.addEventListener('input',()=>{tableScroller.scrollLeft=Number(horizontalSlider.value)});
 tableScroller.addEventListener('scroll',()=>{
