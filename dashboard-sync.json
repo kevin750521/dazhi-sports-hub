@@ -11,7 +11,7 @@
         "competition_dates": "115/10/17～10/29（大直高中已公告明確場次）",
         "venue": "臺北市泰北國際雙語學校、臺北市立興雅國中、臺北市立永春高級中學",
         "doc_url": "https://drive.google.com/file/d/1lrpNWC2XAUywhWmrGtgLGAoPm_j906iw/view",
-        "status": "✅ 最新賽程已整合：大直高中共13場明確賽程；面板隱藏同賽事區間摘要",
+        "status": "✅ 教育盃籃球最終名次已更正：高女乙組冠軍（第一名）、國女乙組第四名（殿軍）。逐場比分以已取得的賽程成績為準；未登錄的決賽比分待核對。",
         "registration_status": "已報名"
       }
     },
@@ -1778,6 +1778,68 @@
         "advancement_rule": "軟式單打最終名次：第五名。個別出賽日期、對戰及比分待正式成績單核對",
         "source_file": "使用者2026/11/16軟式網球單打成績回報",
         "status": "已完賽｜名次：第五名"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "division": "高女乙組｜決賽最終名次",
+        "match_date": "最終名次日期待核對"
+      },
+      "values": {
+        "sport": "🏀 籃球",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "division": "高女乙組｜決賽最終名次",
+        "match_date": "最終名次日期待核對",
+        "match_time": "",
+        "venue": "臺北市和平籃球館暖身館",
+        "opponents_draw": "大直高中｜第一名（冠軍）",
+        "advancement_rule": "高中女子乙組最終名次：第一名（冠軍）；逐場比分未完整取得，不推定未登錄場次的比數",
+        "source_file": "使用者2026/11/16教育盃籃球最終名次更正",
+        "status": "已完賽｜成績：第一名（冠軍）｜最終名次已確認"
+      },
+      "create": {
+        "sport": "🏀 籃球",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "division": "高女乙組｜決賽最終名次",
+        "match_date": "最終名次日期待核對",
+        "match_time": "",
+        "venue": "臺北市和平籃球館暖身館",
+        "opponents_draw": "大直高中｜第一名（冠軍）",
+        "advancement_rule": "高中女子乙組最終名次：第一名（冠軍）；逐場比分未完整取得，不推定未登錄場次的比數",
+        "source_file": "使用者2026/11/16教育盃籃球最終名次更正",
+        "status": "已完賽｜成績：第一名（冠軍）｜最終名次已確認"
+      }
+    },
+    {
+      "match": {
+        "tournament_name": "115學年度教育盃籃球賽",
+        "division": "國女乙組｜決賽最終名次",
+        "match_date": "最終名次日期待核對"
+      },
+      "values": {
+        "sport": "🏀 籃球",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "division": "國女乙組｜決賽最終名次",
+        "match_date": "最終名次日期待核對",
+        "match_time": "",
+        "venue": "臺北市和平籃球館暖身館",
+        "opponents_draw": "大直高中｜第四名（殿軍）",
+        "advancement_rule": "國中女子乙組最終名次：第四名（殿軍）；逐場比分未完整取得，不推定未登錄場次的比數",
+        "source_file": "使用者2026/11/16教育盃籃球最終名次更正",
+        "status": "已完賽｜成績：第四名（殿軍）｜最終名次已確認"
+      },
+      "create": {
+        "sport": "🏀 籃球",
+        "tournament_name": "115學年度教育盃籃球賽",
+        "division": "國女乙組｜決賽最終名次",
+        "match_date": "最終名次日期待核對",
+        "match_time": "",
+        "venue": "臺北市和平籃球館暖身館",
+        "opponents_draw": "大直高中｜第四名（殿軍）",
+        "advancement_rule": "國中女子乙組最終名次：第四名（殿軍）；逐場比分未完整取得，不推定未登錄場次的比數",
+        "source_file": "使用者2026/11/16教育盃籃球最終名次更正",
+        "status": "已完賽｜成績：第四名（殿軍）｜最終名次已確認"
       }
     }
   ]
