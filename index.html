@@ -3126,6 +3126,10 @@
         const text=[status,r.opponents_draw,r.advancement_rule].join(' ');
         const m=text.match(/第[一二三四五六七八12345678]名|冠軍|亞軍|季軍|殿軍/);
         const score=status.match(/成績[：:]([^｜]+)/);
+        // 籃球的 31:45、32:36 等是「單場比分」，不應列入成績統整。
+        // 只保留已確認的賽事最終名次（例如高女乙組冠軍、國女乙組第四名），
+        // 單場比分仍完整保存在「大直出賽賽程」，供比賽紀錄查閱。
+        if(/籃球/.test(String(r.sport||'')+' '+name) && !m)return;
         if(!m&&!score)return;
         const key=[name,division,m?m[0]:score[1]].join('|');
         if(seen.has(key))return;seen.add(key);
@@ -3149,7 +3153,7 @@
       const all=collectAwardResults();
       const host=document.getElementById('contentContainer');
       host.innerHTML='<section style="padding:12px 0"><h2 style="margin:0 0 8px;color:#173f76">🥇 比賽成績統整</h2>'+
-        '<p style="color:#64748b;font-size:.83rem">自動彙整雲端已完賽且有明確名次／比分的紀錄；不將未提供名次者計入獎牌。</p>'+
+        '<p style="color:#64748b;font-size:.83rem">自動彙整雲端已完賽的最終名次及其他成績；籃球單場比分不列入此表，仍保留在出賽賽程。</p>'+
         '<div id="resultKpis" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin:15px 0"></div>'+
         '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">'+
         '<input id="resultQuery" type="search" placeholder="搜尋選手、賽事、組別" style="flex:2;min-width:180px;padding:9px;border:1px solid #cbd5e1;border-radius:8px">'+
