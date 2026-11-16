@@ -3115,6 +3115,80 @@
       finally{btn.disabled=false;btn.textContent='儲存至資料庫';}
     }
 
+
+    function collectAwardResults(){
+      const seen=new Set(),out=[];
+      schedules.forEach(r=>{
+        const status=String(r.status||''),division=String(r.division||''),name=String(r.tournament_name||'');
+        if(!/已完賽|已結束/.test(status))return;
+        if(!/個人|單打|雙打|團體賽|決賽|量級|鈍劍/.test(division))return;
+        if(/、.*(團體|單打)|各組|全部|場序|；/.test(division))return;
+        const text=[status,r.opponents_draw,r.advancement_rule].join(' ');
+        const m=text.match(/第[一二三四五六七八12345678]名|冠軍|亞軍|季軍|殿軍/);
+        const score=status.match(/成績[：:]([^｜]+)/);
+        if(!m&&!score)return;
+        const key=[name,division,m?m[0]:score[1]].join('|');
+        if(seen.has(key))return;seen.add(key);
+        out.push({sport:String(r.sport||''),name,division,athlete:String(r.opponents_draw||''),
+          rank:m?m[0]:'',score:score?score[1].trim():'',date:String(r.match_date||''),
+          source:String(r.source_file||'')});
+      });
+      return out;
+    }
+    function resultRankNumber(rank){
+      const names={'冠軍':1,'亞軍':2,'季軍':3,'殿軍':4};
+      if(names[rank])return names[rank];
+      const m=String(rank).match(/第([一二三四五六七八12345678])名/);
+      if(!m)return 0;
+      return ({一:1,二:2,三:3,四:4,五:5,六:6,七:7,八:8})[m[1]]||Number(m[1])||0;
+    }
+    function resultEscape(v){
+      return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    function renderResultsOverview(){
+      const all=collectAwardResults();
+      const host=document.getElementById('contentContainer');
+      host.innerHTML='<section style="padding:12px 0"><h2 style="margin:0 0 8px;color:#173f76">🥇 比賽成績統整</h2>'+
+        '<p style="color:#64748b;font-size:.83rem">自動彙整雲端已完賽且有明確名次／比分的紀錄；不將未提供名次者計入獎牌。</p>'+
+        '<div id="resultKpis" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin:15px 0"></div>'+
+        '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">'+
+        '<input id="resultQuery" type="search" placeholder="搜尋選手、賽事、組別" style="flex:2;min-width:180px;padding:9px;border:1px solid #cbd5e1;border-radius:8px">'+
+        '<select id="resultSport" style="flex:1;min-width:110px;padding:9px;border:1px solid #cbd5e1;border-radius:8px"><option value="">全部運動種類</option></select>'+
+        '<select id="resultTournament" style="flex:1;min-width:135px;padding:9px;border:1px solid #cbd5e1;border-radius:8px"><option value="">全部賽事</option></select>'+
+        '<select id="resultRank" style="min-width:115px;padding:9px;border:1px solid #cbd5e1;border-radius:8px"><option value="">全部名次</option><option value="1">冠軍</option><option value="2">亞軍</option><option value="3">季軍</option><option value="4-8">第四至八名</option><option value="other">其他成績</option></select></div>'+
+        '<div id="resultCount" style="font-size:.8rem;color:#64748b;margin-bottom:8px"></div>'+
+        '<div style="overflow-x:auto;border:1px solid #dbe3ee;border-radius:10px;background:#fff"><table style="width:100%;min-width:900px;border-collapse:collapse;font-size:.82rem"><thead><tr style="background:#f1f5f9;text-align:left;color:#334155">'+
+        ['運動種類','賽事名稱','組別／項目','選手／隊伍','成績／名次','比賽日期','來源'].map(x=>'<th style="padding:10px">'+x+'</th>').join('')+
+        '</tr></thead><tbody id="resultBody"></tbody></table></div></section>';
+      const sport=document.getElementById('resultSport'),tournament=document.getElementById('resultTournament');
+      [...new Set(all.map(r=>r.sport))].sort().forEach(x=>sport.add(new Option(x,x)));
+      [...new Set(all.map(r=>r.name))].sort().forEach(x=>tournament.add(new Option(x,x)));
+      const update=()=>{
+        const q=document.getElementById('resultQuery').value.toLowerCase().trim();
+        const rank=document.getElementById('resultRank').value;
+        const list=all.filter(r=>{
+          const n=resultRankNumber(r.rank);
+          return (!q||[r.sport,r.name,r.division,r.athlete,r.rank,r.score].join(' ').toLowerCase().includes(q))
+          &&(!sport.value||r.sport===sport.value)&&(!tournament.value||r.name===tournament.value)
+          &&(!rank||(rank==='4-8'?n>=4&&n<=8:rank==='other'?!n:n===Number(rank)));
+        }).sort((a,b)=>b.date.localeCompare(a.date,'zh-Hant',{numeric:true})||a.name.localeCompare(b.name,'zh-Hant'));
+        const items=[['已登錄成績',list.length],['冠軍',list.filter(x=>resultRankNumber(x.rank)===1).length],
+          ['亞軍',list.filter(x=>resultRankNumber(x.rank)===2).length],['季軍',list.filter(x=>resultRankNumber(x.rank)===3).length],
+          ['第四至八名',list.filter(x=>resultRankNumber(x.rank)>=4&&resultRankNumber(x.rank)<=8).length]];
+        document.getElementById('resultKpis').innerHTML=items.map(([label,num])=>
+          '<div style="padding:13px;background:#fff;border:1px solid #dbe3ee;border-radius:10px"><div style="font-size:.75rem;color:#64748b">'+label+'</div><strong style="font-size:1.6rem;color:#173f76">'+num+'</strong></div>').join('');
+        document.getElementById('resultCount').textContent='顯示 '+list.length+' 筆／共 '+all.length+' 筆已登錄成績';
+        document.getElementById('resultBody').innerHTML=list.length?list.map(r=>
+          '<tr style="border-top:1px solid #e2e8f0">'+
+          [r.sport,r.name,r.division,r.athlete,r.rank||r.score,r.date,r.source].map((v,i)=>
+            '<td style="padding:10px;'+(i===4?'font-weight:800;color:#1d4ed8':'')+'">'+resultEscape(v)+'</td>').join('')+'</tr>').join(''):
+          '<tr><td colspan="7" style="text-align:center;padding:25px;color:#64748b">目前沒有符合條件的成績紀錄</td></tr>';
+      };
+      ['resultQuery','resultSport','resultTournament','resultRank'].forEach(id=>
+        document.getElementById(id).addEventListener(id==='resultQuery'?'input':'change',update));
+      update();
+    }
+
     function renderActiveView() {
       // 只有「大直出賽賽程／表格」把篩選直接放進表格標頭；其他頁面維持原有功能。
       const externalFilters = document.querySelector('.filter-options-row');
