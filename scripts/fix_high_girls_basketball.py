@@ -140,7 +140,7 @@ def patch_tournament_summary():
                 "competition_dates": "115/10/17～10/31（大直高中已公告明確場次）",
                 "venue": "臺北市泰北國際雙語學校、臺北市立興雅國中、臺北市立永春高級中學",
                 "doc_url": SOURCE_URL,
-                "status": "✅ 10/14女子乙組新版賽程已整合：大直高中共13場明確賽程；高女乙B組更新至10/31",
+                "status": "✅ 教育盃籃球最終名次已更正：高女乙組冠軍（第一名）、國女乙組第四名（殿軍）。逐場比分以已取得的賽程成績為準；未登錄的決賽比分待核對。",
             }
             request("PATCH", f"tournaments?id=eq.{rid_q}", payload, prefer="return=minimal")
             print(f"Patched tournament summary id={rid}")
