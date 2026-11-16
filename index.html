@@ -1756,6 +1756,7 @@
         <div class="nav-link-left"><span>🏀</span> 大直出賽賽程</div>
         <span class="nav-count-badge" id="sideBadgeSchedules">—</span>
       </a>
+      <a class="nav-link" id="navResults" onclick="switchNavTab('results')"><div class="nav-link-left"><span>🥇</span> 比賽成績統整</div><span class="nav-count-badge" id="sideBadgeResults">—</span></a>
       <a class="nav-link" onclick="openCrawlerModal()" style="cursor:pointer;" title="查看每日 04:00/16:00 主辦學校自動巡檢狀態">
         <div class="nav-link-left"><span>🤖</span> 賽程自動巡檢</div>
         <span class="nav-count-badge" style="background:#1e3a8a; color:#ffffff;">04/16點</span>
@@ -1862,6 +1863,7 @@
       <button class="m-subnav-btn" id="mNavSchedules" onclick="switchNavTab('schedules')">
         🏀 出賽賽程 (<span id="mBadgeSchedules">—</span>)
       </button>
+      <button class="m-subnav-btn" id="mNavResults" onclick="switchNavTab('results')">🥇 成績統整 (<span id="mBadgeResults">—</span>)</button>
     </div>
 
     <div class="main-body-container">
@@ -2738,6 +2740,7 @@
       document.getElementById('sideBadgeDeclined').textContent = dec;
       const sideSched = document.getElementById('sideBadgeSchedules');
       if (sideSched) sideSched.textContent = schedules.length;
+      const rc=collectAwardResults().length;document.getElementById('sideBadgeResults').textContent=rc;document.getElementById('mBadgeResults').textContent=rc;
 
       // 手機專屬徽章計數同步
       const mBadgeTour = document.getElementById('mBadgeTournaments');
@@ -2750,14 +2753,18 @@
       currentNav = tab;
       document.getElementById('navTournaments').className = 'nav-link' + (tab === 'tournaments' ? ' active' : '');
       document.getElementById('navSchedules').className = 'nav-link' + (tab === 'schedules' ? ' active' : '');
+      document.getElementById('navResults').className = 'nav-link' + (tab === 'results' ? ' active' : '');
 
       // 手機專屬導航頁籤同步啟用樣式
       const mTour = document.getElementById('mNavTournaments');
       const mSched = document.getElementById('mNavSchedules');
       if (mTour) mTour.className = 'm-subnav-btn' + (tab === 'tournaments' ? ' active' : '');
       if (mSched) mSched.className = 'm-subnav-btn' + (tab === 'schedules' ? ' active' : '');
+      const mr=document.getElementById('mNavResults'); if(mr) mr.className='m-subnav-btn'+(tab==='results'?' active':'');
 
       document.getElementById('regFilterRow').style.display = tab === 'tournaments' ? 'flex' : 'none';
+      document.querySelector('.filter-card-bar').style.display=tab==='results'?'none':'';
+      document.querySelector('.view-control-pill').style.display=tab==='results'?'none':'';
       document.getElementById('kpiSummaryRow').style.display = tab === 'tournaments' ? 'grid' : 'none';
       populateFilters();
       renderActiveView();
@@ -3114,6 +3121,7 @@
       if (externalFilters) externalFilters.style.display =
         currentNav === 'schedules' && currentView === 'table' ? 'none' : '';
       const container = document.getElementById('contentContainer');
+      if(currentNav==='results'){renderResultsOverview();return;}
       const search = document.getElementById('searchInput').value.trim().toLowerCase();
       const sport = document.getElementById('sportFilter').value;
       const hideDeclined = document.getElementById('chkHideDeclined').checked;
