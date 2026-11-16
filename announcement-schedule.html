@@ -221,6 +221,11 @@ function rosterGroups(r){
  if(name.includes('教育盃')&&name.includes('網球')&&norm(r.division).includes('王○元')){
    return [{label:'高中男子甲組單打',text:'王○元（第五名）'}];
  }
+ // 已完賽的軟式團體賽，優先只呈現該組的報名選手，避免列出同日其他組別。
+ if(name.includes('教育盃')&&name.includes('網球')&&norm(r.division).startsWith('軟式網球｜')&&norm(r.division).includes('團體賽')){
+   const group=norm(r.division).includes('高中男子')?'hBTeam':norm(r.division).includes('高中女子')?'hGTeam':norm(r.division).includes('國中女子')?'jGTeam':null;
+   if(group)return [{label:norm(r.division).replace('軟式網球｜',''),text:publicRoster.soft[group]}];
+ }
  if(name.includes('教育盃')&&name.includes('網球')&&tennisDayGroups[date]){
    return tennisDayGroups[date].map(([label,kind,key])=>({label,text:publicRoster[kind][key]}));
  }
