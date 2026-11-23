@@ -367,6 +367,34 @@ def deduplicate_kong_chungcheng_result():
         print(f"Removed duplicated Kong silver karate record id={row['id']}")
 
 
+def cleanup_old_table_tennis_range():
+    """Remove only the superseded 12/12-12/17 Education Cup table tennis interval row.
+    Never delete individual match rows or any other tournament.
+    """
+    rows = fetch_all("schedules")
+    has_new = any(
+        "教育盃" in str(r.get("tournament_name", ""))
+        and "桌球" in str(r.get("tournament_name", ""))
+        and str(r.get("match_date", "")).startswith("115/12/12")
+        and "國中男子乙組團體賽" in str(r.get("division", ""))
+        for r in rows
+    )
+    if not has_new:
+        return
+    for row in rows:
+        name = str(row.get("tournament_name", ""))
+        date = str(row.get("match_date", ""))
+        if "教育盃" not in name or "桌球" not in name:
+            continue
+        if date != "115/12/12～12/17":
+            continue
+        if "國男乙" not in str(row.get("division", "")):
+            continue
+        rid = urllib.parse.quote(str(row["id"]), safe="")
+        request("DELETE", f"schedules?id=eq.{rid}", None, {"Prefer": "return=minimal"})
+        print(f"Removed superseded Education Cup table tennis range id={row['id']}")
+
+
 with open(DATA_FILE, "r", encoding="utf-8") as f:
     data = json.load(f)
 
@@ -379,4 +407,5 @@ cleanup_obsolete_tennis_records()
 cleanup_old_badminton_range()
 deduplicate_badminton_range_summary()
 deduplicate_kong_chungcheng_result()
+cleanup_old_table_tennis_range()
 print("Dashboard sync completed.")
