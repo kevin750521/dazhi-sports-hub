@@ -80,14 +80,14 @@ table_tennis = {
     "name": "臺北市115學年度教育盃中等學校桌球錦標賽",
     "sport": "桌球",
     "divisions": "大直已報名4組：國男乙（團體1隊、單打3、雙打3）、國女乙（單打3、雙打2）、高男乙（單打3、雙打1）、高女乙（單打1、雙打1）；共19位不重複選手、18報名項次（團體1、單打10、雙打7）",
-    "competition_dates": "115/12/12～12/17（各組實際出賽日期、對手和時間等待115/11/19抽籤公告）",
+    "competition_dates": "115/12/12國男乙團體；12/14高男乙單打；12/15高女乙及國男乙單打；12/16國男乙及國女乙雙打；12/17高男乙／高女乙雙打及國女乙單打（依正式籤表與時間表）",
     "venue": "臺北市立麗山國民中學活動中心3樓（臺北市內湖區內湖路1段629巷42號）",
     "reg_start": "即日起",
     "reg_deadline": "115/11/06",
     "reg_method": "115/11/04取得4組線上系統產生的正式報名表。已報名：國男乙05156（團體／單打／雙打）、國女乙05144（單打／雙打）、高男乙05154（單打／雙打）、高女乙05143（單打／雙打）。報名表須校內核章並掛號郵寄麗山國中體育組；是否已寄送尚待確認。報名表：https://drive.google.com/file/d/1PicxSGlyLEiAHXsOL0rHry83_ftr576j/view（國男）；https://drive.google.com/file/d/1qYxq9XFBgYUvgXU6GBGgCxM2S_Sdp398/view（國女）；https://drive.google.com/file/d/1z5MPWfHxPq8R6STDso3sNo5Ng2XW8ehq/view（高男）；https://drive.google.com/file/d/174Da0JMBcIy6sMm36AgE38bI93i7-E_B/view（高女）",
     "doc_url": "https://drive.google.com/file/d/1tpdOCCjrt25KNb5JOjGmKqQeEbiY2DKr/view",
     "registration_status": "已報名",
-    "status": "✅ 已有4組線上報名表、19名選手、18報名項次；尚須確認校內核章紙本是否於115/11/06前寄送／送達。115/11/19 15:00麗山國中領隊會議及抽籤；大直各場對手／時間待公告。"
+    "status": "✅ 已有4組線上報名表、19名選手、18報名項次；尚須確認校內核章紙本是否於115/11/06前寄送／送達。115/11/23取得正式33頁桌球賽程／籤表PDF（大會3041.pdf），已按各組更新12/12、12/14～12/17出賽日期；國男乙團體首場第8場大直對龍門國中，預定12/12 10:00。其餘實際出場及時間以大會播報為準，請提前30分鐘到場。"
 }
 upsert_by_sport(rows, "桌球", table_tennis)
 
