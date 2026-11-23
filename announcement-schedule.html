@@ -260,7 +260,13 @@ function rosterGroups(r){
    ];
  }
  if(name.includes('教育盃')&&name.includes('桌球')){
-   return [['國男乙組',publicRoster.ping.jB],['國女乙組',publicRoster.ping.jG],['高男乙組',publicRoster.ping.hB],['高女乙組',publicRoster.ping.hG]].map(([label,text])=>({label,text}));
+   // 新版PDF每個組別已有獨立日程，公告僅呈現該場相關選手，不再重複全部四組名單。
+   const div=norm(r.division);
+   if(div.includes('國中男子乙組團體賽'))return [{label:'國男乙團體',text:publicRoster.ping.jB}];
+   const listed=norm(r.opponents_draw).split('（')[0].split('｜')[0];
+   if(listed && /[\u4e00-\u9fff]○[\u4e00-\u9fff]/.test(listed))
+     return [{label:div,text:listed}];
+   return [];
  }
  if(name.includes('教育盃')&&name.includes('擊劍')){
    const match=norm(r.opponents_draw).match(/[\u4e00-\u9fff]○[\u4e00-\u9fff]/);
